@@ -1,8 +1,8 @@
 # My Summary and Notes of Java SE 11 Developer
 
-## Chapter 1
+# Chapter 1
 
-### Components of Java
+## Components of Java
 
 - Use integrated development environment (IDE) to make writing and running code easier.
 - Java Development Kit (`JDK`):
@@ -13,6 +13,7 @@
     - launcher: [`java`](#java-launches-the-java-virtual-machine-jvm-before-running-the-code)
     - archiver command: `jar`
     - API(application programming interfaces) documentation command: `javadoc`
+    - `JVM`
 
 - Java Runtime Environment (`JRE`)
 
@@ -24,7 +25,7 @@
   2. #### `java`: launches the `Java Virtual Machine (JVM)` before running the code.
   3. `JVM`: knows how to run bytecode (`.class`) on the actual machine it is on.
 
-### Benefits of Java
+## Benefits of Java
 
 - `Object Oriented`:
   - All code is defined in classes, and most of those classes can be instantiated into objects. (static classes are an exception)
@@ -39,7 +40,7 @@
 - `Multithreaded`
 - `Backward Compatibility`: Most of the time, old programs will work with later versions of Java. Sometimes, changes that will break backward compatibility occur. Deprecation is a flag to indicate it shouldn’t be used.
 
-### Java Class Structure
+## Java Class Structure
 
 - <u>Classes</u>: basic building blocks.
 - <u>Defining a class</u>: you describe all the parts and characteristics of building blocks.
@@ -76,7 +77,7 @@ class Animal2 { // default
 }
 ```
 
-### Writing a `main()` Method
+## Writing a `main()` Method
 
 - A Java program begins execution with its `main()` method.
 - `main()` method is the gateway between the startup of a Java process (managed by the `JVM`), and the beginning of the code. `JVM` calls on the underlying system to allocate memory and CPU time, access files, and so on
@@ -92,8 +93,9 @@ public class Ege {
 ```
 ```shell
 javac Ege.java     # The result is a file of bytecode by the same name, but with a .class filename extension
-java Ege           # Notice that we must omit the .class extension to run Ege.java
+java Ege           # Notice that we must omit the .class extension to run Ege.java.
 ```
+- `java` accepts the name of the class!!!
 - To compile Java code: the file must have the extension .java and class name must match file name.
 - `static` binds a method to its class so it can be called by just the class name. Java doesn’t need to create an object to call the `main()`
 - If `main()` is not present, the process will throw an error and terminate.
@@ -143,7 +145,7 @@ For any program | For programs with one file
 Can import code in any available Java library | Can only import code that came with the JDK
 
 
-### Package Declarations and Imports
+## Package Declarations and Imports
 - Packages: logical groupings for classes
 - `import`: tell Java which packages to look in for classes
 - If a package begins with `java` or `javax`, this means it came with the JDK
@@ -234,7 +236,17 @@ jar --create --verbose --file myNewFile.jar
 jar -cvf myNewFile.jar -C dir                 # specify directory
 ```
 
-### Ordering Elements In Class
+### `javac` `java` `jar`
+Option | `javac` | `java` | `jar`
+--- | --- | --- | ---
+`-cp` `-classpath` `--class-path` | X | X | X
+`-d` | X | - | -
+`-c` | - | - | X
+`-C` | - | - | X
+`-v` | - | - | X
+`-f` | - | - | X
+
+## Ordering Elements In Class
 
 Element | Required? | Location
 --- | --- | ---
@@ -245,10 +257,271 @@ Field declarations | No | inside class
 Method declarations | No | inside class
 Comments | No | Can go anywhere even in first line of file
 
-### Code Formating In Exam
+## Code Formating In Exam
 
 Don't need to check for imports if:
 - Code that begins with a class name
 - Code that begins with a method declaration
 - Code that begins with a code snippet that would normally be inside a class or method,
 - Code that has line numbers that don’t begin with 1
+
+## Bonus:
+
+```java
+// INSERT PACKAGE NAME HERE
+public class Bird { }
+```
+- Bird is in `/my/directory/named/A/Bird.java`
+- The package name represents any folders underneath the current path
+- Thus `package my.directory.named.A;` wont work
+- Correct one is `package named.A;`
+
+
+___
+ 
+
+# Chapter 2: Java Building Blocks
+
+## Creating Objects
+```java
+public class Chick {
+  public Chick() {
+    System.out.println("in constructor");
+  }
+}
+```
+Key points of constructor: 
+  - the name of the constructor matches the name of the class
+  - there’s no return type.
+
+### Instance Initializer Blocks (IIB)
+
+- Code block: the code between `{}`
+- Instance initializer: when the code block is out of a method
+
+### Order of Initialization
+
+- Fields and instance initializer blocks run in the order they appear
+- Constructor runs after fields and IIB
+- Order matters for the fields and blocks of code. You can’t refer to a variable before it has been defined
+
+
+## Understanding Data Types
+
+### Primitive types: 8 built-in data types
+
+Keyword | Type | Example
+--- | --- | ---
+`boolean` | true/false | true
+`byte` | 8bit integral | 123
+`short` | 16bit integral | 123
+`int` | 32bit integral | 123
+`long` | 64bit integral | 123L
+`float` | 32bit floating-point | 123.45f
+`double` | 64bit floating-point | 123.456
+`char` | 16bit unicode | 'a'
+
+- String is not primitive even though there is built-in support. It is an object.
+- byte can hold between -128 to 127
+- `short` and `char` are closely related: 
+  - `short` is signed, `char` is unsigned; thus `char` has higher range for positive integer
+  - you can use them interchangeably in some cases
+  ```java
+  short bird = 'd';
+  char mammal = (short)83;
+
+  System.out.println(bird); // Prints 100
+  System.out.println(mammal); // Prints S
+
+  short reptile = 65535; // DOES NOT COMPILE
+  char fish = (short)-1; // DOES NOT COMPILE
+  ```
+
+### Literals
+- When a number is present in the code, it is called a literal.
+
+```java
+long max = 3123456789; // DOES NOT COMPILE, because 3123456789 is seen as int, however this is bigger than Integer.MAX_VALUE
+long max = 3123456789L; // now Java knows it is a long
+```
+
+- Underscore
+  - You can not put `_` at the beginning/end of literal and right before/after decimal point
+  ```java
+  double notAtStart = _1000.00; // DOES NOT COMPILE
+  double notAtEnd = 1000.00_; // DOES NOT COMPILE
+  double notByDecimal = 1000_.00; // DOES NOT COMPILE
+  double annoyingButLegal = 1_00_0.0_0; // compiles
+  double reallyUgly = 1__________2; // Also compiles
+  ```
+
+### Reference Types
+- Reference type is an instance of an object
+- Primitive types hold their values in the memory where variable is allocated
+- Reference types point to an object by storing the object's memory adress
+- A reference can be assigned to another object of the same or compatible type.
+- A reference can be assigned to a new object using the new keyword.
+
+### Primitive VS Reference Types
+- Primitive types can not be null
+  ```java
+  int value = null; // DOES NOT COMPILE
+  String s = null;
+  ```
+- Reference types can be used to call methods (if reference is not null)
+  ```java
+  String reference = "hello";
+  int len = reference.length();
+  int bad = len.length(); // DOES NOT COMPILE
+  ```
+- all the primitive types have lowercase type names. bUt reference types are classes, by convention begin with uppercase.
+
+## Declaring Variables
+
+### Identifiers
+- An identifier is the name of a variable, method, class, interface, or package
+- 4 rules for legal identifiers:
+  1. Must begin with a letter or `$` or `_`
+  2. Can include numbers but cannot start with them
+  3. `_` is not allowed as identifier
+  4. Cannot use java's reserved words (`abstract`, `case`, `continue`, `const`, `goto`, `true`...)
+
+### Declaring Multiple Variables
+- You can declare many variables in the same declaration as long as they are all of the same type. You can also initialize any or all of those values inline.
+```java
+void sandFence() {
+ String s1, s2;
+ String s3 = "yes", s4 = "no";
+
+ int num, String value; // DOES NOT COMPILE
+}
+```
+
+## Initializing Variables
+
+### Initiliazing Local Variables
+- A local variable is a variable defined within a constructor, method, or initializer block
+- Local variables do not have a default value and must be initialized before use. Complier will report error if you use an uninitialized variable.
+
+### Passing Constructor and Method Paramters
+- Variables passed to a constructor or method are called constructor parameters or method parameters
+- They are like local variables that have been initialized before the method is called, by the caller.
+```java
+public void findAnswer(boolean check) {}
+
+public void checkAnswer() {
+ boolean value;
+ findAnswer(value); // DOES NOT COMPILE: value is not initialized
+}
+```
+
+### Defining Instance and Class Variables
+- An instance variable, often called a field, is a value defined within a specific instance of an object
+- On the other hand, a class variable is one that is defined on the class level and ***shared among all instances of the class***. It can even be publicly accessible to classes outside the class without requiring an instance to use.
+- You can tell a variable is a class variable because it has the keyword `static` before it
+- Instance and class variables do not require you to initialize them. As soon as you declare these variables, they are given a default value:
+  Variable Type | Default Initialization Value
+  --- | --- 
+  `boolean` | `false`
+  `byte`, `short`, `int`, `long` | 0
+  `float`, `double` | 0.0
+  `char` | '\u0000' (NUL)
+  All object references | `null`
+
+### Introducing `var`
+- you just type `var` instead of the primitive or reference type
+- `var is a specific type defined at compile time. It does not change type at runtime.
+- The formal name of this feature is local variable type inference:
+  1. Thus can be used only as local variable
+    ```java
+    public class VarKeyword {
+      var tricky = "Hello"; // DOES NOT COMPILE: this is an instance variable
+    }
+    ```
+
+  2. Instructing the compiler to determine the type for you
+    ```java
+    public void reassignment() {
+      var number = 7;
+      number = 4;
+      number = "five"; // DOES NOT COMPILE
+    }
+
+    var apples = (short)10;
+    apples = (byte)5;   // value stored in apples is still short but in here byte is automatically promoted to short
+    apples = 1_000_000; // DOES NOT COMPILE: beyond the limits of short
+    ```
+
+- the compiler looks only at the line with the declaration. Initialization has to be done in the same line as declaration for `var`, otherwise code does not compile:
+```java
+public void reassignment() {
+  var question; // does not compile
+  question = 1;
+}
+```
+
+- Java does not allow `var` in multiple variable declarations.
+
+- While a `var` cannot be initialized with a null value without a type, it can be assigned a null value after it is declared (provided that the underlying data type of the `var` is an object)
+- `var` can be initialized to a null value if the type is specified
+```java
+var n = null; // DOES NOT COMPILE: cannot be initialized to null
+
+var n = "myData";
+n = null;
+
+var m = 4;
+m = null; // DOES NOT COMPILE: int cannot be null
+
+var o = (String)null; // var can be initialized to a null value if the type is specified
+```
+
+### Bonus
+```java
+public int addition(var a, var b) { // DOES NOT COMPILE: var can be used only for local variables, a and b are method parameters
+ return a + b;
+}
+```
+```java
+package var;
+
+public class Var { // because of case sensitivity this is allowed
+  public void var() { // Naming a method var is legal: var is not a reserved word
+    var var = "var"; // Naming a local variable var is legal: var is not a reserved word
+  }
+  public void Var() {
+    Var var = new Var(); // Naming a local variable var is legal: var is not a reserved word 
+  }
+}
+```
+
+- While `var` is not a reserved word and allowed to be used as an identifier, it is considered a `reserved type name`.
+- A `reserved type name` means it cannot be used to define a type, such as a class, interface, or enum
+```java
+public class var { // DOES NOT COMPILE
+  public var() {
+  }
+}
+}
+```
+
+## Managing Variable Scope
+- **Local variables**: In scope from declaration to end of block
+- **Instance variables**:  In scope from declaration until object eligible for garbage collection
+- **Class variables**: In scope from declaration until program ends 
+
+## Destroying Objects
+- All Java objects are stored in your program memory’s heap.
+- ***Garbage collection*** refers to the process of automatically freeing memory on the heap by deleting objects that are eligible for garbage collection
+- ***eligible for garbage collection*** refers to an object’s state of no longer being accessible in a program.
+- eligible for garbage collection does'nt mean the object will be immediately garbage collected.
+
+### Calling `System.gc()`
+- What is the System.gc() command guaranteed to do? Nothing, actually. It merely suggests that the JVM kick off garbage collection. Nothing is guaranteed.
+- JVM can ignore this request. `System.gc()` is not guaranteed to run or do anything. 
+- Program may still run out of memory even if `System.gc()` is called
+
+### Tracing Eligibility
+- An object is no longer reachable when one of two situations occurs:
+  1. The object no longer has any references pointing to it.
+  2. All references to the object have gone out of scope.
