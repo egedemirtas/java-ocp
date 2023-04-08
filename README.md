@@ -2,6 +2,10 @@
 
 # Chapter 1
 
+<details>
+
+  <summary>Components Of Java</summary>
+
 ## Components of Java
 
 - Use integrated development environment (IDE) to make writing and running code easier.
@@ -25,6 +29,12 @@
   2. #### `java`: launches the `Java Virtual Machine (JVM)` before running the code.
   3. `JVM`: knows how to run bytecode (`.class`) on the actual machine it is on.
 
+</details>
+
+<details>
+
+  <summary>Benefits of Java</summary>
+
 ## Benefits of Java
 
 - `Object Oriented`:
@@ -40,6 +50,12 @@
 - `Multithreaded`
 - `Backward Compatibility`: Most of the time, old programs will work with later versions of Java. Sometimes, changes that will break backward compatibility occur. Deprecation is a flag to indicate it shouldn’t be used.
 
+</details>
+
+<details>
+
+  <summary>Java Class Structure</summary>
+
 ## Java Class Structure
 
 - <u>Classes</u>: basic building blocks.
@@ -47,6 +63,10 @@
 - <u>Object</u>: is a runtime instance of a class in memory. An object is often referred to as an instance since it represents a single representation of the class.
 - All the various objects of all the different classes represent the state of your program.
 - <u>Reference</u>: is a variable that points to an object.
+
+<details>
+
+  <summary>Fields and Methods</summary>
 
 ### Fields and Methods
 
@@ -56,11 +76,22 @@
 - The method name and parameter types are called the method signature.
 - The method declaration consists of additional information such as the return type
 
+</details>
+
+<details>
+
+<summary>Comments</summary>
+
 ### Comments
 
 1. single line
 2. multiple line
 3. javadoc
+</details>
+
+<details>
+
+<summary>Classes and Files</summary>
 
 ### Classes vs Files
 
@@ -76,6 +107,15 @@ public class Animal {
 class Animal2 { // default
 }
 ```
+
+</details>
+
+</details>
+
+
+<details>
+
+<summary>Writing a main() Method</summary>
 
 ## Writing a `main()` Method
 
@@ -144,6 +184,7 @@ Produces a `.class` file | Fully in memory
 For any program | For programs with one file
 Can import code in any available Java library | Can only import code that came with the JDK
 
+</details>
 
 ## Package Declarations and Imports
 - Packages: logical groupings for classes
@@ -525,3 +566,4 @@ public class var { // DOES NOT COMPILE
 - An object is no longer reachable when one of two situations occurs:
   1. The object no longer has any references pointing to it.
   2. All references to the object have gone out of scope.
+
