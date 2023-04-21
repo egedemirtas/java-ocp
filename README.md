@@ -359,6 +359,9 @@ long max = 3123456789L; // now Java knows it is a long
 - Reference type is an instance of an object
 - Primitive types hold their values in the memory where variable is allocated
 - Reference types point to an object by storing the object's memory adress
+
+  <img src="./object_ref.png" alt= “” width="250" height="200">
+
 - A reference can be assigned to another object of the same or compatible type.
 - A reference can be assigned to a new object using the new keyword.
 
@@ -374,7 +377,7 @@ long max = 3123456789L; // now Java knows it is a long
   int len = reference.length();
   int bad = len.length(); // DOES NOT COMPILE
   ```
-- all the primitive types have lowercase type names. bUt reference types are classes, by convention begin with uppercase.
+- All the primitive types have lowercase type names. But reference types are classes, by convention begin with uppercase.
 
 ## Declaring Variables
 
@@ -430,8 +433,8 @@ public void checkAnswer() {
 
 ### Introducing `var`
 - you just type `var` instead of the primitive or reference type
-- `var is a specific type defined at compile time. It does not change type at runtime.
-- The formal name of this feature is local variable type inference:
+- `var` is a specific type defined at compile time. It does not change type at runtime.
+- The formal name of this feature is **local variable type inference**:
   1. Thus can be used only as local variable
     ```java
     public class VarKeyword {
@@ -448,7 +451,8 @@ public void checkAnswer() {
     }
 
     var apples = (short)10;
-    apples = (byte)5;   // value stored in apples is still short but in here byte is automatically promoted to short
+    apples = (byte)5;   // value stored in apples is still short 
+                        // but in here byte is automatically promoted to short
     apples = 1_000_000; // DOES NOT COMPILE: beyond the limits of short
     ```
 
@@ -478,7 +482,8 @@ var o = (String)null; // var can be initialized to a null value if the type is s
 
 ### Bonus
 ```java
-public int addition(var a, var b) { // DOES NOT COMPILE: var can be used only for local variables, a and b are method parameters
+public int addition(var a, var b) { // DOES NOT COMPILE: var can be used only for local variables
+                                    //, a and b are method parameters
  return a + b;
 }
 ```
@@ -512,9 +517,9 @@ public class var { // DOES NOT COMPILE
 
 ## Destroying Objects
 - All Java objects are stored in your program memory’s heap.
-- ***Garbage collection*** refers to the process of automatically freeing memory on the heap by deleting objects that are eligible for garbage collection
-- ***eligible for garbage collection*** refers to an object’s state of no longer being accessible in a program.
-- eligible for garbage collection does'nt mean the object will be immediately garbage collected.
+- ***Garbage collection*** Refers to the process of automatically freeing memory on the heap by deleting objects that are eligible for garbage collection
+- ***eligible for garbage collection*** Refers to an object’s state of no longer being accessible in a program.
+- Eligible for garbage collection doesn't mean the object will be immediately garbage collected.
 
 ### Calling `System.gc()`
 - What is the System.gc() command guaranteed to do? Nothing, actually. It merely suggests that the JVM kick off garbage collection. Nothing is guaranteed.
@@ -525,3 +530,2024 @@ public class var { // DOES NOT COMPILE
 - An object is no longer reachable when one of two situations occurs:
   1. The object no longer has any references pointing to it.
   2. All references to the object have gone out of scope.
+
+## Objects VS References
+- All references are the same size, no matter their object type
+- Object sits in heap and doesn't have a name
+- The object is garbage is collected but reference is not garbage collected
+
+___
+
+# Chapter 3
+
+## Operator Precedence
+- If two operators have the same level of precedence, then Java guarantees left-to-right evaluation.
+
+Operator | Example
+-- | --
+Post-unary operators | a++
+Pre-unary operators | ++a
+Other unary operators | -, !, ~, +, (type)
+Multiplication / division / modulus  | *, /, %
+Addition/subtraction | +,-
+Shift operators | <<, >>, >>>
+Relational operators | <, >, <=, >=, instanceof
+Equal to/not equal to | =, !=
+Logical operators | &,^,|
+Short-circuit logical operators | &&,||
+Ternary operators | a ? b : c
+Assignment operators | =, +=, -=, *=, /=, %=, &=, ^=, |=, <<=, >>=, >>>=
+
+## Unary Operators
+- Needs only 1 variable
+- ! (negate boolean), + (positive number) , - (negative number or negates an expression), ++ (increments by 1), -- (decrements by 1), (type) (cast a value to a type)
+- in Java, 1 and true are not related in any way, just as 0 and false are not related
+
+## Increment and Decrement
+- Pre- :If the operator is placed before the operand, then the operator is applied first and the value returned is the new value of the expression. 
+- Post- :If the operator is placed after the operand, then the original value of the expression is returned, with operator applied after the value is returned.
+- Example:
+```java
+int lion = 3;
+int tiger = ++lion * 5 / lion--;
+```
+  1. int tiger = ++lion * 5 / 3     // 3 is returned, then lion decremented to 2
+  2. int tiger = 3 * 5 / 3          // lion is incremented to 3, then lion return 3
+  3. tiger is 5
+  4. Lion is 3
+
+## Binary Arithmetic Operators
+- `+,-,%,/,*`
+- For integer values, division results in the floor value of the nearest integer that fulfills the operation
+- Floor value: discard anything after decimal: 4.645634 --> 4
+- Modulus can work with negative numbers
+
+## Numeric Promotions
+1. If two values have different data types, Java will automatically promote one of the values to the larger of the two data types.
+2. If one of the values is integral and the other is floating-point, Java will automatically promote the integral value to the floating-point value’s data type.
+3. Smaller data types: `byte`, `short`, and `char` are first promoted to int any time they’re used with a Java binary arithmetic operator, even if neither of the operands is int.
+    - Unary operators are excluded from this rule
+4. After all promotion has occurred and the operands have the same data type, the resulting value will have the same data type as its promoted operands.
+
+```java
+int x = 1;
+long y = 33;
+var z = x * y; // z is long
+
+double x = 39.21;
+float y = 2.1; // does not compile since 2.1 will be treated as double, but double cannot be promoted down to short
+var z = x + y;
+
+short x = 10;
+short y = 3;
+var z = x * y; // z is integer: x and y are both promoted to int before multiplication!
+
+
+short w = 14; 
+float x = 13; 
+double y = 30;
+// w is promoted to int to be used in binary arithmetic operation, 
+//then w is promoted to float so w can be multiplied with x 
+// result of w * x then promoted to double so it can be divided with y
+var z = w * x / y; 
+```
+
+## Assignment Operator
+- Java will automatically promote from smaller to larger data types
+- But it will throw a compiler exception if it detects that you are trying to convert from larger to smaller data types without casting
+- Result of an assignment is an expression in and of itself, equal to the value of the assignment.
+```java
+long wolf = 5;
+long coyote = (wolf=3);     // set wolf to 3, then return it
+System.out.println(wolf);   // 3
+System.out.println(coyote); // 3
+
+boolean healthy = false;
+if(healthy = true)          // healthy is assigned to true, then true is returned
+   System.out.print("Good!"); // prints Good!
+```
+
+## Casting Values
+- Optional if the casting is from bigger to smaller type
+- Mandatory if casting is from smaller to bigger type
+```java
+int fur = (int)5;
+int hair = (short) 2;
+String type = (String)     "Bird";
+short tail = (short)(4 + 10);
+long feathers = 10(long); // DOES NOT COMPILE: unary operator(cast) is in wrong side
+
+float egg = 2.0 / 9;        // DOES NOT COMPILE
+int tadpole = (int)5 * 2L;  // DOES NOT COMPILE
+short frog = 3 - 2.0;       // DOES NOT COMPILE
+
+short mouse = 10;
+short hamster = 3;
+short capybara = mouse * hamster;  // DOES NOT COMPILE
+short capybara = (short)(mouse * hamster);
+
+short capybara = (short)mouse * hamster;      // DOES NOT COMPILE: mouse and hamster promoted to int
+short gerbil = 1 + (short)(mouse * hamster);  // DOES NOT COMPILE: result is automatically casted to int
+```
+
+## Compound Assignment Values
+- `+=, -=, /=, *=`
+- Compound assignments automatically casts variables!!
+```java
+long goat = 10;
+int sheep = 5;
+sheep = sheep * goat;   // DOES NOT COMPILE
+sheep *= goat;          // COMPILES: sheep is casted to long, then result casted to int
+```
+
+## Overflow and Underflow
+```java
+short ticketTaker = (short)1921222;  // Stored as 20678
+System.out.print(2147483647+1);  // -2147483648
+```
+
+## Equality Operators
+Equality | Primitive | Objects
+-- | -- | --
+`==` | two values represent same value | two values reference the same object
+`!=` | two values represent different value | two values **do not** reference the same object
+
+- Only 3 scenarios are allowed:
+  1. Comparing two numeric types or primitives: If the numeric values are of different data types, the values are automatically promoted.
+  ```java
+  5 == 5.00 // true
+  ```
+  2. two booleans
+  3. Two objects
+
+  ```java
+  boolean monkey = true == 3;       // DOES NOT COMPILE
+  boolean ape = false != "Grape";   // DOES NOT COMPILE
+  boolean gorilla = 10.2 == "Koko"; // DOES NOT COMPILE
+  ```
+- Two references are equal if and only if they point to the same object or both point to null
+```java
+File monday = new File("schedule.txt");
+File tuesday = new File("schedule.txt");
+File wednesday = tuesday;
+System.out.println(monday == tuesday);    // false: same file content but don't point to same object
+System.out.println(tuesday == wednesday); // true
+```
+
+## Relational Operators
+- `<,>,<=,>=`: applies only to numeric values
+- `a instanceof b`: Returns true if the reference that `a` points to is an instance of a class, subclass or class that implements a particular interface, as named in `b`
+- If the two numeric operands are not of the same data type, the smaller one is promoted
+```java
+public static void openZoo(Number time) {
+   if(time instanceof String) // DOES NOT COMPILE: String and Number are incompatible, only applies to classes, not interfaces
+```
+- using null with `instanceof` always results in `false`
+```java
+System.out.print(null instanceof Object); //false
+System.out.print(null instanceof null);  // DOES NOT COMPILE
+```
+
+## Logical Operators
+- `&, |, ^`: can be used for boolean and numeric types. If used for numeric types: ***bitwise operators***
+
+## Short-Circuit Operators
+- `&&, ||`
+- Good for avoiding `NullPointerException`:
+```java
+if(duck!=null & duck.getAge()<5) { // Could throw a NullPointerException
+if(duck!=null && duck.getAge()<5) { // Doesn't throw NullPointerException
+
+int rabbit = 6;
+boolean bunny = (rabbit >= 6) || (++rabbit <= 7);  // rabbit won't be incremented since short-circuit
+System.out.println(rabbit);                        // prints 6
+```
+- there is no requirement that second and third expressions in ternary operations have the same data types
+```java
+int stripes = 7;
+System.out.print((stripes > 5) ? 21 : "Zebra");
+int animal = (stripes < 9) ? 3 : "Horse";  // DOES NOT COMPILE
+```
+
+___
+
+# Chapter 4
+
+## `if-else`
+
+## `switch`
+- a switch statement must have braces around the variable
+- a switch statement must have curly braces around the switch body
+- `case`, `defult`, `break` are optional
+- `default`: it is branched to only if there is no matching case value for the switch statement, regardless of its position within the switch statement
+- A switch can have 0 `case`
+- Allowed types: 
+  - `int` and `Integer`
+  - `byte` and `Byte`
+  - `short` and `Short`
+  - `char` and `Character`
+  - `String`
+  - `enum` values
+  - `var` (if the type resolves to one of the preceding types)
+
+```java
+int month = 5;
+// a switch statement must have braces around the variable
+switch (month) {                  // a switch statement must have curly braces around the switch body
+  case 1:                         // "case" keyword then value then ":"
+    System.out.print("January");
+    break;                        // optional
+  case 1 | 2:
+    break;
+  default:                        // optional
+    System.out.print("April");
+
+switch(month){}
+}
+```
+- In the example below, the code will jump to the default block and then execute all of the proceeding case statements in order until it finds a break statement or finishes the switch statement
+```java
+var dayOfWeek = 5;
+switch(dayOfWeek) {
+ case 0:
+  System.out.println("Sunday");
+ default:
+  System.out.println("Weekday");
+ case 6:
+  System.out.println("Saturday");
+  break;
+}
+
+//output:
+Weekday
+Saturday
+
+// if dayOfWeek = 6, Output:
+Saturday // default is branched only if there is no match
+
+// if dayOf Week =0, Output:
+Sunday
+Weekday   //  default statement is executed since there was no break statement in first case
+Saturday
+```
+
+### Acceptable Case Values
+- the values in each `case` statement must be ***compile time constant values*** of the same data type as the `switch` value
+- ***Compile time constants***: `enum`, `final`, `literals`
+-  data type for `case` statements must all match the data type of the `switch` variable
+```java
+final int getCookies() { return 4; }
+
+void feedAnimals(final int x) {
+ final int bananas = 1;
+ int apples = 2;
+ int numberOfAnimals = 3;
+ final int cookies = getCookies();
+ switch (numberOfAnimals) {
+  case bananas:
+  case apples: // DOES NOT COMPILE: not final
+  case getCookies(): // DOES NOT COMPILE: evaluated at runtime
+  case cookies : // DOES NOT COMPILE: evaluated at runtime
+  case 3 * 5 :
+  case x: // DOES NOT COMPILE: x is final but it is not constant since it is passed to the function
+ }
+}
+```
+
+### Numeric Promotion and Casting
+- Last but not least, switch statements support numeric promotion that does not require an explicit cast.
+```java
+short size = 4;
+final int small = 15;
+final int big = 1_000_000;
+switch(size) {
+ case small: // 15 is small enough to cast from int to short
+ case 1+2 :
+ case big: // DOES NOT COMPILE: cannot auto cast from long to short
+}
+```
+
+## `while`
+
+## `do-while`
+
+## `for`
+```java
+for(initialization; boolExpression: updateStatement){}
+```
+Order:
+1. init
+2. boolExpression
+3. body
+4. updateStatement
+5. return to 2
+
+- `var` is allowed
+- initialization and update sections may contain multiple statements, separated by commas
+
+### Working with `for` loops
+1. Infinite loop
+```java
+for( ; ; )
+```
+2. Multiple terms in `for``
+```java
+int x = 0;
+for(long y = 0, z = 4; x < 5 && y < 10; x++, y++) {
+ System.out.print(y + " "); }
+System.out.print(x + " ");
+
+// output:
+1 2 3 4 5 // 5 is outside of loop
+```
+3. Redeclaring a Variable in the Initialization Block
+```java
+int x = 0;
+for(int x = 4; x < 5; x++) { // DOES NOT COMPILE
+ System.out.print(x + " ");
+}
+
+for(x = 0; x < 5; x++) {
+ System.out.print(x + " ");
+}
+```
+4. Using Incompatible Data Types in the Initialization Block
+  - The variables in the initialization block must all be of the same type
+```java
+int x = 0;
+for(long y = 0, int z = 4; x < 5; x++) { // DOES NOT COMPILE
+ System.out.print(y + " ");
+}
+```
+
+### Modifying Loop Variables
+```java
+for(int i=0; i<10; i++)
+ i = 0;
+for(int j=1; j<10; j++)
+ j--;
+for(int k=0; k<10; )
+ k++;
+``` 
+
+## `foreach`
+- The right side of the for-each loop must be one of the following: 
+  - A built-in Java array
+  - An object whose type implements java.lang.Iterable
+- The left side of the for-each loop must include a declaration for an instance of a variable whose type is compatible with the type of the array or collection on the right side of the statement
+- `var` is allowed at the left side
+-  Java actually converts the for-each loop into a standard for loop during compilation
+```java
+for(int value : values) {
+ System.out.print(value + ", ");
+}
+// if value implemets Iterable
+for(Iterator<Integer> i = values.iterator();i.hasNext(); ) {  // there is no update statement !!!
+ int value = i.next();
+ System.out.print(value + ", ");
+}
+//if value is not iterable
+for(int i=0; i < values.length; i++) {
+ String value = values[i];
+ System.out.print(value + ", ");
+}
+```
+
+## Optional Labels
+- `if`, `switch` and loops may have ***optional labels***
+- A label is an optional pointer to the head of a statement that allows the application flow to jump to it or break from it.
+```java
+INNER_LOOP: for(int i=0; i<mySimpleArray.length; i++)
+{
+ System.out.print(mySimpleArray[i]+"\t");
+ }
+```
+
+## `break`
+- Without a label parameter, the `break` statement will terminate the nearest inner loop it is currently in the process of executing
+- `break`break statement can take an optional label parameter.
+- `return` can be also used to exit loops quickly
+
+## `continue`
+- causes flow to finish the execution of the current loop
+- `continue` is applied to the nearest inner loop under execution using optional label statements to override this behavior.
+
+## `Unreachable Code`
+- Any code placed after `break`, `return`, `continue` in the same code block is unreachable and will not compile
+
+___
+
+# Chapter 5
+
+## Creating and Manipulating `String`
+- `String` does not need `new` to be instantiated
+- `String` is a sequence of `char` and implements `CharSequence`
+
+## Concatenation
+- If either operand is `String` then it is concatenation
+- Concatenation is evaluated from left to right
+```java
+System.out.println(1 + 2); // 3
+System.out.println("a" + "b"); // ab
+System.out.println("a" + "b" + 3); // ab3
+System.out.println(1 + 2 + "c"); // 3c
+System.out.println("c" + 1 + 2); // c12
+```
+
+## Immutability
+- Once a `String`object is created it can not be changed
+- **Why?:** immutablity creates a perfectly full box (optimization), but the downfall is zero flexibility
+- Immutable classes in Java are `final`, which prevents subclasses creation. You wouldn’t want a subclass adding mutable behavior.
+```java
+String s1 = "1";
+String s2 = s1.concat("2");
+s2.concat("3");
+System.out.println(s2); // prints 12
+```
+
+## Importnt `String` Methods
+```java
+int length()
+
+char charAt(int index)
+
+// return -1 if no match is found
+int indexOf(int ch)                            // char can be also passed
+int indexOf(int ch, int fromIndex)             // char can be also passed
+int indexOf(String str)
+int indexOf(String str, int fromIndex)
+
+String substring(int beginIndex)
+String substring(int beginIndex, int endIndex)  // endIndex is not inclusive
+System.out.println(string.substring(3, 3)); // empty string
+System.out.println(string.substring(3, 2)); // throws exception
+System.out.println(string.substring(3, 8)); // throws exception: assume last index is 7
+
+String toLowerCase()
+String toUpperCase()
+
+boolean equals(Object obj)
+boolean equalsIgnoreCase(String str)
+
+boolean startsWith(String prefix)
+boolean endsWith(String suffix)
+
+String replace(char oldChar, char newChar)
+String replace(CharSequence target, CharSequence replacement)
+
+boolean contains(CharSequence charSeq)
+
+String strip()            //remove whitespace from the beginning and end
+String stripLeading()     //removes whitespace from the beginning
+String stripTrailing()    //
+String trim()             //remove whitespace from the beginning and end
+
+String intern()     // returns the value from the string pool if it is there, otherwise add to string pool
+```
+
+## `StringBuilder`
+- Mutable, it changes it's inner state
+```java
+StringBuilder a = new StringBuilder("abc"); // a references to "abc"
+// a references to "abcde"
+StringBuilder b = a.append("de");           // a and b reference to "abcde"
+// a and b references to "abcdefg"
+b = b.append("f").append("g");              // assigment operation doesn't actually do anything since b is already referencing to the object          
+System.out.println("a=" + a);               // "abcdefg"
+System.out.println("b=" + b);               // "abcdefg"
+```
+
+## `StringBuilder` Constructors
+```java
+StringBuilder sb1 = new StringBuilder();
+StringBuilder sb2 = new StringBuilder("animal");  // create it with specific value
+StringBuilder sb3 = new StringBuilder(10);        // max char slot is 10
+```
+
+## `StringBuilder` Methods
+```java
+int length()
+
+char charAt(int index)
+
+// return -1 if no match is found
+int indexOf(int ch)                            // char can be also passed
+int indexOf(int ch, int fromIndex)             // char can be also passed
+int indexOf(String str)
+int indexOf(String str, int fromIndex)
+
+String substring(int beginIndex)
+String substring(int beginIndex, int endIndex)
+
+StringBuilder append(String str)
+
+StringBuilder insert(int offset, String str)
+
+StringBuilder delete(int startIndex, int endIndex)  // endIndex is allowed exceed the end of the StringBuilder, in that case Java assumes endIndex=length-1
+StringBuilder deleteCharAt(int index)
+
+StringBuilder replace(int startIndex, int endIndex, String newString)   // java deletes from startIndex to endIndex(not inclusive, can exceed length), java puts newString to startIndex
+
+StringBuilder reverse()
+
+String toString()
+```
+
+## Comparing `equals()`and `==`
+- `==`: are the objects refering to same object?
+- `equals()`: logical equality
+- If a class doesn’t have an equals method java uses `==`
+- `StringBuilder` doesn't have `equals()` implemented !!!
+
+## String Pool
+- A location in JVM that collects strings
+- It contains literral values and constants that appear in the program
+- `myObject.toString()` doesn't go to string pool
+```java
+String x = "Hello World";
+String y = "Hello World";
+System.out.println(x == y); // true: jvm created only 1 literal in the memory thus x and y points to the same locaiton in memory
+
+String x = "Hello World";
+String z = " Hello World".trim();
+System.out.println(x == z); // false: the String that z points to is calculated at runtime. Since x and z are not the same at compile time, new String is created
+```
+
+- You can force JVM to use/not use string pool
+```java
+String x = "Hello World";
+String y = new String("Hello World");
+System.out.println(x == y); // false
+
+String name = "Hello World";
+String name2 = new String("Hello World").intern(); // use the String in string pool or create one
+System.out.println(name == name2); // true
+
+String first = "rat" + 1;                           // compile-time constant, placed new in pool
+String second = "r" + "a" + "t" + "1";              // compile-time constant, points to first at string pool
+String third = "r" + "a" + "t" + new String("1");   // not compile time constant, created new in pool
+System.out.println(first == second);                // true
+System.out.println(first == second.intern());       // true
+System.out.println(first == third);                 // false
+System.out.println(first == third.intern());        // true
+```
+
+## Arrays
+
+- `myArray.toString()` -> `Ljava.lang .String;@160bc7c0`
+- Can print contents of an array with `Arrays.toString(myArray)`
+
+### Creating Array of Primitives
+```java
+// When you use this form to instantiate an array, all elements are 
+// set to the default value for that type
+int[] numbers1 = new int[3];
+
+int[] numbers2 = new int[] {42, 55, 99};
+// anonymous array: didn't specify type and size
+int[] numbers2 = {42, 55, 99};
+
+// [] can be before/after name with/without spaceint[] numAnimals;
+int [] numAnimals2;
+int []numAnimals3;
+int numAnimals4[];
+int numAnimals5 [];
+
+int[] ids, types; // creates 2 int arrays
+int ids[], types; // creates 1 int array and 1 int
+```
+
+### Casting Arrays
+```java
+String[] strings = { "stringValue" };
+Object[] objects = strings;
+String[] againStrings = (String[]) objects;
+againStrings[0] = new StringBuilder(); // DOES NOT COMPILE: only String is allowed
+objects[0] = new StringBuilder(); // COMPILES BUT: throws exception at runtime: we have a String[] referred from Object[]
+```
+
+### Sorting Arrays
+- `Arrays.sort(myArray)`
+- ascending order. 
+- Actual ordering of myArray changes. 
+- If myArray is String, it does alphabetical sorting
+
+### Binary Search
+- `Arrays.binarySearch(myArray, search)`
+- Only works for already sorted array(ascending!!!)
+- Returns index of match
+- Returns negative value if no match. This negative value is index-1 where the match should be put to preserve input
+
+### Comparing Arrays
+- `Arrays.compare(myArr1, myArr2)`: 
+  - Arrays must be the same type, or code does not compile
+  - Negative number: 
+    - first array is smaller than second
+    - if both arrays are the same but second has 1 more element
+    - If the first element that differs is smaller in the first array
+  - Zero: 
+    - same size, same elements in the same order
+  - Positive number: 
+    - first array is bigger than second
+    - if both arrays are the same but first has 1 more element
+    - If the first element that differs is larger in the first array
+  - What does smaller/larger mean?: 
+    - `null` is the smallest
+    - numeric order for numbers
+    - For strings:
+      - one is smaller if it is a prefix of another
+      - Uppeercase is smaller than lowercase
+      - Numbers are smaller than letters
+
+- `mismatch(myArr1, myArr2)`
+  - returns -1 if no difference
+  - returns first index of mismatch
+
+## Varargs
+```java
+public static void main(String[] args)
+public static void main(String args[])
+public static void main(String... args) // varargs
+```
+
+## Multidimensional Arrays
+```java
+int[][] vars1; // 2D array
+int vars2 [][]; // 2D array
+int[] vars3[]; // 2D array
+int[] vars4 [], space [][]; // a 2D AND a 3D array
+
+int[][] differentSizes = {{1, 4}, {3}, {9,8,7}}; // multidimensional arrays doesn't have to be rectangular
+// another way of creating asymmetric array
+int [][] args = new int[4][];
+args[0] = new int[5];
+args[1] = new int[3];
+```
+
+## `ArrayList`
+- Disadvantage of arrays is that they are fixed size. You can't change their size after creation
+- Implements `List`(an interface), thus you can store `ArrayList` in `List` reference.
+- Implements `toString()`
+- When empty `ArrayList`is created, capacity > 0 but the size is 0.
+
+### Creating `ArrayList`
+```java
+// pre-java 5, all of them are type of ArrayList<Object>
+ArrayList list1 = new ArrayList();        // contains space for default number of elements with empty slots
+ArrayList list2 = new ArrayList(10);      // specific number of empty slots
+ArrayList list3 = new ArrayList(list2);   // copy both size and contents
+
+// after java 5
+ArrayList<String> list4 = new ArrayList<String>();
+
+// after java 7
+ArrayList<String> list5 = new ArrayList<>();
+```
+
+### Using `var` with `ArrayList`
+```java
+var myArr = new ArrayList<String>(); // myArr is type of ArrayList<String>
+
+var list = new ArrayList<>();        // list is type of ArrayList<Object>
+list.add("a");
+for (String s: list) { } // DOES NOT COMPILE: java assumes most generic type => Object
+```
+
+### `ArrayList` Methods
+```java
+// adds to list, doesn`t overwirtes elements
+boolean add(E element)          // always returns true: other classes in Collections family need to return a value when adding an element (Set)
+void add(int index, E element)
+
+// remove first match
+boolean remove(Object object)   // return true if a match is deleted
+E remove(int index)             // return the elemnt that was deleted, may throw IndexOutOfBoundsException
+
+E set(int index, E newElement)  // return the element that got replaced
+
+boolean isEmpty()
+int size()
+
+void clear()
+
+boolean contains(Object object) // calls equals() for each element
+
+boolean equals(Object object)   // return true if same elements in same order
+```
+
+## Wrapper Classes
+- Contrary to primitives, then can store `null`: useful for data-based services
+- You can create them like `Float.valueOf((float) 1.0)`
+- Each wrapper class has a constructor but it is not recommended. `valueOf()` allows object caching. `String` can be shared when the value is the same(String pool). The wrapper classes are immutable and take advantage of some caching as well.
+- Each wrapper class also have a method that converts back to primitive: `intValue()`
+- Converting `String` to a primitive: `Byte.parseByte("1")` (`Character` cannot use these since you can just call `charAt()`)
+- Converting `String` to a primitive: `Byte.valueOf("2")` (`Character` cannot use these since you can just call `charAt()`)
+
+## Autoboxing and Unboxing
+- ***Autoboxing***: type the primitive value, and Java will convert it to the relevant wrapper class for you
+- ***Unboxing***: reverse of autoboxing
+- Unboxing `null` will throw `NullPointerException`
+```java
+List<Integer> weights = new ArrayList<>();
+Integer w = 50;                   // autoboxing int to Integer
+weights.add(w);                   // [50]
+weights.add(Integer.valueOf(60)); // [50, 60]
+weights.remove(new Integer(50));  // [60]
+double first = weights.get(0);    // 60.0: retrieves Integer and unboxes to int then implicitly casts it to double
+```
+
+## Converting Between `Array` and `List`
+- `ArrayList` to `Array`
+```java
+List<String> list = new ArrayList<>();
+list.add("hawk");
+list.add("robin");
+Object[] objectArray = list.toArray();              // using toArray() without parameters will default to array of Object
+// if you specify a size of 0 for the parameter Java will create a new array of the proper size for the return value. 
+// If you like, you can suggest a larger array to be used instead. 
+// If the ArrayList fits in that array, it will be returned,
+// otherwise a new one will be created
+String[] stringArray = list.toArray(new String[0]); 
+list.clear();                           // list has no connection to objectArray nor stringArray
+System.out.println(objectArray.length); // 2
+System.out.println(stringArray.length); // 2
+```
+
+- `Array` to `List`
+```java
+String[] array = { "hawk", "robin" }; 
+
+List<String> list = Arrays.asList(array);   // returns fixed size list!!!
+list.set(1, "test");                        // updates both array and list!!!
+array[0] = "new";                           // updates both array and list
+System.out.print(Arrays.toString(array));   // [new, test]
+list.remove(1);                             // throws exception
+
+
+List<String> list = List.of(array);         // returns immutable list
+array[0] = "new";                           // only updates array
+System.out.println(Arrays.toString(array)); // [new, robin]
+System.out.println(list);                   // [hawk, robin]
+list.set(1, "test");                        // throws exception
+
+// Arrays.asList() nor List.of() allows you to 
+// change number of elements. For this you need to write logic:
+List<String> fixedSizeList = Arrays.asList("a", "b", "c");
+List<String> expandableList = new ArrayList<>(fixedSizeList);
+```
+
+## Sorting `ArrayList`
+```java
+List<Integer> numbers = new ArrayList<>();
+numbers.add(99);
+numbers.add(5);
+numbers.add(81);
+Collections.sort(numbers);  
+System.out.println(numbers); // [5, 81, 99]       
+```
+
+## Sets
+- Collection of objects that cannot contain duplicates
+- If you try to add a duplicate object to a `Set` API will not fullfil your request
+- there are 2 common classes that implements `Set`: `HashSet` and `TreeSet`(when ordering is important)
+```java
+Set<Integer> set = new HashSet<>();
+System.out.println(set.add(66)); // true
+System.out.println(set.add(66)); // false
+System.out.println(set.size()); // 1
+set.remove(66);
+System.out.println(set.isEmpty()); // true
+```
+
+## Maps
+- A `Map` uses key to identify values
+```java
+V get(Object key)                   // returns the value mapped or null
+
+V getOrDefault(Object key, V other) // returns the value mapped or other
+
+V put(K key, V value)               // add/replace key/value pair, return previous value or null
+
+V remove(Object key)                // removes and returns value (null if none)
+
+boolean containsKey(Object key)
+
+boolean containsValue(Object value)
+
+Set<K> keySet()
+
+Collection<V> values()
+```
+
+## Calculating with `Math` APIs
+```java
+// same goes for Math.max()
+double min(double a, double b)
+float min(float a, float b)
+int min(int a, int b)
+long min(long a, long b)
+
+long round(double num)
+int round(float num)
+
+double pow(double number, double exponent)
+
+double random() // 1 > randomnum >= 0
+```
+
+___
+
+# Chapter 6
+
+## What is Lambda?
+- Java is a OOP language. In java 8 ***Functional Programming*** aspect was added.
+- ***Functional Programming***: 
+  - You specify what you want todo rather than dealing with sate of objects. Focus more on expressions than loops.
+  - Uses ***lambda expressions***
+- ***lambda expressions***: 
+  - block of code that gets passed around like a variable
+  - unnamed method: has parameters and body but no method name
+  - short name: ***lambdas***
+
+## Lambda Syntax
+```java
+interface CheckTrait {
+    boolean test(Animal a);
+}
+
+class CheckIfHopper implements CheckTrait {
+    public boolean test(Animal a) {
+        return a.canHop();
+    }
+}
+
+class Animal {
+    private String species;
+    private boolean canHop;
+    private boolean canSwim;
+
+    public Animal(String speciesName, boolean hopper, boolean swimmer) { species = speciesName; canHop = hopper; canSwim = swimmer;}
+
+    public boolean canHop() {return canHop;}
+    public boolean canSwim() {return canSwim;}
+    public String toString() {return species;}
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        List<Animal> animals = new ArrayList<Animal>();
+        animals.add(new Animal("fish", false, true));
+        animals.add(new Animal("kangaroo", true, false));
+        animals.add(new Animal("rabbit", true, false));
+        animals.add(new Animal("turtle", false, true));
+
+        // without lambda, you need to write new classes for each constraint check
+        print(animals, new CheckIfHopper());
+        //print(animals, new CheckIfSwim());
+        
+        // with lambda
+        print(animals, a -> a.canHop());
+        print(animals, a -> a.canSwim());
+    }
+
+    private static void print(List<Animal> animals, CheckTrait checkTrait) {
+        for (Animal animal :
+                animals) {
+            if (checkTrait.test(animal)) {
+                System.out.println(animal);
+            }
+        }
+    }
+}
+```
+- Above code uses ***Deferred Execution*** in `print(animals, a -> a.canSwim());` and `print(animals, a -> a.canHop());`. It means code specified now will run later. Normally when an expression contains a nested method call, that method call is evaluated immediately. However in this case, `canHop()` and `canSwim()` are called when `print()` calls `test()`.
+- ***Lambdas work with interfaces that have only one abstract method (functional interface)***. In the code above java looks at `CheckTrait` interface
+- We are passing lambda as the second parameter of `print()` which expects `CheckTrait`. Java tries to map lambda to that interface: `boolean test(Animal a);`. Since that interface has to be a an `Animal` and returns `boolean` we know the lambda paramter has to be animal and returns `boolean`
+- These are the same:
+```java
+a -> a.canHop()
+
+// parantheses can be omitted if there is a single parameter
+// curly braces can be omitted if there is only a single statement. If you don't have braces you can also omit return
+(Animal a) -> { return a.canHop(); } 
+```
+
+## Functional Interfaces
+- ***Functional Interface*** = Interfaces that have only one abstract method(simplified explanation)
+- Java provides `@FunctionalInterface` on **some** functional interfaces. This annotation indicates that usage of lambda in the future will be safe. However, there are functional interfaces without this annotation.
+- 4 functional interfaces:
+  1. `Predicate`
+    - Return `boolean`
+    - Imagine you need to test Animals, Strings and Plants.. then we would have to create lots of interfaces to use lambdas
+    ```java
+    public interface Predicate<T> {   // uses type T(syntax for generics) instead of animal
+      boolean test(T t);
+    }
+    ```
+    - This way you don't need your interface anymore!! In the animal example you just need to change the parameter in `print()` as a predicate class. Nothing else will be changed
+  2. `Consumer`
+    - only need to know `void accept(T t)`
+    - When you want receive a value but but return it (you might need it if you just want to print the value)
+    ```java
+    public static void main(String[] args) {
+      Consumer<String> consumer = x -> System.out.println(x);   // we don't have the value to be printed yet, but value will be provided when we print
+      print(consumer, "Hello World");
+    }
+
+    private static void print(Consumer<String> consumer, String value) {
+      consumer.accept(value);
+    }
+    ```
+  3. `Supplier`
+    - only need to know `T get()`
+    - you might need it when you generating values
+    ```java
+    Supplier<Integer> number = () ->  42;                     //always return 42 when called
+    Supplier<Integer> random = () ->  new Random().nextInt(); //always random number (likey to be different one)
+
+    public static void main(String[] args) {
+      Supplier<Integer> number = () ->  42;
+      Supplier<Integer> random = () ->  new Random().nextInt();
+      System.out.println(returnNumber(number));
+      System.out.println(returnNumber(random));
+    }
+
+    private static int returnNumber(Supplier<Integer> supplier) {
+      return supplier.get();
+    }
+    ```
+  4. `Comparator`
+    - `int compare(T o1, T o2)`
+    - For custom ordering
+    ```java
+    Comparator<Integer> ints = (i1, i2) -> i1 - i2; //ascending
+    Comparator<String> strings = (s1, s2) -> s2.compareTo(s1); //descending
+    ```
+  5. BONUS: `BiConsumer`
+    - just like `Consumer`but it can take two parameters
+    ```java
+    Map<String, Integer> bunnies = new HashMap<>();
+    bunnies.put("long ear", 3);
+    bunnies.put("floppy", 8);
+    bunnies.put("hoppy", 1);
+    bunnies.forEach((k, v) -> System.out.println(k + " " + v));
+    ```
+
+## Working With Variables in Lambdas
+- Variables can appear in 4 places in a lambdas:
+1. Parameter List
+```java
+Predicate<String> p = x -> true;
+Predicate<String> p = (var x) -> true;
+Predicate<String> p = (String x) -> true;
+```
+  - In the above code type of x is String in all 3 examples, java infers them from the functiopnal interface(`Predicate`)
+
+2. Lambda Body
+```java
+(a, b) -> { int c = 0; return 5;}
+
+(a, b) -> { int a = 0; return 5;}     // DOES NOT COMPILE: redeclared a
+
+public void variables(int a) {
+  int b = 1;
+  Predicate<Integer> p1 = a -> {    // syntax error, local vraible a already in scope
+  int b = 0;                        // // syntax error, local vraible b already in scope
+  int c = 0;
+  return b == c;}                   // p1 missing ;
+}
+
+```
+- **Tip for better code practice:** a lambda block with a local variable is a good hint that you should extract that code into a method.
+
+3. Variables Referenced from Lambda Body
+- Lambda can always access instance variables and class variables
+- Lambda can access local variables and method parameter only if they are ***effectively final***(value of variable doesn't change after it is set, regardless of whether it is explicitly marked as `final`). If you aren't sure if your variable is ***effectively final*** then just add `final` to it. If you code compiles, your varaible is effectively final.
+```java
+public class Crow {
+   private String color;
+   public void caw(String name) {   // or `final String name`
+      String volume = "loudly";     // or `final String volume`
+      Consumer<String> consumer = s -> System.out.println(name + " says "
+      + volume + " that she is " + color);
+} }
+```
+
+## Calling APIs with Lambdas
+- `List` and `Set`declare `removeIf()` that takes `Predicate`
+```java
+List<String> bunnies = new ArrayList<>();
+bunnies.add("long ear");
+bunnies.add("floppy");
+bunnies.add("hoppy");
+System.out.println(bunnies);     // [long ear, floppy, hoppy]
+// remove if element starts with `h`
+bunnies.removeIf(s -> s.charAt(0) != 'h');
+System.out.println(bunnies);     // [hoppy]
+```
+
+- The `sort()` method takes `Comparator` that provides the sort order. works for `List`
+```java
+List<String> bunnies = new ArrayList<>();
+bunnies.add("long ear");
+bunnies.add("floppy");
+bunnies.add("hoppy");
+System.out.println(bunnies);     // [long ear, floppy,hoppy]
+bunnies.sort((b1, b2) -> b1.compareTo(b2));
+System.out.println(bunnies);     // [floppy, hoppy, long ear]
+```
+
+- `foreach()` takes a `Consumer` and calls that lambda for each element. Works for `List`, `Set`, `Map`(you have to choose whether you want to go through the keys or values)
+```java
+List<String> bunnies = new ArrayList<>();
+bunnies.add("long ear");
+bunnies.add("floppy");
+bunnies.add("hoppy");
+bunnies.forEach(b -> System.out.println(b));
+```
+
+___
+
+# Chapter 7
+
+## Designing Methods
+- ***Method Signature:*** method name and parameter list
+```java
+public final void nap(int minutes) throws Exception {}
+```
+### 1. Access Modifiers
+  1. `private`: method can be called only from within class
+  2. default (there is no key word for this, you simply have to omit the access modifier to achieve default behaviour): can be called from classes in the same package. `default` key word is in `switch` and ìnterface`, don't mix it up.
+  ```java
+  default void walk2() {} // DOES NOT COMPILE
+  void walk4() {}
+  ```
+  3. `protected`: can be called from classes in the same package or subclasses
+    - Assume you have the parant class **Bird** which has protected method and variable: `floatInWater()` and `name`. **Swan** is a subclass of **Bird** but ***they are in different packages***. In class **Swan**, you can freely access `name` and call `floatInWater()`. However you can not do something like this:
+    ```java
+    public class Swan extends Bird {
+      public void swim() {
+        floatInWater();             // can access 
+        System.out.println(name);   // can access
+
+        Swan otherSwan = new Swan();
+        other.floatInWater();       // can access
+
+        Bird otherBird = new Bird();
+        other.floatInWater();       // DNC: Bird reference is used rather than inheritance, 
+                                    // thus you don't get to use protected members
+      }
+    }
+    ```
+  4. `public`: can be called from any class
+
+### 2. Optional specifier (not required)
+  - You can have multiple optional specifiers int the same method
+  1. `static`: used for class methods
+  2. `abstract`: used when method body is not provided
+  3. `final`: when a method is not allowed to be overriden by a subclass
+  4. `sycnhronized`: multithreaded code
+  5. `native`: when interacting with code written in another language
+  6. `strictfp`: used for making floating-point calculations portable
+
+### 3. Return type (required)
+
+### 4. Method name (required)
+  - Same rules are followed as practiced for variable names in ***Chapter 2***
+### 5. Parameter list (required)
+
+### 6. Excepiton list (not required)
+
+### 7. Method body (required, omitted for `abstract` methods)
+
+
+## Working with Varargs
+- A bit different than an array:
+  - A varargs parameter must be the last element in a method's parameter List. Thus, you are allowed to have only 1 varargs parameter per method.
+- When calling a method with varargs as parameter you have few choices:
+  - pass an array
+  - list the elements of the array (let java create the array)
+  - omit varargs values method call (java will create an empty array).
+  - pass `null`: java treats this paramter as array reference that happens to be `null`. Thus, java won't create an array and vararg varaible in the method will be `null`
+  ```java
+  public static void walk(int start, int... nums) { 
+    System.out.println(nums.length);
+  }
+
+  public static void main(String[] args) {
+      walk(1);                    // 0
+      walk(1, 2);                 // 1
+      walk(1, 2, 3);              // 2
+      walk(1, new int[] {4, 5});  // 2
+  }
+  ```
+
+## Designing `static` Methods and Fields
+- `static` methods don't require an instance of the class. They are shared among all users of the class. `static` keyword applies to the class rather than an instance of a class
+- - `static` methods in the class, including a `main()` method, may access private members, including private constructors.
+- Purposes of `static` methods:
+  1. Used for utility or helper methods that don't require any object state. User doesn't need to instantiate objects to call these utility methods. Ex: `public static void main(String[]args)`
+  2. Used for a shared state by all instances of a class. **Methods that use any static variables must be `static` as well**
+
+## Accessing a `static` Variable/Method
+```java
+public class Koala {
+   public static int count = 0;
+   public static void main(String[] args) {
+      System.out.println(count);
+   }
+}
+----------------------------------
+
+System.out.println(Koala.count);
+Koala.main(new String[0]);
+
+Koala koala = new Koala();
+System.out.println(k.count);      // 0
+k = null;                         // k is null
+System.out.println(k.count);      // 0: k is still treated as Koala since k is Koala reference
+
+Koala.count = 4;
+Koala koala1 = new Koala();
+Koala koala2 = new Koala();
+koala1.count = 6;
+koala2.count = 5;
+System.out.println(Koala.count);  // 5
+```
+
+## `static` VS Instance
+- A `static` member cannot call an instance member without referencing an instance of the class.
+```java
+public class Static {
+   private String name = "Static class";
+   public static void first() {  }
+   public static void second() {  }
+   public void third() {  System.out.println(name); }
+   public static void main(String args[]) {
+      first();
+      second();
+      third();          // DOES NOT COMPILE
+  } 
+}
+```
+- You can fix the code above by:
+  1. make `third()`, `static`. However now `third()` is a `static` method referring to nonstatic `name`
+  2. add `static` to `name`
+
+- A `static` method or instance method can call a `static` method because `static` methods don't require an object to use. They can not call an instance method or instance variable without a reference variable because these need object to be created in the first place!
+
+```java
+public class Giraffe {
+  public void eat(Giraffe g) {}
+  public void drink() {};
+  public static void allGiraffeGoHome(Giraffe g) {}
+  public static void allGiraffeComeOut() {}
+
+  public static int count;
+  public int total;
+  public static double average = total / count;  // DOES NOT COMPILE: static variable cannot use instance variable
+}
+```
+Type | Calling | Legal?
+-- | -- | --
+`allGiraffeGoHome()` | `allGiraffeComeOut()` | Yes
+`allGiraffeGoHome()` | `drink()` | No
+`allGiraffeGoHome()` | `g.eat()` | Yes
+`eat()` | `allGiraffeComeOut()` | Yes
+`eat()` | `drink()` | Yes
+`eat()` | `g.eat()` | Yes
+
+## `static` Variables
+- ***constant variable***: use the modifier `static final`(`static` for memory management, don't create a variable for each instance of class) and use alluppercase letters with underscore between words
+```java
+public class Initializers {
+   private static final int NUM_BUCKETS = 45;
+   private static final ArrayList<String> values = new ArrayList<>();
+
+   public static void main(String[] args) {
+      NUM_BUCKETS = 5;  // DOES NOT COMPILE
+
+      // `values` is a reference variable
+      // thusyou can make changes in the object
+      // however you can't make `values` refer to another object after init
+      values.add("changed");  
+   }
+```
+
+## `static` Initialization
+```java
+private static int one;               // since `one` is not final it can be reassigned many times
+private static final int two;         // it is final, can be initialized once in `static`
+private static final int three = 3;   // `final` is initialized and assigned, thus cannot be assigned again
+private static final int four;        //DNC: `final` but never initialized
+static {
+   one = 1;       
+   two = 2;
+   three = 3;     // DNC: `three` init and assigned, cannot reassign a final variable again
+   two = 4;       // DNC: second attempt to assign `two`
+}
+```
+- All `static` initializers run when the class is first used in the order they are defined. The statements in them run and assign any `static` variables as needed.
+- `static` initializer blocks always execute before the instance initialization blocks because static blocks run at the time of class loading. However, the instance block runs at the time of instance creation. 
+- ***Tip for better code practice***:
+  - try to avoid instance initializers: use constructor
+  - try to avoid `static` initializers: but if you need to do so (you may need to initilaize a collection like `ArrayList`), put all the static initialization in the same block
+
+## `static` Imports
+- `import` is for classes, `import static` is for static members of classes
+- If you try to explicitly `import static` two same method or variables, the code won't compile.
+
+## Passing Data among Methods
+- Java is a ***pass-by-value*** language: copy of the variable is made and the method receives that copy. Assignments made in the method do not affect the caller
+```java
+public static void main(String[] args) {
+   String name = "Webby";     // name -> "Webby"
+   speak(name);
+   System.out.println(name);  // Webby
+
+   StringBuilder name1 = new StringBuilder(); //name1 -> `StringBuilder`
+   speak1(name1);
+   System.out.println(name1); // Sparky
+}
+
+public static void speak(String s) {    // name-> "Webby" <-s 
+   s = "Sparky";                        // name-> "Webby"   s->"Sparky"
+}
+
+public static void speak1(String s) {    // name1-> `StringBuilder` <-s 
+   s = "Sparky";                        // name1-> StringBuilder <-s
+}
+```
+- In the above code: The variable ***s*** is a copy of the variable ***name***. Both point to the same `StringBuilder`, which means that changes made to the `StringBuilder` are available to both references
+
+## Overloading Methods
+- ***Method overloading*** occurs when methods have the same name but different method signatures, so only method parameters can change. On an overloaded method you can also have different access modifiers, specifiers, return types and exception list
+```java
+// they are overloaded beacuse method parameters are different
+// not beacuse they have different access modifiers, specifiers, return types and exception list
+public void fly(int numMiles) {}
+public void fly(short numFeet) {}
+public boolean fly() { return false; }
+void fly(int numMiles, short numFeet) {}
+public void fly(short numFeet, int numMiles) throws Exception {}
+public int fly(int numMiles) {}     // DNC: since name and parameters are the same, this is a duplicate method for Java
+
+public void fly(int[] lengths) {}
+public void fly(int... lengths) {}     // DNC: java treats varargs as arrays!!
+```
+- Although java treats varargs as arrays, calling them are different
+```java
+public void fly(int[] lengths) {}
+fly(new int[] { 1, 2, 3 });
+fly(1, 2, 3); // DNC
+//---------------------------------------
+public void fly(int... lengths) {}
+fly(new int[] { 1, 2, 3 });
+fly(1, 2, 3);
+```
+
+## Autoboxing
+```java
+public void fly(Integer numMiles) {}
+fly(3);  // int will be autoboxed to Integer
+```
+```java
+public void fly(int numMiles) {}
+public void fly(Integer numMiles) {}
+fly(3);   // java will match this to most specific one which is int version
+```
+- Java will do only 1 conversion
+```java
+public class TooManyConversions {
+   public static void play(Long l) {}
+   public static void play(Long... l) {}
+   public static void main(String[] args) {
+      play(4);      // DNC: there are 2 conversion to make: int to long to Long
+      play(4L);     // calls the Long version
+   }
+}
+```
+
+Rule | Example of what will be chosen for `glide(1,2)`
+-- | --
+Exact match by type | `String glide(int i, int j)`
+Larger primitive type | `String glide(long i, long j)`
+Autoboxed type | `String glide(Integer i, Integer j)`
+Varargs | `String glide(int... nums)`
+
+## Generics
+- Java has ***type erasure***: generics are used at compile time
+```java
+public void walk(List<String> strings) {}
+public void walk(List<Integer> integers) {}    // DNC
+```
+- In the code above, the compiled code looks like this:
+```java
+public void walk(List strings) {}
+public void walk(List integers) {}    // DNC
+```
+- Arrays don`t participate in ***type erasure***
+```java
+public static void walk(int[] ints) {}
+public static void walk(Integer[] integers) {}
+```
+- You also can’t overload a generic method in a parent class:
+```java
+public class LongTailAnimal {
+   protected void chew(List<Object> input) {}
+}
+public class Anteater extends LongTailAnimal {
+   protected void chew(List<Double> input) {}  // DOES NOT COMPILE 
+}
+```
+
+## Encapsulating Data
+- ***Encapsulation*** means only methods in the class with the variables can refer to the instance variables. Callers are required to use these methods. 
+- As long as instance variables are `private`, the class is encapsulated. Only methods can read/update these variables.
+- Uses ***getter/accessor methods*** and ***setter/mutator methods***
+
+___
+
+# Chapter 8
+
+## Inheritance
+- ***Inheritance*** is the process by which a subclass automatically includes any `public` or `protected` members of the class, defined in the parent class. 
+- Package-private(default) members are available if the child class is in the same package as the parent class
+- ***Inheritance*** is transitive: child class X inherits from class Y, which inherits from class Z. X is subclass of Z and X is direct subclass  of Y. Y is direct subclass of Z.
+
+## Single vs Multiple Inheritance
+- Java supports single inheritance: a class may inherit from only 1 direct parent class.
+- However, a class may implement multiple interfaces
+- Java supports multiple level inheritance: X->Y->Z (example before)
+- Multiple inheritance is complex: which parent to inherit values from in case of a conflict. For example, if you have an object or method defined in all of the parents, which one does the child inherit?
+- You can prevent a class from being extended by marking the class with the `final` modifier
+
+## Inheriting `Object`
+- All classes inherit from a single class: `Object`
+- `Object` is the only class that doesn’t have a parent class.
+- If you have a class which doesn't extends from any class, complier will automatically adds a code which extends from `Object`:
+```java
+public class Zoo { }
+
+// complier writes the above code like this:
+public class Zoo extends java.lang.Object { }
+
+// java won't extend Object if a class is extending another class 
+public class Animal extends Zoo {}   
+```
+- `toString()` and `equals()` methods are available in `Object`; therefore, they are accessible in all classes.
+
+## Applying Class Access Modifiers
+- ***Top-level class***: a class that is not defined inside another class. They can only have `public`or package-private(default) class.
+- ***Inner class***: a class defined in another class. Can have `public`, default, protected, private access.
+- Java file can have many top level classes but can have **at most** only 1 top-level `public` class.
+
+## Accessing `this` Reference
+- `this`reference refers to the current instance of the class. Can be used to access any member of the class, including inherited members.
+- `this` can be used in any instance method, constructor, instance initializer block. But can not be used when there is no implicit instance of the class such as `static` method or `static` initializer block
+```java
+public class Flamingo {
+  private String color;
+  public void setColor(String color) {
+     color = color;                   // if you change this to this.color = color, it will print PINK
+  }
+  public static void main(String... unused) {
+     Flamingo f = new Flamingo();
+     f.setColor("PINK");
+     System.out.println(f.color);     // prints null
+  } 
+}
+```
+
+## Calling `super` Reference
+- **Problem**: A variable/method can be defined both in child and parent class, how can wereference the version in the parent class? 
+- `super` reference excludes any memebers found the current class, and can refer only to the members available via inheritance.
+
+## Crating a Constructor
+```java
+public class Bunny {
+   public Bunny() { // contructor name matches the class name + no return type(not even void)
+      System.out.println("constructor");
+   }
+
+   public void Bunny(String name) {}    // not a consturctor but a method
+}
+```
+- Constructor parameters can not contain `var`
+```java
+class Bonobo {
+   public Bonobo(var food) { // DOES NOT COMPILE
+} }
+```
+- Can have many constructors as long as they all have unique signatures. Since constructor name should be same, only constructor parameters can change in the signature
+- Declaring constructors with different signatures called ***constructor overloading***
+- Constructors are used when creating a new object. This process called ***instantiation***
+- When java sees `new`, it allocates memory for the new object and looks for a constructor, matching signature
+
+## Default Constructor
+- If you don’t include any constructors in the class, Java will create one for you without any parameters. This Java-created constructor is called the ***default constructor***
+- The default constructor has an empty parameter list and an empty body
+- Default constructor is generated during compile time
+```java
+// Only Rabbit1 will have a default constructor generated since it doesn't have any constructor!!
+
+public class Rabbit1 {}
+public class Rabbit2 {
+   public Rabbit2() {}
+}
+public class Rabbit3 {
+   public Rabbit3(boolean b) {}
+}
+public class Rabbit4 {
+   private Rabbit4() {}
+}
+```
+- ***Why would you want to have a private constructor?:*** this will tell complier not provide default constructor. This also prevents other classes to instantiate the class. This is useful if the class has only `static` methods or the dev wants to have full control of all calls to create new instances of the class (`static` methods can access `private` memebrs)
+
+## Calling Overloaded Constructors with `this()`
+```java
+public class Hamster {
+   private String color;
+   private int weight;
+   public Hamster(int weight) {
+      this.weight = weight;
+      color = "brown";
+   }
+   public Hamster(int weight, String color) {
+      this.weight = weight;
+      this.color = color;
+   }
+}
+```
+- In the above code, there is a bit of duplication, as `this.weight` is assigned twice in the same way in both constructors. What can be done to reduce the duplication?
+  ```java
+  public Hamster(int weight) {
+   Hamster(weight, "brown");      // DOES NOT COMPILE
+  }
+
+  public Hamster(int weight) {
+      new Hamster(weight, "brown");  // Compiles, but incorrect
+  }
+
+  public Hamster(int weight) {  // Now Java calls the constructor that takes two parameters, with weight and color set as expected.
+    this(weight, "brown");
+  }
+  ```
+- `this()` call must be the first statement in the constructor. The side effect of this is that there can be only one call to `this()` in any constructor.
+```java
+public class Gopher {
+   public Gopher(int dugHoles) {
+      this(5);  // DOES NOT COMPILE: endless loop
+   }
+}
+```
+- `this`, refers to an instance of the class, while `this()`, refers to a constructor call within the class
+
+## Calling Parent Constructors With `super()`
+- In Java, the first statement of every constructor is either `this()` or `super()`
+- `super()` always refers to the most direct parent
+
+## Complier Enhancements
+- Java compiler automatically inserts a call to the no-argument constructor `super()` if you do not explicitly call `this()` or `super()` as the first line of a constructor
+- following three class and constructor definitions are equivalent:
+```java
+public class Donkey {}
+public class Donkey {
+   public Donkey() {}
+}
+public class Donkey {
+   public Donkey() {
+super(); }
+}
+```
+
+## ARE CLASSES WITH ONLY PRIVATE CONSTRUCTORS CONSIDERED FINAL?
+- What happens if you have a class that is not marked final but only contains private constructors—can you extend the class? The answer is “yes,” but only an inner class defined in the class itself can extend it. An inner class is the only one that would have access to a private constructor and be able to call super(). Other top-level classes cannot extend such a class.
+
+## Missing a Default No-Argument Constructor
+```java
+public class Mammal {
+   public Mammal(int age) {}
+}
+public class Elephant extends Mammal {  // DNC
+}
+```
+- Above doesn't compile because complier will insert code like this:
+```java
+public class Mammal {
+   public Mammal(int age) {}
+}
+public class Elephant extends Mammal {  
+  public Elephant() {
+    super()   // DNC: there is no constructor of Mammal with 0 parameters
+  }
+}
+```
+- You can fix it by adding a call to parent constructor:
+```java
+public class Mammal {
+   public Mammal(int age) {}
+}
+public class Elephant extends Mammal {  
+  public Elephant() {
+    super(5)
+  }
+}
+```
+
+## Constructors and `final` fields
+- `final static` variables must be assigned a value exactly once. Instance variables marked `final` follow similar rules. They can be assigned values in the line in which they are declared or in an instance initializer. There is one more place they can be assigned a value—the constructor. ***By the time the constructor completes, all `final` instance variables must be assigned a value.***
+- Unlike local `final` variables, which are not required to have a value unless they are actually used, `final` instance variables must be assigned a value. Default values are not used for these variables.
+```java
+public class MouseHouse {
+   private final int volume;
+   private final String type;
+   {
+      this.volume = 10;
+   }
+   public MouseHouse(String type) {
+      this.type = type;
+   }
+   public MouseHouse() {  // DOES NOT COMPILE: value is not set for `type`
+      this.volume = 2;    // DOES NOT COMPILE: volume is already set a value
+   }
+}
+```
+- You can fix it by:
+```java
+public MouseHouse() {
+   this(null);
+}
+```
+
+## Order of Initialization
+1. Class Initialization
+  - Starting from highest super class, invoke all `static` members in the class hierarchy. Often referred as ***loading the class***
+  - The JVM controls when the class is initialized, although you can assume the class is loaded before it is used. The class may be initialized when the program first starts, when a static member of the class is referenced, or shortly before an instance of the class is created. A class may never be loaded if it is not used.
+  - Happens at most once for each class
+  - ***Initialize Class X***
+    1. If there is a superclass Y of X, then initialize class Y first.
+    2. Process all static variable declarations in the order they appear in the class.
+    3. Process all static initializers in the order they appear in the class.
+    ```java
+    public class Animal {
+      static { System.out.print("A"); }
+    }
+    public class Hippo extends Animal {
+      static { System.out.print("B"); }
+      public static void main(String[] grass) {
+          System.out.print("C");
+          new Hippo();
+          new Hippo();
+          new Hippo();
+      } 
+    }
+    ```
+    - Above code prints "ABC": Since the `main()` method is inside the Hippo class, the class will be initialized first, starting with the superclass and printing AB. Afterward, the main() method is executed, printing C. Even though the main() method creates three instances, the class is loaded only once.
+    - What if you instead called Hippo inside another program?
+    ```java
+    public class HippoFriend {
+    public static void main(String[] grass) {
+          System.out.print("C");
+          new Hippo();
+      }
+    }
+    ```
+    - this program will likely print CAB, with the Hippo class not being loaded until it is needed inside the main() method. We say likely, because the rules for when classes are loaded are determined by the JVM at runtime.
+2. Instance Initialization
+  - An instance is initialized anytime the new keyword is used
+  - First, start at the lowest-level constructor where the new keyword is used. Remember, the first line of every constructor is a call to this() or super(), and if omitted, the compiler will automatically insert a call to the parent no-argument constructor super(). Then, progress upward. Finally, initialize each class starting with the superclass, processing each instance initializer and constructor in the reverse order in which it was called
+  - ***Initialize Class X***
+  1. If there is a superclass Y of X, then initialize the instance of Y first.
+  2. Process all instance variable declarations in the order they appear in the class.
+  3. Process all instance initializers in the order they appear in the class.
+  4. Initialize the constructor including any overloaded constructors referenced with this().
+  - Example without inheritance, prints: 0-10-BestZoo-z-
+  ```java
+  public class ZooTickets {
+    private String name = "BestZoo";
+    { System.out.print(name+"-"); }
+    private static int COUNT = 0;
+    static { System.out.print(COUNT+"-"); }
+    static { COUNT += 10; System.out.print(COUNT+"-");}
+
+    public ZooTickets() {
+      System.out.print("z-");
+    }
+
+    public static void main(String... patrons) {
+      new ZooTickets();
+    }
+  }  
+  ```
+  - Example with inheritance, prints Primate-Ape1-Chimpanzee-:
+  ```java
+  class Primate {
+    public Primate() {
+      System.out.print("Primate-");
+    }
+  }
+
+  class Ape extends Primate {
+    public Ape(int fur) {
+      System.out.print("Ape1-");
+    }
+    public Ape() {
+      System.out.print("Ape2-");
+    }
+  }
+
+  public class Chimpanzee extends Ape {
+    public Chimpanzee() {
+      super(2);
+      System.out.print("Chimpanzee-");
+    }
+    public static void main(String[] args) {
+      new Chimpanzee();
+    }
+  }
+  ```
+  - Prints:
+  0
+  Ready
+  swimmy
+  1
+  Constructor
+  ```java
+  public class Cuttlefish {
+    private String name = "swimmy";
+    { System.out.println(name); }
+    private static int COUNT = 0;
+    static { System.out.println(COUNT); }
+    { COUNT++; System.out.println(COUNT); }
+    
+    public Cuttlefish() {
+      System.out.println("Constructor");
+    }
+    public static void main(String[] args) {
+      System.out.println("Ready");
+      new Cuttlefish();
+    }
+  }
+  ```
+  - Prints
+  AFBECHG
+  BECHG
+  ```java
+  class GiraffeFamily {
+    static { System.out.print("A"); }
+    { System.out.print("B"); }
+    public GiraffeFamily(String name) {
+      this(1);
+      System.out.print("C");
+    }
+    public GiraffeFamily() {
+      System.out.print("D");
+    }
+    public GiraffeFamily(int stripes) {
+      System.out.print("E");
+    }
+  }
+  
+  public class Okapi extends GiraffeFamily {
+    static { System.out.print("F"); }
+    public Okapi(int stripes) {
+      super("sugar");
+      System.out.print("G");
+    }
+    {System.out.print("H"); }
+    public static void main(String[] grass) {
+      new Okapi(1);
+      System.out.println();
+      new Okapi(2);
+    }
+  }
+  ```
+
+1. The first statement of every constructor is a call to an overloaded constructor via this(), or a direct parent constructor via super().
+2. If the first statement of a constructor is not a call to this() or super(), then the compiler will insert a no-argument super() as the first statement of the constructor.
+3. Calling this() and super() after the first statement of a constructor results in a compiler error.
+4. If the parent class doesn’t have a no-argument constructor, then every constructor in the child class must start with an explicit this() or super() constructor call.
+5. If the parent class doesn’t have a no-argument constructor and the child doesn’t define any constructors, then the child class will not compile.
+6. If a class only defines private constructors, then it cannot be extended by a top-level class.
+7. All final instance variables must be assigned a value exactly once by the end of the constructor. Any final instance variables not assigned a value will be reported as a compiler error on the line the constructor is declared.
+
+## Calling Inherited Members
+- you can use this to access visible members of the current or a parent class, and you can use super to access visible members of a parent class
+
+## Defining Subtype and Supertype
+- In java subtype is used rather than subclass since java includes `interface`
+- A subtype is the relationship between two types where one type inherits the other. If X is subtype of Y, then one of these must be true:
+  - X and Y are classes, and X is a subclass of Y
+  - X and Y are interfaces, and X is a subinterface of Y
+  - X is a class and Y is an interface, and X implements Y (either directly or through an inherited class).
+
+## Overriding a Method
+- overriding a method occurs when a subclass declares a new implementation for an inherited method with the same signature and compatible return type. 
+- there are 4 rules to overriding:
+  1. The method in the child class must have the same signature as the method in the parent class.
+  2. The method in the child class must be at least as accessible as the method in the parent class.
+    ```java
+    public class Camel {
+      public int getNumberOfHumps() {
+        return 1; 
+      }
+    }
+    
+    public class BactrianCamel extends Camel {
+      private int getNumberOfHumps() {  // DOES NOT COMPILE
+        return 2; 
+      }
+    }
+      
+    public class Rider {
+      public static void main(String[] args) {
+          Camel c = new BactrianCamel();  // polymorphism
+          System.out.print(c.getNumberOfHumps());
+      }
+    }
+    ```
+    - Why such a rule exists? Assume the code will compile, The reference type for the object is Camel, where the method is declared public, but the object is actually an instance of type BactrianCamel, which is declared private. This creates ambiguity
+
+  3. The method in the child class may not declare a checked(***does not apply to unchecked exception!!!***) exception that is new or broader than the class of any exception declared in the parent class method.
+    ```java
+    // FileNotFoundException is subclass of IOException
+    // NumberFormatException is subclass of IllegalArgumentException
+    public class Reptile {
+      protected void sleepInShell() throws IOException {}
+      protected void hideInShell() throws NumberFormatException {}
+      protected void exitShell() throws FileNotFoundException{}
+    }
+    public class GalapagosTortoise extends Reptile {
+      public void sleepInShell() throws FileNotFoundException{}
+      public void hideInShell() throws IllegalArgumentException {}  // This compiles because both of the excepitons are unchecked, so rule does not apply
+      public void exitShell() throws IOException {} // DOES NOT COMPILE
+    }
+    ```
+    - Why such a rule exists? Same as **2.**, because of polymorphism, you could end up with an object that is more restrictive than the reference type it is assigned to, resulting in a checked exception that is not handled or declared.
+
+  4. If the method returns a value, it must be the same or a subtype of the method in the parent class, known as ***covariant return types***.
+    ```java
+    public class Rhino {
+      protected CharSequence getName() {
+        return "rhino";
+      }
+      protected String getColor() {
+        return "grey, black, or white";
+      }
+    }
+
+    class JavanRhino extends Rhino {
+      public String getName() {   // String implements CharSequence
+        return "javan rhino";
+      }
+      public CharSequence getColor() {  // DNC: CharSequence is not a subtype of String
+        return "grey";
+      }
+    }
+    ```
+
+
+- Overloaded methods are considered independent and do not share the same polymorphic properties as overridden methods.
+
+## Overloading VS Overriding
+- Similarity: involve redefining a method using the same name.
+- Difference: overloaded method will use a different list of method parameters
+```java
+public class Bird {
+   public void fly() {
+      System.out.println("Bird is flying");
+   }
+   public void eat(int food) {
+      System.out.println("Bird is eating "+food+" units of food");
+  } 
+}
+
+public class Eagle extends Bird {
+   public int fly(int height) {   // overloaded
+      System.out.println("Bird is flying at "+height+" meters");
+      return height;
+   }
+   public int eat(int food) {  // DNC: overridden but int is not a subtype of void
+      System.out.println("Bird is eating "+food+"units of food");
+      return food;
+   }
+}
+```
+
+## Generic Method Parameters
+- You can not overload a parent method with generic parameters. But you can override a method with generic parameters.
+- When overriding a method with generic type, you must match the signature(including generic type) exactly.
+```java
+public class LongTailAnimal {
+   protected void chew(List<String> input) {}
+}
+public class Anteater extends LongTailAnimal {
+   protected void chew(List<String> input) {}
+}
+```
+
+## Generic Return Types
+- When you’re working with overridden methods that return generics, the return values must be covariant. The generic parameter type must match its parent’s type exactly.
+```java
+public class Mammal {
+   public List<CharSequence> play() { ... }
+   public CharSequence sleep() { ... }
+}
+public class Monkey extends Mammal {
+   public ArrayList<CharSequence> play() { ... }
+}
+public class Goat extends Mammal {
+   public List<String> play() { ... }  // DNC: Generic is not the same as parent's
+   public String sleep() { ... }
+}
+```
+
+## Redeclaring `private` Methods
+- In Java, you can’t override `private` methods since they are not inherited. But the child can still define the same method, but the method wouldn't be an inherited method, it will be jsut a regualr instance method.
+```java
+public class Camel {
+   private String getNumberOfHumps() {
+      return "Undefined";
+   }
+}
+public class DromedaryCamel extends Camel {
+   private int getNumberOfHumps() {   // it is not overriden, just a regular method
+    return 1; 
+   }
+}
+```
+
+## Hiding `static` Methods
+- A ***hidden method*** occurs when a child class defines a `static` method with the same name and signature as an inherited static method defined in a parent class.
+- The same 4 rules for overriding are applied with 1 more rule to follow:
+  5. The method defined in the child class must be marked as static if it is marked as static in a parent class.
+  ***Tip***: this means if you have an overriden method, making it `static` both in parent and child would make it ***hidden method***
+- ***Hidden methods*** are not considered as overriden methods, but there is still inheritance going on:
+```java
+public class Bear {
+   public static void eat() {
+      System.out.println("Bear is eating");
+   }
+}
+public class Panda extends Bear {
+   public static void eat() {
+      System.out.println("Panda is chewing");
+   }
+   public static void main(String[] args) {
+    eat(); 
+   }
+}
+```
+- Above code prints ***Panda is chewing*** at runtime. What if `eat()` from Panda was removed? Then it prints ***Bear is eating***
+
+## Creating `final` Methods
+- `final` methods cannot be overriden nor hidden(hidden method)
+- ***Why mark a method as `final`?:*** you’d mark a method as final when you’re defining a parent class and want to guarantee certain behavior of a method in the parent class, regardless of which child is invoking the method. For example if you have a `hasFeathers()` which always returns `true` in Bird, then it means you trust that all birds have feathers and you don't want any childern of Bird to change this behaviour. In practice not many methods are marked with `final` beacuse as a dev it is hard to predict and see every possibilty of children. For this example: a Chick class can extend from Bird, but chicks are featherless!!!
+
+## Hiding Variables
+- Variables can not be overriden, but they can be hidden.
+- A ***hidden variable*** occurs when a child class defines a variable with the same name as an inherited variable defined in the parent class. 
+```java
+class Carnivore {
+   protected boolean hasFur = false;
+}
+public class Meerkat extends Carnivore {
+   protected boolean hasFur = true;
+   public static void main(String[] args) {
+      Meerkat m = new Meerkat();
+      Carnivore c = m;
+      System.out.println(m.hasFur);
+      System.out.println(c.hasFur);
+} 
+```
+
+## Understanding Polymorphism
+- ***polymorphism***, the property of an object to take on many different forms. 
+- A Java object may be accessed 
+  - using a reference with the same type as the object, 
+  - a reference that is a superclass of the object, 
+  - or a reference that defines an interface the object implements, either directly or through a superclass. 
+- Furthermore, a cast is not required if the object is being reassigned to a super type or interface of the object.
+- Example for polymorphism: 
+```java
+public class Primate {
+   public boolean hasHair() {
+      return true;
+   }
+}
+public interface HasTail {
+   public abstract boolean isTailStriped();
+}
+public class Lemur extends Primate implements HasTail {
+   public boolean isTailStriped() {
+      return false;
+   }
+   public int age = 10;
+   public static void main(String[] args) {
+      Lemur lemur = new Lemur();
+      System.out.println(lemur.age);
+      HasTail hasTail = lemur;
+      System.out.println(hasTail.isTailStriped());
+      System.out.println(hasTail.age);    // DNC: hasTail reference doesn't have age
+      Primate primate = lemur;
+      System.out.println(primate.hasHair());
+      System.out.println(primate.isTailStriped());    // DNC: primate rerefence doesn't have isTailStripped()
+   }
+}
+```
+- Above, only 1 object Lemur created. Polymorphism enables an instance of Lemur to be reassigned or passed to a method using one of its supertypes, such as Primate or HasTail
+- Once the object has been assigned to a new reference type, only the methods and variables available to that reference type are callable on the object without an explicit cast
+
+## Object VS Reference
+- all objects are accessed by reference, thus no direct access to objects itself
+- Regardless of the type of the reference you have for the object in memory, the object itself doesn’t change. 
+```java
+Lemur lemur = new Lemur();
+Object lemurAsObject = lemur;
+```
+- Even though the Lemur object has been assigned to a reference with a different type, the object itself has not changed and still exists as a Lemur object in memory. What has changed, then, is our ability to access methods within the Lemur class with the lemurAsObject reference. Without an explicit cast back to Lemur, as you’ll see in the next section, we no longer have access to the Lemur properties of the object.
+
+1. The type of the object determines which properties exist within the object in memory.
+2. The type of the reference to the object determines which methods and variables are accessible to the Java program.
+
+## Casting Objects
+```java
+Primate primate = new Lemur();  // Implicit Cast: Lemur is a subclass of Primate, this can be done without a cast operator
+
+Lemur lemur2 = primate;         // DNC: 
+System.out.println(lemur2.age);
+
+Lemur lemur3 = (Lemur)primate;  // Explicit Cast
+System.out.println(lemur3.age);
+```
+- Casting objects is similar to casting primitives: 
+  1. Casting a reference from a subtype to a supertype doesn’t require an explicit cast.
+  2. Casting a reference from a supertype to a subtype requires an explicit cast.
+  3. The compiler disallows casts to an unrelated class. (applies to class types opnly, not interfaces)
+  4. At runtime, an invalid cast of a reference to an unrelated type results in a ClassCastException being thrown.
+
+```java
+public class Rodent {}
+
+public class Capybara extends Rodent {
+  public static void main(String[] args) {
+      Rodent rodent = new Rodent();
+      Capybara capybara = (Capybara)rodent;  // runtime error: ClassCastException
+  } 
+}
+```
+
+## `instanceof` With Polymorphism
+- we presented the instanceof operator, which can be used to check whether an object belongs to a particular class or interface and to prevent ClassCastExceptions at runtime.
+- Just as the compiler does not allow casting an object to unrelated types, it also does not allow instanceof to be used with unrelated types.
+```java
+public static void main(String[] args) {
+   Fish fish = new Fish();
+   if (fish instanceof Bird) {  // DOES NOT COMPILE
+      Bird bird = (Bird) fish;  // DOES NOT COMPILE
+   }
+}
+```
+
+## Polymorphism And Method Overriding
+- In Java, polymorphism states that when you override a method, you replace all calls to it, even those defined in the parent class.
+- The facet of polymorphism that replaces methods via overriding is one of the most important properties in all of Java. It allows you to create complex inheritance models, with subclasses that have their own custom implementation of overridden methods. It also means the parent class does not need to be updated to use the custom or overridden method. If
+the method is properly overridden, then the overridden version will be used in all places that it is called.
+- Remember, you can choose to limit polymorphic behavior by marking methods final, which prevents them from being overridden by a subclass.
+
+## Calling the Parent Version of Overriden Method
+```java
+class Penguin {
+   public int getHeight() { return 3; }
+   public void printInfo() {
+      System.out.print(this.getHeight());
+   } 
+}
+
+public class EmperorPenguin extends Penguin {
+   public int getHeight() { 
+    return super.getHeight(); 
+   }
+
+   public void printInfo() {
+      System.out.print(super.getHeight());
+   }
+
+   public static void main(String []fish) {
+      new EmperorPenguin().printInfo();
+   }
+}
+```
+
+## Overrriding vs. Hiding Members
+- While method overriding replaces the method everywhere it is called, static method and variable hiding does not.
+- hiding members is not a form of polymorphism since
+the methods and variables maintain their individual properties. Unlike method overriding, hiding members is very sensitive to the reference type and location where the member is being used.
+
+## Don't Hide Members in Practice
+- Java allows you to hide variables and `static` methods but it is a poor coding practice
+- Value of variable/method can change depending on what reference is used, making your code very confusing
+
+___
