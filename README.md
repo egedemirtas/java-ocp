@@ -356,7 +356,7 @@ long max = 3123456789L; // now Java knows it is a long
   ```
 
 ### Reference Types
-- Reference type is an instance of an object
+- A reference type refers to an object (an instance of a class)
 - Primitive types hold their values in the memory where variable is allocated
 - Reference types point to an object by storing the object's memory adress
 
@@ -564,8 +564,8 @@ Assignment operators | =, +=, -=, *=, /=, %=, &=, ^=, |=, <<=, >>=, >>>=
 - in Java, 1 and true are not related in any way, just as 0 and false are not related
 
 ## Increment and Decrement
-- Pre- :If the operator is placed before the operand, then the operator is applied first and the value returned is the new value of the expression. 
-- Post- :If the operator is placed after the operand, then the original value of the expression is returned, with operator applied after the value is returned.
+- **Pre- :**If the operator is placed before the operand, then the operator is applied first and the value returned is the new value of the expression. 
+- **Post- :**If the operator is placed after the operand, then the original value of the expression is returned, with operator applied after the value is returned.
 - Example:
 ```java
 int lion = 3;
@@ -793,7 +793,7 @@ Saturday
 
 ### Acceptable Case Values
 - the values in each `case` statement must be ***compile time constant values*** of the same data type as the `switch` value
-- ***Compile time constants***: `enum`, `final`, `literals`
+- ***Compile time constants***: `enum`, `final`, literals
 -  data type for `case` statements must all match the data type of the `switch` variable
 ```java
 final int getCookies() { return 4; }
@@ -965,7 +965,7 @@ s2.concat("3");
 System.out.println(s2); // prints 12
 ```
 
-## Importnt `String` Methods
+## Important `String` Methods
 ```java
 int length()
 
@@ -1054,14 +1054,14 @@ String toString()
 ```
 
 ## Comparing `equals()`and `==`
-- `==`: are the objects refering to same object?
+- `==`: are the objects refering to same object?. In terms of `String`, it will check whether references points to the same object in **string pool**.
 - `equals()`: logical equality
-- If a class doesn’t have an equals method java uses `==`
-- `StringBuilder` doesn't have `equals()` implemented !!!
+- If a class doesn’t have an equals method java uses the logic of `==`
+- `StringBuilder` doesn't have `equals()` implemented. Thus, using `equals()` will check whether the references points to the same object
 
 ## String Pool
 - A location in JVM that collects strings
-- It contains literral values and constants that appear in the program
+- It contains literal values and constants that appear in the program
 - `myObject.toString()` doesn't go to string pool
 ```java
 String x = "Hello World";
@@ -1448,7 +1448,7 @@ a -> a.canHop()
     - This way you don't need your interface anymore!! In the animal example you just need to change the parameter in `print()` as a predicate class. Nothing else will be changed
   2. `Consumer`
     - only need to know `void accept(T t)`
-    - When you want receive a value but but return it (you might need it if you just want to print the value)
+    - When you want receive a value but not return it (you might need it if you just want to print the value)
     ```java
     public static void main(String[] args) {
       Consumer<String> consumer = x -> System.out.println(x);   // we don't have the value to be printed yet, but value will be provided when we print
@@ -1502,7 +1502,7 @@ Predicate<String> p = x -> true;
 Predicate<String> p = (var x) -> true;
 Predicate<String> p = (String x) -> true;
 ```
-  - In the above code type of x is String in all 3 examples, java infers them from the functiopnal interface(`Predicate`)
+  - In the above code type of x is String in all 3 examples, java infers them from the functional interface(`Predicate`)
 
 2. Lambda Body
 ```java
@@ -1578,32 +1578,32 @@ public final void nap(int minutes) throws Exception {}
 ```
 ### 1. Access Modifiers
   1. `private`: method can be called only from within class
-  2. default (there is no key word for this, you simply have to omit the access modifier to achieve default behaviour): can be called from classes in the same package. `default` key word is in `switch` and ìnterface`, don't mix it up.
+  2. default (there is no key word for this, you simply have to omit the access modifier to achieve default behaviour): can be called from classes in the same package. `default` key word is in `switch` and `interface`, don't mix it up.
   ```java
   default void walk2() {} // DOES NOT COMPILE
   void walk4() {}
   ```
   3. `protected`: can be called from classes in the same package or subclasses
     - Assume you have the parant class **Bird** which has protected method and variable: `floatInWater()` and `name`. **Swan** is a subclass of **Bird** but ***they are in different packages***. In class **Swan**, you can freely access `name` and call `floatInWater()`. However you can not do something like this:
-    ```java
-    public class Swan extends Bird {
-      public void swim() {
-        floatInWater();             // can access 
-        System.out.println(name);   // can access
+  ```java
+  public class Swan extends Bird {
+    public void swim() {
+      floatInWater();             // can access 
+      System.out.println(name);   // can access
 
-        Swan otherSwan = new Swan();
-        other.floatInWater();       // can access
+      Swan otherSwan = new Swan();
+      otherSwan.floatInWater();       // can access
 
-        Bird otherBird = new Bird();
-        other.floatInWater();       // DNC: Bird reference is used rather than inheritance, 
-                                    // thus you don't get to use protected members
-      }
+      Bird otherBird = new Bird();
+      otherBird.floatInWater();       // DNC: Bird reference is used rather than inheritance, 
+                                  // since you don't have inheritance and classes are in different packages you can't use this
     }
-    ```
+  }
+  ```
   4. `public`: can be called from any class
 
 ### 2. Optional specifier (not required)
-  - You can have multiple optional specifiers int the same method
+  - You can have multiple optional specifiers in the same method
   1. `static`: used for class methods
   2. `abstract`: used when method body is not provided
   3. `final`: when a method is not allowed to be overriden by a subclass
@@ -1617,7 +1617,7 @@ public final void nap(int minutes) throws Exception {}
   - Same rules are followed as practiced for variable names in ***Chapter 2***
 ### 5. Parameter list (required)
 
-### 6. Excepiton list (not required)
+### 6. Exception list (not required)
 
 ### 7. Method body (required, omitted for `abstract` methods)
 
@@ -1645,7 +1645,7 @@ public final void nap(int minutes) throws Exception {}
 
 ## Designing `static` Methods and Fields
 - `static` methods don't require an instance of the class. They are shared among all users of the class. `static` keyword applies to the class rather than an instance of a class
-- - `static` methods in the class, including a `main()` method, may access private members, including private constructors.
+- `static` methods in the class, including a `main()` method, may access private members, including private constructors.
 - Purposes of `static` methods:
   1. Used for utility or helper methods that don't require any object state. User doesn't need to instantiate objects to call these utility methods. Ex: `public static void main(String[]args)`
   2. Used for a shared state by all instances of a class. **Methods that use any static variables must be `static` as well**
@@ -1663,10 +1663,10 @@ public class Koala {
 System.out.println(Koala.count);
 Koala.main(new String[0]);
 
-Koala koala = new Koala();
+Koala k = new Koala();
 System.out.println(k.count);      // 0
 k = null;                         // k is null
-System.out.println(k.count);      // 0: k is still treated as Koala since k is Koala reference
+System.out.println(k.count);      // 0: k is null but still a Koala reference with static variable
 
 Koala.count = 4;
 Koala koala1 = new Koala();
@@ -1695,7 +1695,7 @@ public class Static {
   1. make `third()`, `static`. However now `third()` is a `static` method referring to nonstatic `name`
   2. add `static` to `name`
 
-- A `static` method or instance method can call a `static` method because `static` methods don't require an object to use. They can not call an instance method or instance variable without a reference variable because these need object to be created in the first place!
+- A `static` method or instance method can call a `static` method because `static` methods don't require an object to use. `static` methods can not call an instance method or instance variable without a reference variable because these need object to be created in the first place!
 
 ```java
 public class Giraffe {
@@ -1719,7 +1719,7 @@ Type | Calling | Legal?
 `eat()` | `g.eat()` | Yes
 
 ## `static` Variables
-- ***constant variable***: use the modifier `static final`(`static` for memory management, don't create a variable for each instance of class) and use alluppercase letters with underscore between words
+- ***constant variable***: use the modifier `static final`(`static` for memory management, don't create a variable for each instance of class) and use all uppercase letters with underscore between words
 ```java
 public class Initializers {
    private static final int NUM_BUCKETS = 45;
@@ -1752,7 +1752,7 @@ static {
 - `static` initializer blocks always execute before the instance initialization blocks because static blocks run at the time of class loading. However, the instance block runs at the time of instance creation. 
 - ***Tip for better code practice***:
   - try to avoid instance initializers: use constructor
-  - try to avoid `static` initializers: but if you need to do so (you may need to initilaize a collection like `ArrayList`), put all the static initialization in the same block
+  - try to avoid `static` initializers: but if you need to do so (you may need to initialize a collection like `ArrayList`), put all the static initialization in the same block
 
 ## `static` Imports
 - `import` is for classes, `import static` is for static members of classes
@@ -1775,16 +1775,17 @@ public static void speak(String s) {    // name-> "Webby" <-s
    s = "Sparky";                        // name-> "Webby"   s->"Sparky"
 }
 
-public static void speak1(String s) {    // name1-> `StringBuilder` <-s 
-   s = "Sparky";                        // name1-> StringBuilder <-s
+public static void speak1(StringBuilder s) {    // name1-> `StringBuilder` <-s 
+   s.append("Webby");                        // name1-> StringBuilder <-s
 }
 ```
 - In the above code: The variable ***s*** is a copy of the variable ***name***. Both point to the same `StringBuilder`, which means that changes made to the `StringBuilder` are available to both references
 
 ## Overloading Methods
-- ***Method overloading*** occurs when methods have the same name but different method signatures, so only method parameters can change. On an overloaded method you can also have different access modifiers, specifiers, return types and exception list
+- ***Method overloading*** occurs when methods have the same name but different method signatures, so only method parameters can change. 
+- On an overloaded method you can also have different access modifiers, specifiers, return types and exception list
 ```java
-// they are overloaded beacuse method parameters are different
+// they are overloaded because method parameters are different
 // not beacuse they have different access modifiers, specifiers, return types and exception list
 public void fly(int numMiles) {}
 public void fly(short numFeet) {}
@@ -1921,7 +1922,7 @@ public class Flamingo {
 ```
 
 ## Calling `super` Reference
-- **Problem**: A variable/method can be defined both in child and parent class, how can wereference the version in the parent class? 
+- **Problem**: A variable/method can be defined both in child and parent class, how can we reference the version in the parent class? 
 - `super` reference excludes any memebers found the current class, and can refer only to the members available via inheritance.
 
 ## Crating a Constructor
@@ -2013,12 +2014,15 @@ public class Gopher {
 - following three class and constructor definitions are equivalent:
 ```java
 public class Donkey {}
+
 public class Donkey {
-   public Donkey() {}
+  public Donkey() {}
 }
+
 public class Donkey {
-   public Donkey() {
-super(); }
+  public Donkey() {
+    super(); 
+  }
 }
 ```
 
@@ -2117,7 +2121,8 @@ public MouseHouse() {
     - this program will likely print CAB, with the Hippo class not being loaded until it is needed inside the main() method. We say likely, because the rules for when classes are loaded are determined by the JVM at runtime.
 2. Instance Initialization
   - An instance is initialized anytime the new keyword is used
-  - First, start at the lowest-level constructor where the new keyword is used. Remember, the first line of every constructor is a call to this() or super(), and if omitted, the compiler will automatically insert a call to the parent no-argument constructor super(). Then, progress upward. Finally, initialize each class starting with the superclass, processing each instance initializer and constructor in the reverse order in which it was called
+  - First, start at the lowest-level constructor where the new keyword is used. Remember, the first line of every constructor is a call to this() or super(), and if omitted, the compiler will automatically insert a call to the parent no-argument constructor super(). Then, progress upward. 
+  - Finally, initialize each class starting with the superclass, processing each instance initializer and constructor in the reverse order in which it was called
   - ***Initialize Class X***
   1. If there is a superclass Y of X, then initialize the instance of Y first.
   2. Process all instance variable declarations in the order they appear in the class.
@@ -2234,7 +2239,7 @@ public MouseHouse() {
 7. All final instance variables must be assigned a value exactly once by the end of the constructor. Any final instance variables not assigned a value will be reported as a compiler error on the line the constructor is declared.
 
 ## Calling Inherited Members
-- you can use this to access visible members of the current or a parent class, and you can use super to access visible members of a parent class
+- you can use `this` to access visible members of the current or a parent class, and you can use super to access visible members of a parent class
 
 ## Defining Subtype and Supertype
 - In java subtype is used rather than subclass since java includes `interface`
@@ -2447,13 +2452,13 @@ public class Lemur extends Primate implements HasTail {
    public int age = 10;
    public static void main(String[] args) {
       Lemur lemur = new Lemur();
-      System.out.println(lemur.age);
+      System.out.println(lemur.age);  //10
       HasTail hasTail = lemur;
-      System.out.println(hasTail.isTailStriped());
+      System.out.println(hasTail.isTailStriped());  //false
       System.out.println(hasTail.age);    // DNC: hasTail reference doesn't have age
-      Primate primate = lemur;
-      System.out.println(primate.hasHair());
-      System.out.println(primate.isTailStriped());    // DNC: primate rerefence doesn't have isTailStripped()
+      Primate primate = lemur;  
+      System.out.println(primate.hasHair());  //true
+      System.out.println(primate.isTailStriped());    // DNC: primate reference doesn't have isTailStripped()
    }
 }
 ```
@@ -2467,7 +2472,7 @@ public class Lemur extends Primate implements HasTail {
 Lemur lemur = new Lemur();
 Object lemurAsObject = lemur;
 ```
-- Even though the Lemur object has been assigned to a reference with a different type, the object itself has not changed and still exists as a Lemur object in memory. What has changed, then, is our ability to access methods within the Lemur class with the lemurAsObject reference. Without an explicit cast back to Lemur, as you’ll see in the next section, we no longer have access to the Lemur properties of the object.
+- Even though the Lemur object has been assigned to a reference with a different type, the object itself has not changed and still exists as a Lemur object in memory. What has changed, then, is our ability to access methods within the Lemur class with the `lemurAsObject` reference. 
 
 1. The type of the object determines which properties exist within the object in memory.
 2. The type of the reference to the object determines which methods and variables are accessible to the Java program.
@@ -2476,7 +2481,7 @@ Object lemurAsObject = lemur;
 ```java
 Primate primate = new Lemur();  // Implicit Cast: Lemur is a subclass of Primate, this can be done without a cast operator
 
-Lemur lemur2 = primate;         // DNC: 
+Lemur lemur2 = primate;         // DNC: need explicit cast
 System.out.println(lemur2.age);
 
 Lemur lemur3 = (Lemur)primate;  // Explicit Cast
@@ -2515,7 +2520,22 @@ public static void main(String[] args) {
 - In Java, polymorphism states that when you override a method, you replace all calls to it, even those defined in the parent class.
 - The facet of polymorphism that replaces methods via overriding is one of the most important properties in all of Java. It allows you to create complex inheritance models, with subclasses that have their own custom implementation of overridden methods. It also means the parent class does not need to be updated to use the custom or overridden method. If
 the method is properly overridden, then the overridden version will be used in all places that it is called.
-- Remember, you can choose to limit polymorphic behavior by marking methods final, which prevents them from being overridden by a subclass.
+- Remember, you can choose to limit polymorphic behavior by marking methods `final`, which prevents them from being overridden by a subclass.
+```java
+class Penguin {
+  public int getHeight() { return 3; }
+  public void printInfo() {
+    System.out.print(this.getHeight());
+  }
+}
+
+public class EmperorPenguin extends Penguin {
+  public int getHeight() { return 8; }
+  public static void main(String []fish) {
+    new EmperorPenguin().printInfo();  //8
+  }
+}
+```
 
 ## Calling the Parent Version of Overriden Method
 ```java
@@ -2527,16 +2547,14 @@ class Penguin {
 }
 
 public class EmperorPenguin extends Penguin {
-   public int getHeight() { 
-    return super.getHeight(); 
-   }
+   public int getHeight() { return 8; }
 
    public void printInfo() {
       System.out.print(super.getHeight());
    }
 
    public static void main(String []fish) {
-      new EmperorPenguin().printInfo();
+      new EmperorPenguin().printInfo(); //3
    }
 }
 ```
