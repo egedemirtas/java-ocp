@@ -2569,3 +2569,314 @@ the methods and variables maintain their individual properties. Unlike method ov
 - Value of variable/method can change depending on what reference is used, making your code very confusing
 
 ___
+
+# Chapter 9
+
+## Abstract Classes
+- An **abstract class** is a class that ***cannot be instantiated*** and ***may*** contain **abstract methods** and **may** contain constructors
+- An **abstract method** is a method that does not define an implementation when it is declared
+- Both abstract classes and abstract methods are denoted with the `abstract` modifier
+- Any `abstract` method in the parent class ***must be overridden*** in child class
+- Why need `abstract` class/method? Imagine you have an abstract `Bird` class, in there you have `abstract String getName();`. This way you are forcing other developers who extends `Bird`, to override this method. If you have a `Sparrow` class extending from `Bird`, you must override the `getName()`, which should print **Sparrow**. Similarly a `Chicken` class must print **Chicken** by overriding `getName()`
+- When overriding an `abstract` method, you can also use **implementing** a method. But for `abstract` methods, using overriding as a term is more accurate.
+
+## `abstract` Methods
+- can only be defined in `abstract` class or interface
+- the `abstract` modifier can be placed before or after the access modifier in class and method declarations
+- The `abstract` modifier cannot be placed after the `class` keyword in a class declaration, nor after the return type in a method declaration
+
+## Constructors in `abstract` Classes
+- There is only 1 difference between the constructor in abstract and nonabstract class:
+  - `abstract` classes cannot be instantiated, but they can be initialized through constructors by their subclasses.
+
+```java
+abstract class Bear {
+  abstract CharSequence chew();
+  public Bear() {
+    System.out.println(chew()); 
+  }
+}
+public class Panda extends Bear {
+  String chew() { return "yummy!"; }
+  public static void main(String[] args) {
+    new Panda();    // prints "yummy"
+  }
+}
+```
+- In the above code, the compiler inserts a default no-argument constructor into the `Panda` class, which first calls `super()` in the `Bear` class. The `Bear` constructor is only called when the abstract class is being initialized through a subclass
+
+## `abstract` and `final` Modifiers
+- You can not declare a method or class as both `final` and `abstract`:
+  - `final` prevents inheritance of class or overriding a method
+  - `abstract` forces you to override a method
+  - Thus, `abstract` and `final` conflict each other
+  ```java
+  public abstract final class Tortoise { // DOES NOT COMPILE
+    public abstract final void walk(); // DOES NOT COMPILE
+  }
+  ```
+
+## `abstract` and `private` Modifiers
+- A method cannot be marked as both `abstract` and `private`: 
+  - `abstract` forces you to override a method
+  - `private` methods can not be overridden
+
+## `abstract` and `static` Modifiers
+- A method cannot be marked as both `abstract` and `static`
+  - `static` methods can not be overridden
+
+## Creating Concrete Classes
+- An abstract class becomes usable when it is extended by a concrete subclass. 
+- A concrete class is a nonabstract class.
+- An abstract class can extend a nonabstract class
+
+```java
+abstract class Mammal {
+  abstract void showHorn();
+  abstract void eatLeaf();
+}
+abstract class Rhino extends Mammal {
+  void showHorn() {}
+}
+public class BlackRhino extends Rhino {
+  void eatLeaf() {}
+}
+```
+- In the above code, the BlackRhino class is the first concrete subclass, while the Mammal and Rhino classes are abstract
+
+## Abstract Class Definition Rules
+1. Abstract classes cannot be instantiated.
+2. All top-level types, including abstract classes, cannot be marked protected or private.
+3. Abstract classes cannot be marked final.
+4. Abstract classes may include zero or more abstract and nonabstract methods.
+5. An abstract class that extends another abstract class inherits all of its abstract methods.
+6. The first concrete class that extends an abstract class must provide an implementation for all of the inherited abstract methods.
+7. Abstract class constructors follow the same rules for initialization as regular constructors, except they can be called only as part of the initialization of a subclass.
+
+## Abstract Method Definition Rules
+1. Abstract methods can be defined only in abstract classes or interfaces.
+2. Abstract methods cannot be declared private or final or static.
+3. Abstract methods must not provide a method body/implementation in the abstract class in which they are declared.
+4. Implementing an abstract method in a subclass follows the same rules for overriding a method, including covariant return types, exception declarations, etc.
+
+## Implementing Interfaces
+- An `interface` is an abstract data type that declares a list of `abstract` methods that any class implementing the `interface` must provide.
+- Interfaces simply define a set of rules/ a contract that a class implementing them must follow
+- A class can implement any number of interfaces, separeted by comma
+- An interface can include constant variables
+- Interfaces have ***implicit modifiers***; these are assumed to be this way, you cannot change them:
+  - Interfaces are implicitly `abstract`, thus interfaces cannot be `static` or `final` or `private`
+  - Interface variables are implicitly `public` and `static`, and `final`.
+  - Interface methods without a body are implicitly `public` and `abstract`
+  ```java
+  public abstract interface WalksOnTwoLegs {
+    public static final int MIN_DEPTH = 2;
+    public abstract Float getSpeed(int age);
+  }   
+  public interface WalksOnTwoLegs {
+    int MIN_DEPTH = 2;
+    Float getSpeed(int age);
+  }  
+  private interface WalksOnTwoLegs {  //DNC
+    static int MIN_DEPTH = 2; 
+    int MAX_DEPTH;      // must be initialized 
+    protected int MIN_DEPTH = 2;  // DNC: must be public
+    private Float getSpeed(int age);  //DNC: must be public
+  }  
+  ```
+- Interfaces can be default or `public`
+
+- Interfaces can't have constructors
+
+- When implementing an interface method:
+  - **method signature** must exactly match
+  - return type is **covariant**
+  - In the implemention, the access modifier has to be explicitly declared
+
+
+
+- Rules for class declarations also apply to interfaces
+  - a file may have only 1 `public` top-level interface and name must match file name
+  - top-level interface can be only `public` or default
+
+## Difference Between Interfaces and Abstract Classes
+- They are both considered as abstract
+- Only interfaces use ***implicit modifiers***
+```java
+abstract class Husky {
+  abstract void play(); // default access
+}
+interface Poodle {
+  void play();    // public access
+}
+
+class Webby extends Husky {
+  void play() {}  
+}
+class Georgette implements Poodle {
+  void play() {}    //DNC: Poodle's access is public but Georgette's access is default.
+}
+```
+
+## Inheriting an Interface
+- An interface can be inherited in 3 ways:
+  - An interface can extend multiple interfaces using `extends` since interfaces can not be initialized and don't have constructors. If an abstract class or interface is implementing an interface, it is not required to implement all the interface methods
+  - A class can implement an interface
+  - A class can extend another class whose ancestor implements an interface.
+
+## Duplicate Interface Method Declarations
+- Since java allows multiple inheritance via interfaces, what would happen if a class inherits the same method from 2 different interfaces?
+```java
+public interface Herbivore {
+  public void eatPlants();
+}
+public interface Omnivore {
+  public void eatPlants();
+  public void eatMeat();
+}
+
+public class Bear implements Herbivore, Omnivore {
+  public void eatMeat() {
+    System.out.println("Eating meat");
+  }
+  public void eatPlants() {
+    System.out.println("Eating plants");
+  }
+}
+```
+- In the above code, `eatPlants()` methods are duplicate. As they have identical method declarations, they are also considered **compatible**: complier can resolve differences without conflicts
+
+- What happens if a class implements multiple interfaces with methods with different signatures? This actually method overloading, thus the class must implement both methods
+
+- What happens if a class/interface/abstarct class implements multiple interfaces with a method that has different return types?
+  - If return types are covariant, you have to implement using the subclass:
+  ```java
+  interface Dances {
+    String swingArms();
+  }
+  interface EatsFish {
+    CharSequence swingArms();
+  }
+  public class Penguin implements Dances, EatsFish {
+    public String swingArms() {
+      return "swing!";
+    }
+  }
+  ```
+  - you can not implement if return types are not covariant!!!
+
+## Casting Interfaces
+- Let’s say you have an abstract reference type variable, which has been instantiated by a concrete subclass. If you need access to a method that is only declared in the concrete subclass, then you will need to cast the interface reference to that type assuming the cast is supported at runtime.
+- Compiler does not allow casts to unrelated types.
+```java
+interface Canine {}
+class Dog implements Canine {}
+class Wolf implements Canine {}
+public class BadCasts {
+  public static void main(String[] args) {
+    Canine canine = new Wolf();
+    Canine badDog = (Dog)canine;   // throws exception at runtime: because of polymorphism, java can't decide the class of canine instance. Thus it complies and throw exception at runtime
+  } 
+}
+```
+
+- The compiler does not allow a cast from an interface reference to an object reference if the object type does not implement the interface. 
+```java
+Object badDog = (String)canine; //DNC: String doesnt implement Canine
+```
+
+## `instanceof` with Interfaces
+- Using `instanceof` with unrelated types does not compile. But this rule has limited capacity with interfaces: even though a reference type may not implement an interface, one of its subclasses could. Thus this compiles:
+```java
+Number tickets = 5;
+if(tickets instanceof List) {}
+```
+- Even though `Number` does not inherit `List`, it’s possible the `tickets` variable may be a reference to a subclass of `Number` that does inherit `List`. As an example: `tickets` could be assigned to an instance of `public class MyNumber extends Number implements List`
+- If you use a `final` or immutable object complier can check for unrelated interface since it is impossible to create a subclass from `final`:
+```java
+Integer tickets = 6;  //wrapper classes are immutable
+if(tickets instanceof List) {} // DOES NOT COMPILE
+```
+
+## Interface Definition Rules
+1. Interfaces cannot be instantiated
+2. All top-level types, including interfaces, cannot be marked `protected` or `private`.
+3. Interfaces are assumed to be abstract and cannot be marked `final`.
+4. Interfaces may include zero or more abstract methods.
+5. An interface can extend any number of interfaces.
+6. An interface reference may be cast to any reference that inherits the interface, although this may produce an exception at runtime if the classes aren’t related.
+7. The compiler will only report an unrelated type error for an `instanceof` operation with an interface on the right side if the reference on the left side is a `final` class that does not inherit the interface.
+8. An interface method with a body must be marked `default`, `private`, `static`, or `private static`
+
+## Abstract Interface Method Rules
+- (first 4 rules are exactly the same as abstract class method rules)
+1. Abstract methods can be defined only in abstract classes or interfaces.
+2. Abstract methods cannot be declared `private` or `final`.
+3. Abstract methods must not provide a method body/implementation in the abstract class in which is it declared.
+4. Implementing an abstract method in a subclass follows the same rules for overriding a method, including covariant return types, exception declarations, etc.
+5. Interface methods without a body are assumed to be `abstract` and `public`.
+
+## Interface Variables Rules
+1. Interface variables are assumed to be `public`, `static`, and `final`.
+2. Because interface variables are marked `final`, they must be initialized with a value when they are declared.
+
+## Primary differences
+The primary differences between the two are that interfaces include implicit modifiers, do not contain constructors, do not participate in the instance initialization process, and support multiple inheritance.
+
+## Interface Advantage in Development
+- An interface provides a way for one individual to develop code that uses another individual’s code, without having access to the other individual’s underlying implementation. 
+- Interfaces can facilitate rapid application development by enabling development teams to create applications in parallel, rather than being directly dependent on each other.
+- Two teams can work together to develop a one-page standard interface at the start of a project. One team then develops code that uses the interface, while the other team develops code that implements the interface
+
+## Inner Classes
+- All of these apply to both `class` and `interface` types
+- Nested classes: member inner classes, local classes, anonymous classes, and static nested classes
+## Member Inner Classes
+- A ***member inner class*** is a class defined at the member level of
+a class (the same level as the methods, instance variables, and
+constructors)
+- Developers often define a member inner class inside another class if the relationship between the two classes is very close. For example, a Zoo sells tickets for its patrons; therefore, it may want to manage the lifecycle of the Ticket object.
+```java
+public class Zoo {
+ private interface Paper {} //member inner interface
+ public class Ticket implements Paper {} // member inner class implementing inner interface
+}
+```
+- A top-level class can be only `public` or default, but member inner classes can have any access modifiers they want
+- A member inner class can contain many of the same methods and variables as a top-level class. But `static` members are disallowed in member inner classes
+```java
+public class Zoo {
+ private interface Paper {
+ public String getId();
+ }
+ public class Ticket implements Paper {
+ private String serialNumber;
+ public String getId() { return serialNumber;}
+ }
+}
+```
+
+## Using Member Inner Class
+- you can use a member inner class by calling it from outer class.
+- one advantage is that you completely control the inner member class lifecycle
+  ```java
+  public class Zoo {
+    private interface Paper {
+      public String getId();
+  }
+  public class Ticket implements Paper {
+  private String serialNumber;
+  public String getId() { return serialNumber; }
+  }
+  public Ticket sellTicket(String serialNumber) {
+  var t = new Ticket();
+  t.serialNumber = serialNumber;
+  return t;
+  }
+  }
+  ```
+
+- In the next sections, you will learn more interface members:
+  - With Java 8, interfaces were updated to include static and default methods. A default method is one in which the interface method has a body and is not marked abstract.
+  - In Java 9, interfaces were updated to support private and private static methods.
+

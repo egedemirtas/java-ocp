@@ -4,8 +4,8 @@
 
 - **Access Modifiers**:
     - **`private`**: method can be only called within the class
-    - **default**: has no keyword, method can be called from classes that are in the same package
     - **`protected`**: same package or subclass
+    - **default**: has no keyword, method can be called from classes that are in the same package
     - **`public`**: can be called from any class
 
 - **Varargs**
