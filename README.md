@@ -24,14 +24,14 @@
       - Contains compressed format of ***complied*** java project
       - Has only `.class` files + meta data + other resources
       - Used for:
-        - distrubting java code/libraries for use by other resources
-        - directly execute java program without `IDE`
+        - distributing java code/libraries for use by other resources
+        - directly executing java program without `IDE`
     - API(application programming interfaces): reusable codes
     - `javadoc`: documentation generator
     - `JVM`: knows how to run bytecode on the machine it is on.
     - Java Runtime Environment (`JRE`)
       - The `JRE` was a subset of the `JDK`.
-      - Can run a program bt cannot compile one.
+      - Can run a program but cannot compile one.
       - As of Java 11 it is depreciated.
 
 - Flow:
@@ -44,8 +44,9 @@
 - `Object Oriented`:
   - All code is defined in classes, and most of those classes can be instantiated into objects. (static classes are an exception)
   - Java allows for functional programming within a class
-- `Encapsulation`: Java supports access modifiers to protect data from unintended access and modification.
-- `Platform Independent`: Java is an interpreted language that gets compiled to bytecode.
+- `Encapsulation`: Java supports **access modifiers** to protect data from unintended access and modification.
+- `Platform Independent`:
+  - Java is both a compiled & interpreted language: source code compiles to bytecode, then JVM interpretes bytecode.
   - `“write once, run everywhere.”`: Java code gets compiled once rather than needing to be recompiled for different operating systems.
   - It is possible to write code that throws an exception in some environments
 - `Robust`: prevents memory leaks by managing garbage collection automatically.
@@ -56,35 +57,27 @@
 
 ## Java Class Structure
 
-- <u>Classes</u>: basic building blocks.
-- <u>Defining a class</u>: you describe all the parts and characteristics of building blocks.
-- <u>Object</u>: is a runtime instance of a class in memory. An object is often referred to as an instance since it represents a single representation of the class.
+- `Classes`: basic building blocks.
+- `Object`: is a runtime instance of a class in memory. An object is often referred to as an instance since it represents a single representation of the class.
 - All the various objects of all the different classes represent the state of your program.
-- <u>Reference</u>: is a variable that points to an object.
 
 ### Fields and Methods
 
-- methods/functions/procedures + fields/variables = members of class
-- Variables hold the state of the program, methods operate on that state
-- keyword: a word with special meaning
-- The method name and parameter types are called the method signature.
+- `methods/functions/procedures` **+** `fields/variables` **=** `members of class`
+- ***Variables hold the state of the program, methods operate on that state***
+- **keyword**: a word with special meaning
+- `method name` **+** `parameter types` **=** `the method signature`
 - The method declaration consists of additional information such as the return type
-
-### Comments
-
-1. single line
-2. multiple line
-3. javadoc
 
 ### Classes vs Files
 
-- Most of the time, each Java class is defined in its own .java file
 - If you do have a public class, it needs to match the filename.
-- Access modifiers: default, private, protected, public
-- You can declare a class without writing a access modifer for the class. In this case the class will be default.
-- You can even put two classes in the same file. When you do so, at most one of the classes in the file is allowed to be public:
+- ***Access modifiers***: `default`, `private`, `protected`, `public`
+- `default` = declare a class without writing a access modifer for the class
+- When there are multiple classes in a file, at most 1 of them can be `public`:
 
 ```java
+// file name: Animal.java
 public class Animal {
 }
 class Animal2 { // default
@@ -96,7 +89,6 @@ class Animal2 { // default
 - A Java program begins execution with its `main()` method.
 - `main()` method is the gateway between the startup of a Java process (managed by the `JVM`), and the beginning of the code. `JVM` calls on the underlying system to allocate memory and CPU time, access files, and so on
 - The `main()` method lets the JVM call our code.
-- To compile Java code, the file must have the extension `.java`
 ```java
 public class Ege {
   public static void main(String[] args) {
@@ -113,12 +105,12 @@ java Ege           # Notice that we must omit the .class extension to run Ege.ja
 - To compile Java code: the file must have the extension .java and class name must match file name.
 - `static` binds a method to its class so it can be called by just the class name. Java doesn’t need to create an object to call the `main()`
 - If `main()` is not present, the process will throw an error and terminate.
-- If `main()` is not static it will throw exception. Non-static `main()` is invisble for JVM.
+- If `main()` is not static it will throw exception. Non-static `main()` is invisible for JVM.
 - `main()` method’s parameter list:
   - an array of java.lang.String objects
   ```java
-  String[] args   //  The variable name args hints that this list contains values that were read in when the JVM started.
-  String args[]   //  The characters [] are brackets and represent an array. An array is a fixed-size list of items that are all of the same type.
+  String[] args
+  String args[]   
   String... args  //  The characters ... are called varargs (variable argument lists).
   ```
 
@@ -160,7 +152,7 @@ Can import code in any available Java library | Can only import code that came w
 
 
 ## Package Declarations and Imports
-- Packages: logical groupings for classes
+- **Packages**: logical groupings for classes
 - `import`: tell Java which packages to look in for classes
 - If a package begins with `java` or `javax`, this means it came with the JDK
 
@@ -168,15 +160,14 @@ Can import code in any available Java library | Can only import code that came w
 ```java
 import java.util.*; // imports all the classes in java.util.
 ```
-- Every class in the java.util package is available to this program when Java compiles it. 
-- It doesn’t import child packages, fields, or methods; it imports only classes. 
+- ***It doesn’t import child packages, fields, or methods; it imports only classes.***
 - Importing all the classes with wildcard doesn't slow down program execution. Complier figures out which classes are needed.
 
 ### Redundant Imports
-- `java.lang` automatically imported thus can use `System` without import statement.
+- `java.lang` automatically imported, thus can use `System` without import statement.
 
 ### Naming Conflicts
-- class names don’t have to be unique across all of Java: `java.util.Date` `java.sql.Date`
+- ***Class names don’t have to be unique across all of Java: `java.util.Date` `java.sql.Date`***
 
 ```java
 // When the class is found in multiple packages, Java gives you a compiler error
@@ -200,6 +191,10 @@ public class Conflicts {
 ```
 
 ### Compiling and Running Code With Package
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 package packagea;
 public class ClassA {
@@ -259,6 +254,8 @@ Option | `javac` | `java` | `jar`
 `-C` | - | - | X
 `-v` | - | - | X
 `-f` | - | - | X
+
+</details>
 
 ## Ordering Elements In Class
 
