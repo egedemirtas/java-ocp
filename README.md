@@ -269,12 +269,16 @@ Method declarations | No | inside class
 Comments | No | Can go anywhere even in first line of file
 
 ## Code Formating In Exam
+<details>
+<summary>Details...</summary>
+<br>
 
 Don't need to check for imports if:
 - Code that begins with a class name
 - Code that begins with a method declaration
 - Code that begins with a code snippet that would normally be inside a class or method,
 - Code that has line numbers that don’t begin with 1
+</details>
 
 ## Bonus:
 
@@ -301,20 +305,20 @@ public class Chick {
   }
 }
 ```
-Key points of constructor: 
+***Key points of constructor:***
   - the name of the constructor matches the name of the class
   - there’s no return type.
 
 ### Instance Initializer Blocks (IIB)
 
-- Code block: the code between `{}`
-- Instance initializer: when the code block is out of a method
+- `Code block`: the code between `{}`
+- `Instance initializer block`: when the code block is out of a method
 
 ### Order of Initialization
 
-- Fields and instance initializer blocks run in the order they appear
-- Constructor runs after fields and IIB
-- Order matters for the fields and blocks of code. You can’t refer to a variable before it has been defined
+- ***Fields and instance initializer blocks run in the order they appear***
+- ***Constructor runs after fields and IIB***
+- ***Order matters for the fields and blocks of code. You can’t refer to a variable before it has been defined***
 
 
 ## Understanding Data Types
@@ -333,7 +337,7 @@ Keyword | Type | Example
 `char` | 16bit unicode | 'a'
 
 - String is not primitive even though there is built-in support. It is an object.
-- byte can hold between -128 to 127
+- `byte` can hold between -128 to 127
 - `short` and `char` are closely related: 
   - `short` is signed, `char` is unsigned; thus `char` has higher range for positive integer
   - you can use them interchangeably in some cases
@@ -344,15 +348,15 @@ Keyword | Type | Example
   System.out.println(bird); // Prints 100
   System.out.println(mammal); // Prints S
 
-  short reptile = 65535; // DOES NOT COMPILE
-  char fish = (short)-1; // DOES NOT COMPILE
+  short reptile = 65535; // DNC: 65535 is int but out of range for short. Need to use explicit cast: (short)65535
+  char fish = (short)-1; // DNC: char is unsigned
   ```
 
 ### Literals
 - When a number is present in the code, it is called a literal.
 
 ```java
-long max = 3123456789; // DOES NOT COMPILE, because 3123456789 is seen as int, however this is bigger than Integer.MAX_VALUE
+long max = 3123456789; // DNC: because 3123456789 is seen as int, however this is bigger than Integer.MAX_VALUE
 long max = 3123456789L; // now Java knows it is a long
 ```
 
@@ -374,7 +378,6 @@ long max = 3123456789L; // now Java knows it is a long
   <img src="./object_ref.png" alt= “” width="250" height="200">
 
 - A reference can be assigned to another object of the same or compatible type.
-- A reference can be assigned to a new object using the new keyword.
 
 ### Primitive VS Reference Types
 - Primitive types can not be null
@@ -388,26 +391,26 @@ long max = 3123456789L; // now Java knows it is a long
   int len = reference.length();
   int bad = len.length(); // DOES NOT COMPILE
   ```
-- All the primitive types have lowercase type names. But reference types are classes, by convention begin with uppercase.
 
 ## Declaring Variables
 
 ### Identifiers
 - An identifier is the name of a variable, method, class, interface, or package
 - 4 rules for legal identifiers:
-  1. Must begin with a letter or `$` or `_`
+  1. Must begin with a `letter` or `$` or `_`
   2. Can include numbers but cannot start with them
   3. `_` is not allowed as identifier
   4. Cannot use java's reserved words (`abstract`, `case`, `continue`, `const`, `goto`, `true`...)
 
 ### Declaring Multiple Variables
-- You can declare many variables in the same declaration as long as they are all of the same type. You can also initialize any or all of those values inline.
+- ***You can declare many variables in the same declaration as long as they are all of the same type.*** 
+- ***You can also initialize any or all of those values inline.***
 ```java
 void sandFence() {
  String s1, s2;
  String s3 = "yes", s4 = "no";
 
- int num, String value; // DOES NOT COMPILE
+ int num, String value; // DNC
 }
 ```
 
@@ -415,25 +418,27 @@ void sandFence() {
 
 ### Initiliazing Local Variables
 - A local variable is a variable defined within a constructor, method, or initializer block
-- Local variables do not have a default value and must be initialized before use. Complier will report error if you use an uninitialized variable.
+- Local variables do not have a default value and must be initialized before use. 
+- Complier will report error if you use an uninitialized variable.
 
 ### Passing Constructor and Method Paramters
-- Variables passed to a constructor or method are called constructor parameters or method parameters
+- Variables passed to a constructor or method are called ***constructor parameters or method parameters***
 - They are like local variables that have been initialized before the method is called, by the caller.
 ```java
 public void findAnswer(boolean check) {}
 
 public void checkAnswer() {
  boolean value;
- findAnswer(value); // DOES NOT COMPILE: value is not initialized
+ findAnswer(value); // DNC: value is not initialized
 }
 ```
 
 ### Defining Instance and Class Variables
-- An instance variable, often called a field, is a value defined within a specific instance of an object
-- On the other hand, a class variable is one that is defined on the class level and ***shared among all instances of the class***. It can even be publicly accessible to classes outside the class without requiring an instance to use.
-- You can tell a variable is a class variable because it has the keyword `static` before it
-- Instance and class variables do not require you to initialize them. As soon as you declare these variables, they are given a default value:
+- An `instance variable`/`field`, is a value defined within a specific instance of an object
+- A `class variable`:
+  - it has the keyword `static` before it
+  - defined on the class level / ***shared among all instances of the class***.
+- ***Instance and class variables*** do not require you to initialize them. As soon as you declare these variables, they are given a default value:
   Variable Type | Default Initialization Value
   --- | --- 
   `boolean` | `false`
@@ -443,58 +448,58 @@ public void checkAnswer() {
   All object references | `null`
 
 ### Introducing `var`
-- you just type `var` instead of the primitive or reference type
-- `var` is a specific type defined at compile time. It does not change type at runtime.
+- ***Can use `var` instead of the primitive or reference type***
+- ***`var` is a specific type defined at compile time. It does not change type at runtime.***
 - The formal name of this feature is **local variable type inference**:
-  1. Thus can be used only as local variable
+  1. ***Thus can be used only as local variable***
     ```java
     public class VarKeyword {
-      var tricky = "Hello"; // DOES NOT COMPILE: this is an instance variable
+      var tricky = "Hello"; // DNC: this is an instance variable
     }
     ```
 
-  2. Instructing the compiler to determine the type for you
+  2. ***Instructing the compiler to determine the type for you***
     ```java
     public void reassignment() {
       var number = 7;
       number = 4;
-      number = "five"; // DOES NOT COMPILE
+      number = "five"; // DNC
     }
 
     var apples = (short)10;
     apples = (byte)5;   // value stored in apples is still short 
                         // but in here byte is automatically promoted to short
-    apples = 1_000_000; // DOES NOT COMPILE: beyond the limits of short
+    apples = 1_000_000; // DNC: beyond the limits of short
     ```
 
-- the compiler looks only at the line with the declaration. Initialization has to be done in the same line as declaration for `var`, otherwise code does not compile:
+- ***Initialization has to be done in the same line as declaration for `var`, otherwise code does not compile:***
 ```java
 public void reassignment() {
-  var question; // does not compile
+  var question; // DNC
   question = 1;
 }
 ```
 
-- Java does not allow `var` in multiple variable declarations.
+- ***Java does not allow `var` in multiple variable declarations.***
 
 - While a `var` cannot be initialized with a null value without a type, it can be assigned a null value after it is declared (provided that the underlying data type of the `var` is an object)
 - `var` can be initialized to a null value if the type is specified
 ```java
-var n = null; // DOES NOT COMPILE: cannot be initialized to null
+var n = null; // DNC: cannot be initialized to null
 
 var n = "myData";
 n = null;
 
 var m = 4;
-m = null; // DOES NOT COMPILE: int cannot be null
+m = null; // DNC: int cannot be null
 
 var o = (String)null; // var can be initialized to a null value if the type is specified
 ```
 
 ### Bonus
 ```java
-public int addition(var a, var b) { // DOES NOT COMPILE: var can be used only for local variables
-                                    //, a and b are method parameters
+public int addition(var a, var b) { // DNC: var can be used only for local variables
+                                    // a and b are method parameters
  return a + b;
 }
 ```
@@ -514,26 +519,25 @@ public class Var { // because of case sensitivity this is allowed
 - While `var` is not a reserved word and allowed to be used as an identifier, it is considered a `reserved type name`.
 - A `reserved type name` means it cannot be used to define a type, such as a class, interface, or enum
 ```java
-public class var { // DOES NOT COMPILE
+public class var { // DNC
   public var() {
   }
-}
 }
 ```
 
 ## Managing Variable Scope
 - **Local variables**: In scope from declaration to end of block
-- **Instance variables**:  In scope from declaration until object eligible for garbage collection
+- **Instance variables**: In scope from declaration until object eligible for garbage collection
 - **Class variables**: In scope from declaration until program ends 
 
 ## Destroying Objects
 - All Java objects are stored in your program memory’s heap.
-- ***Garbage collection*** Refers to the process of automatically freeing memory on the heap by deleting objects that are eligible for garbage collection
-- ***eligible for garbage collection*** Refers to an object’s state of no longer being accessible in a program.
-- Eligible for garbage collection doesn't mean the object will be immediately garbage collected.
+- ***Garbage collection***: Refers to the process of automatically freeing memory on the heap by deleting objects that are eligible for garbage collection
+- ***eligible for garbage collection***: Refers to an object’s state of no longer being accessible in a program.
+- ***Eligible for garbage collection doesn't mean the object will be immediately garbage collected.***
 
 ### Calling `System.gc()`
-- What is the System.gc() command guaranteed to do? Nothing, actually. It merely suggests that the JVM kick off garbage collection. Nothing is guaranteed.
+- What is the `System.gc()` command guaranteed to do? Nothing, actually. It merely suggests that the JVM kick off garbage collection. Nothing is guaranteed.
 - JVM can ignore this request. `System.gc()` is not guaranteed to run or do anything. 
 - Program may still run out of memory even if `System.gc()` is called
 
@@ -543,9 +547,9 @@ public class var { // DOES NOT COMPILE
   2. All references to the object have gone out of scope.
 
 ## Objects VS References
-- All references are the same size, no matter their object type
-- Object sits in heap and doesn't have a name
-- The object is garbage is collected but reference is not garbage collected
+- ***All references are the same size, no matter their object type***
+- ***Object sits in heap and doesn't have a name***
+- ***The object is garbage is collected but reference is not garbage collected***
 
 ___
 

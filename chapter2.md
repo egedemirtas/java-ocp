@@ -3,6 +3,7 @@
 - **Primitive Types:**
     - Cannot be null
     - Primitive types hold their values in the memory where variable is allocated
+    
     Keyword | Type | Example
     --- | --- | ---
     `boolean` | true/false | true
@@ -13,6 +14,7 @@
     `float` | 32bit floating-point | 123.45f
     `double` | 64bit floating-point | 123.456
     `char` | 16bit unicode | 'a'
+
 - `short` is signed, `char` is unsigned; thus `char` has higher range for positive integer. You can use them interchangeably, as long as they do not exceed their limits.
 - **Literal:** a number that is present in the code
 - **Reference Types:** 
