@@ -4,25 +4,39 @@
 
 ## Components of Java
 
-- Use integrated development environment (IDE) to make writing and running code easier.
+- `IDE`: software that provides comprehensive facilities for software development:
+  - Editing source code
+  - Syntax highlight
+  - Auto-complete
+  - Debugging
+
 - Java Development Kit (`JDK`):
 
-  - Contains min software you need to do development.
+  - Contains minimum software you need to do development.
   - Key pieces:
-    - compiler: [`javac`](#javac-program-generates-bytecode-file-class-that-the-java-command-can-run)
-    - launcher: [`java`](#java-launches-the-java-virtual-machine-jvm-before-running-the-code)
+    - [`javac`](#javac-program-generates-bytecode-file-class-that-the-java-command-can-run)
+      - complier
+      - turns source code to `bytecode(.class)`
+    - [`java`](#java-launches-the-java-virtual-machine-jvm-before-running-the-code)
+      - launcher
+      - launches `JVM` and calls the code
     - archiver command: `jar`
-    - API(application programming interfaces) documentation command: `javadoc`
-    - `JVM`
-
-- Java Runtime Environment (`JRE`)
-
-  - The `JRE` was a subset of the `JDK` that was used for running a program but could not compile one.
-  - In Java 11, the `JRE` is no longer available as a stand-alone download or a subdirectory of the `JDK`.
+      - Contains compressed format of ***complied*** java project
+      - Has only `.class` files + meta data + other resources
+      - Used for:
+        - distrubting java code/libraries for use by other resources
+        - directly execute java program without `IDE`
+    - API(application programming interfaces): reusable codes
+    - `javadoc`: documentation generator
+    - `JVM`: knows how to run bytecode on the machine it is on.
+    - Java Runtime Environment (`JRE`)
+      - The `JRE` was a subset of the `JDK`.
+      - Can run a program bt cannot compile one.
+      - As of Java 11 it is depreciated.
 
 - Flow:
-  1. #### `javac`: program generates bytecode file (`.class`) that the `java` command can run.
-  2. #### `java`: launches the `Java Virtual Machine (JVM)` before running the code.
+  1. #### `javac`: program turns source code to bytecode file (`.class`) that the `java` command can run.
+  2. #### `java`: launches the `JVM` before running the code.
   3. `JVM`: knows how to run bytecode (`.class`) on the actual machine it is on.
 
 ## Benefits of Java
@@ -564,8 +578,8 @@ Assignment operators | =, +=, -=, *=, /=, %=, &=, ^=, |=, <<=, >>=, >>>=
 - in Java, 1 and true are not related in any way, just as 0 and false are not related
 
 ## Increment and Decrement
-- **Pre- :**If the operator is placed before the operand, then the operator is applied first and the value returned is the new value of the expression. 
-- **Post- :**If the operator is placed after the operand, then the original value of the expression is returned, with operator applied after the value is returned.
+- **Pre (`++val;`)**: If the operator is placed before the operand, then the operator is applied first and the value returned is the new value of the expression. 
+- **Post (`val++;`)**: If the operator is placed after the operand, then the original value of the expression is returned, with operator applied after the value is returned.
 - Example:
 ```java
 int lion = 3;
@@ -1362,7 +1376,7 @@ ___
 ## What is Lambda?
 - Java is a OOP language. In java 8 ***Functional Programming*** aspect was added.
 - ***Functional Programming***: 
-  - You specify what you want todo rather than dealing with sate of objects. Focus more on expressions than loops.
+  - You specify what you want to do rather than dealing with sate of objects. Focus more on expressions than loops.
   - Uses ***lambda expressions***
 - ***lambda expressions***: 
   - block of code that gets passed around like a variable
@@ -1423,7 +1437,7 @@ public class Main {
 ```
 - Above code uses ***Deferred Execution*** in `print(animals, a -> a.canSwim());` and `print(animals, a -> a.canHop());`. It means code specified now will run later. Normally when an expression contains a nested method call, that method call is evaluated immediately. However in this case, `canHop()` and `canSwim()` are called when `print()` calls `test()`.
 - ***Lambdas work with interfaces that have only one abstract method (functional interface)***. In the code above java looks at `CheckTrait` interface
-- We are passing lambda as the second parameter of `print()` which expects `CheckTrait`. Java tries to map lambda to that interface: `boolean test(Animal a);`. Since that interface has to be a an `Animal` and returns `boolean` we know the lambda paramter has to be animal and returns `boolean`
+- We are passing lambda as the second parameter of `print()` which expects `CheckTrait`. Java tries to map lambda to that interface: `boolean test(Animal a);`. Since the parameter in that interface method has to be an `Animal` and returns `boolean`, we know the lambda parameter has to be animal and returns `boolean`
 - These are the same:
 ```java
 a -> a.canHop()
@@ -2880,3 +2894,224 @@ public class Zoo {
   - With Java 8, interfaces were updated to include static and default methods. A default method is one in which the interface method has a body and is not marked abstract.
   - In Java 9, interfaces were updated to support private and private static methods.
 
+
+# Chapter 10: Exceptions
+
+- A method can handle the exception case itself or make it the caller’s responsibility.
+- In general, try to avoid return codes (ex: -1 for invalid). Return codes are commonly used in searches(ex: find position of 'Ege' in an array), so programmers are expecting them. In other methods, you will take your callers by surprise by returning a special value.
+
+## Understanding Exception Types
+
+```java
+java.lang.Object <- java.lang.Throwable <- java.lang.Exception <- java.lang.RuntimeException                                     
+                                      ^- java.lang.Error
+```
+
+- `Error` means something went so horribly wrong that your program should not attempt to recover from it
+- While you can handle `Throwable` and `Error` exceptions, it is not recommended you do so in your application code
+
+### Checked Exceptions
+- An exception that must be declared or handled by the application code where it is thrown. 
+- **Checked exceptions** all inherit `Exception` but not `RuntimeException`. 
+- Checked exceptions are used where it is anticipated that an exception might be thrown if anything goes wrong.
+- ***The distinction between checked and unchecked*** is that checked exceptions must be handled or declared, while unchecked exceptions can be optionally handled or declared.
+- ***The handle or declare rule***: means that all checked exceptions that could be thrown within a method are either wrapped in compatible try and catch blocks or declared in the method signature.
+
+```java
+void fall(int distance) throws IOException { // the method might throw Exception
+ if(distance > 10) {
+  throw new IOException(); // you want to throw an exception
+ }
+}
+
+// you can also choose to handle exception inside the method with catch
+void fall1(int distance) {
+ try {
+  if(distance > 10) {
+    throw new IOException();
+  }
+ } catch (Exception e) { // you can use Exception since IOExcepiton is a subclass of it
+  e.printStackTrace();
+ }
+}
+```
+
+### Unchecked Exceptions
+- An unchecked exception is any exception that does not need to be declared or handled by the application code where it is thrown. 
+- Unchecked exceptions are often referred to as **runtime exceptions**, ***HOWEVER***, unchecked exceptions include any class that inherits `RuntimeException` or `Error`. 
+- A ***runtime exception*** is defined as the `RuntimeException` class and its subclasses. Runtime exceptions tend to be unexpected but not necessarily fatal.
+
+## Throwing an Exception
+```java
+throw new Exception();
+throw new Exception("Ow! I fell.");
+throw new RuntimeException();
+throw new RuntimeException("Ow! I fell.");
+```
+- The `throw` keyword is used as a statement inside a code block to throw a new exception or rethrow an existing exception, while the `throws` keyword is used only at the end of a method declaration to indicate what exceptions it supports.
+- Remember that a `Throwable` is either an `Exception` or an `Error`. You should not catch `Throwable` or `Error` directly in your code.
+
+## Recognizing Excepiton Classes
+
+### `RuntimeException` Classes
+- `RuntimeException` and its subclasses are unchecked exceptions that don’t have to be handled or declared. They can be thrown by the programmer or by the JVM.
+1. `ArithmeticException` Thrown when code attempts to divide by zero
+2. `ArrayIndexOutOfBoundsException` Thrown when code uses an illegal index to access an array
+3. `ClassCastException` Thrown when an attempt is made to cast an object to a class of which it is not an instance
+4. `NullPointerException` Thrown when there is a null reference where an object is required
+5. `IllegalArgumentException` Thrown by the programmer to indicate that a method has been passed an illegal or inappropriate argument
+6. `NumberFormatException` Subclass of `IllegalArgumentException` thrown when an attempt is made to convert a string to a numeric type but the string doesn’t have an appropriate format
+
+### Checked Exception Classes
+- Checked exceptions have `Exception` in their hierarchy but not `RuntimeException`. They must be handled or declared.
+1. `ExceptionInInitializerError` Thrown when a static initializer throws an exception and doesn’t handle it
+2. `StackOverflowError` Thrown when a method calls itself too many times (This is called infinite recursion because the method typically calls itself without end.)
+3. `NoClassDefFoundError` Thrown when a class that the code uses is available at compile time but not runtime. Generally, this means a library available when the code was compiled is not available when the code is executed
+
+## Chaining `Catch` Blocks
+- A rule exists for the order of the catch blocks. Java looks at them in the order they appear. If it is impossible for one of the catch blocks to be executed, a compiler error about unreachable code occurs.
+```java
+public void visitMonkeys() {
+ try {
+  seeAnimal();
+ } catch (ExhibitClosed e) { // ExhibitClosed this is a super class of ExhibitClosedForLunch
+  System.out.print("not today");
+ } catch (ExhibitClosedForLunch e) { // DNC: all the exceptions will be catched in the first `catch`, thus this catch will be unreachable
+  System.out.print("try back later");
+ }
+}
+```
+
+## Multi-catch Block
+```java
+public static void main(String[] args) {
+ try {
+  System.out.println(Integer.parseInt(args[1])); }
+ catch (ArrayIndexOutOfBoundsException | NumberFormatException e) { // variable named e can be of type Exception1 or Exception2. 
+                                                                    // You can't have multiple variables with this notation
+  System.out.println("Missing or invalid input");
+ }
+}
+
+catch(Exception1 e | Exception2 e | Exception3 e) // DOES NOT COMPILE
+catch(Exception1 e1 | Exception2 e2 | Exception3 e3) // DOES NOT COMPILE
+
+try {
+ throw new IOException();
+} catch (FileNotFoundException | IOException p) {} // DNC: java doesn't allow redundant tyoes in multi catch. IOException is superclass of FileNotFoundException
+```
+
+## `finally` Block
+- lets you run code at the end with a `finally` regardless of whether an exception is thrown
+- `catch` is optional when `finally` is used
+- must be after `catch`, at the end
+- A `finally` block is typically used to close resources such as files or databases
+- You cannot have multiple `finally`
+
+```java
+int goHome(){
+  try {
+    mightThrowException();
+    System.out.print("1");
+    return 1;
+  } catch(Exception e) {
+    System.out.print("2");
+    return 2;
+  } finally {
+    System.out.print("3");
+    return 3;
+  }
+}
+```
+- Above code alwways returns `3`: Because the `finally` block is executed shortly before the method completes, it interrupts the `return` statement from inside both the `try` and `catch` blocks.
+- Above code might print `1 3` or `2 3`
+- `System.exit(int code)`: if you call this inside `catch`, `finally` won't be executed!! This is the only exception to our rule
+
+## Closing Resources (files, DB etc)
+- To open a file you need `catch` for `IOException` when reading/opening file. Then in `finally` you need to close the file which may throw `IOException` too! You need to catch this as well. Manually you need to write 2 `catch`, 1 `finally`
+- Solution: ***try-with-resources statement***: to automatically close all resources opened in a `try` clause (automatic resource management)
+```java
+public void readFile(String file) {
+  try (FileInputStream is = new FileInputStream("myfile.txt"); FileInputStream is1 = new FileInputStream("myfile1.txt")) { // Read file data from 2 sources, they will be closed in reverse order
+ } catch (IOException e) { // this is optional, you can delete this if you want. You cannot access `is` or `is1` anymore
+  e.printStackTrace();
+ }
+}
+```
+- This solution will cause complier to create ***implicit(hidden) `finally`*** block at the end to handle closing of file. You can still add your own `finally` block at the end but just keep in mind that implicit `finally` will be called first before any programmer coded `catch` or `finally`.
+- `catch` block is optional with a try-with-resources statement (because there is implicit `finally`!!!)
+- Java requires classes used in a try with-resources implement the `AutoCloseable` interface
+- The resources created in the `try` clause are in scope only within the `try` block. Then immediately **implicit `finally`** is called which closes the files. It means that you cannot access to files any longer inside your own `catch` and `finally`
+- ***try-with-resources statement*** guarantees that `close()` is called for the file but if an exception is thrown during that you can still have memory leaks. You may need to handle that too.
+
+```java
+try {
+  throw new RuntimeException();
+} catch (RuntimeException e) {
+  throw new RuntimeException();
+} finally {
+  throw new Exception();
+}
+```
+- Above code will actually throw `Exception`, the reason is `finally` will be run at last and `RuntimeException` from previous catch will be omitted
+
+## Calling Methods That Throw Exceptions
+- the rules for calling a method that throw exception is the same as within a method
+```java
+class NoMoreCarrotsException extends Exception {}
+
+public class Bunny {
+ public static void main(String[] args) {
+  eatCarrot(); // DNC: NoMoreCarrotsException is checked exception but not handled, you need to add try-catch or add `throws NoMoreCarrotsException to main()`
+ }
+
+ private static void eatCarrot() throws NoMoreCarrotsException {}
+}
+```
+
+- ***Note***: When you see a checked exception declared inside a catch block, make sure the code in the associated try block is capable of throwing the exception or a subclass of the exception. If not, the code is unreachable and does not compile. Remember that this rule does not extend to unchecked exceptions or exceptions declared in a method signature.
+
+## Declaring and Overriding Methods With Exceptions
+- When a class overrides a method from a superclass or implements a method from an interface, it’s not allowed to add new checked exceptions to the method signature:
+```java
+class CanNotHopException extends Exception { }
+class Hopper {
+ public void hop() { }
+}
+class Bunny extends Hopper {
+ public void hop() throws CanNotHopException { } // DNC
+}
+```
+
+- An overridden method in a subclass is allowed to declare fewer exceptions(or subclasse type of the exception) than the superclass or interface. This is legal because callers are already handling them:
+```java
+class Hopper {
+ public void hop() throws Exception { }
+}
+class Bunny extends Hopper {
+ public void hop() { }
+}
+class Kangroo extends Hopper {
+ public void hop() throws CanNotHopException{ }
+}
+```
+
+- These rules applies only to checked exceptions. You can add unchecked exceptions freely:
+```java
+class Hopper {
+ public void hop() { }
+}
+class Bunny extends Hopper {
+ public void hop() throws IllegalStateException { }
+}
+```
+- The reason that it’s okay to declare new unchecked exceptions in a subclass method is that the declaration is redundant. Methods are free to throw any unchecked exceptions they want without mentioning them in the method declaration.
+
+
+# Chapter 11: Modules
+- Since Java 9, packages can be grouped into modules.
+- Java Platform Module System = JPMS
+- A real project will consist of thousands of classes grouped into packages. These packages are grouped into Java archive (JAR) files.
+- Open source projects are supplied in JAR files
+- you need to make sure you had compatible versions of all the relevant JARs available at runtime. This complex chain of dependencies and minimum versions is often referred to by the community as ***JAR hell***
+- The main purpose of a module is to provide groups of related packages to offer a particular set of functionality to developers. It’s like a JAR file except a developer chooses which packages are accessible outside the module.
