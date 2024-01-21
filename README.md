@@ -988,6 +988,10 @@ ___
 > ***`String` is a sequence of `char` and implements `CharSequence`***
 
 ## Concatenation
+<details>
+<summary>Details...</summary>
+<br>
+
 - If either operand is `String` then it is concatenation
 - Concatenation is evaluated from left to right
 ```java
@@ -997,11 +1001,14 @@ System.out.println("a" + "b" + 3); // ab3
 System.out.println(1 + 2 + "c"); // 3c
 System.out.println("c" + 1 + 2); // c12
 ```
+</details>
 
 ## Immutability
-- Once a `String`object is created it can not be changed
-- **Why?:** immutablity creates a perfectly full box (optimization), but the downfall is zero flexibility
-- Immutable classes in Java are `final`, which prevents subclasses creation. You wouldn’t want a subclass adding mutable behavior.
+> [!IMPORTANT]
+> ***Once a `String` object is created it can not be changed***<br>
+> ***Why?: immutablity creates a perfectly full box (optimization), but the downfall is zero flexibility***<br>
+> ***Immutable classes in Java are `final`, which prevents subclasses creation. You wouldn’t want a subclass adding mutable behavior.***
+
 ```java
 String s1 = "1";
 String s2 = s1.concat("2");
@@ -1010,6 +1017,10 @@ System.out.println(s2); // prints 12
 ```
 
 ## Important `String` Methods
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 int length()
 
@@ -1048,9 +1059,16 @@ String trim()             //remove whitespace from the beginning and end
 
 String intern()     // returns the value from the string pool if it is there, otherwise add to string pool
 ```
+</details>
+
+> [!IMPORTANT] 
+> `String intern()`: returns the value from the string pool if it is there, otherwise add to the string pool
+
 
 ## `StringBuilder`
-- Mutable, it changes it's inner state
+> [!IMPORTANT] 
+> Mutable, it changes it's inner state
+
 ```java
 StringBuilder a = new StringBuilder("abc"); // a references to "abc"
 // a references to "abcde"
@@ -1062,13 +1080,22 @@ System.out.println("b=" + b);               // "abcdefg"
 ```
 
 ## `StringBuilder` Constructors
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 StringBuilder sb1 = new StringBuilder();
 StringBuilder sb2 = new StringBuilder("animal");  // create it with specific value
 StringBuilder sb3 = new StringBuilder(10);        // max char slot is 10
 ```
+</details>
 
 ## `StringBuilder` Methods
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 int length()
 
@@ -1096,28 +1123,33 @@ StringBuilder reverse()
 
 String toString()
 ```
+</details>
 
 ## Comparing `equals()`and `==`
-- `==`: are the objects refering to same object?. In terms of `String`, it will check whether references points to the same object in **string pool**.
-- `equals()`: logical equality
-- If a class doesn’t have an equals method java uses the logic of `==`
-- `StringBuilder` doesn't have `equals()` implemented. Thus, using `equals()` will check whether the references points to the same object
+> [!IMPORTANT]
+> `==`: are the objects refering to same object?. In terms of `String`, it will check whether references points to the same object in **string pool**.<br><br>
+> `equals()`: logical equality<br><br>
+> If a class doesn’t have an equals method java uses the logic of `==`<br><br>
+> `StringBuilder` doesn't have `equals()` implemented. Thus, using `equals()` will check whether the references points to the same object
 
 ## String Pool
-- A location in JVM that collects strings
-- It contains literal values and constants that appear in the program
-- `myObject.toString()` doesn't go to string pool
+> [!IMPORTANT]
+> A location in JVM that collects `String` literals/constants<br><br>
+> `myObject.toString()` doesn't go to string pool<br><br>
 ```java
 String x = "Hello World";
 String y = "Hello World";
-System.out.println(x == y); // true: jvm created only 1 literal in the memory thus x and y points to the same locaiton in memory
+System.out.println(x == y); 
+// true: jvm created only 1 literal in the memory, thus x and y points to the same location in memory
 
 String x = "Hello World";
 String z = " Hello World".trim();
-System.out.println(x == z); // false: the String that z points to is calculated at runtime. Since x and z are not the same at compile time, new String is created
+System.out.println(x == z); 
+// false: the String that z points to is calculated at runtime. Since x and z are not the same at compile time, new String is created
 ```
 
-- You can force JVM to use/not use string pool
+> [!IMPORTANT]
+> You can force JVM to use/not use string pool<br><br>
 ```java
 String x = "Hello World";
 String y = new String("Hello World");
@@ -1138,10 +1170,15 @@ System.out.println(first == third.intern());        // true
 
 ## Arrays
 
-- `myArray.toString()` -> `Ljava.lang .String;@160bc7c0`
-- Can print contents of an array with `Arrays.toString(myArray)`
+> [!IMPORTANT]
+> ***Fixed size!***<br><br>
+> `myArray.toString()` -> `Ljava.lang .String;@160bc7c0`. Can print contents of an array with `Arrays.toString(myArray)`
 
 ### Creating Array of Primitives
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 // When you use this form to instantiate an array, all elements are 
 // set to the default value for that type
@@ -1160,8 +1197,14 @@ int numAnimals5 [];
 int[] ids, types; // creates 2 int arrays
 int ids[], types; // creates 1 int array and 1 int
 ```
+</details>
+<br>
 
 ### Casting Arrays
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 String[] strings = { "stringValue" };
 Object[] objects = strings;
@@ -1169,29 +1212,47 @@ String[] againStrings = (String[]) objects;
 againStrings[0] = new StringBuilder(); // DOES NOT COMPILE: only String is allowed
 objects[0] = new StringBuilder(); // COMPILES BUT: throws exception at runtime: we have a String[] referred from Object[]
 ```
+</details>
+<br>
 
 ### Sorting Arrays
+<details>
+<summary>Details...</summary>
+<br>
+
 - `Arrays.sort(myArray)`
 - ascending order. 
 - Actual ordering of myArray changes. 
 - If myArray is String, it does alphabetical sorting
+</details>
+<br>
 
 ### Binary Search
+<details>
+<summary>Details...</summary>
+<br>
+
 - `Arrays.binarySearch(myArray, search)`
 - Only works for already sorted array(ascending!!!)
 - Returns index of match
 - Returns negative value if no match. This negative value is index-1 where the match should be put to preserve input
+</details>
+<br>
 
 ### Comparing Arrays
+<details>
+<summary>Details...</summary>
+<br>
+
 - `Arrays.compare(myArr1, myArr2)`: 
-  - Arrays must be the same type, or code does not compile
-  - Negative number: 
+  - **Arrays must be the same type, or DNC**
+  - ***Negative number***:
     - first array is smaller than second
     - if both arrays are the same but second has 1 more element
     - If the first element that differs is smaller in the first array
-  - Zero: 
+  - ***Zero***:
     - same size, same elements in the same order
-  - Positive number: 
+  - ***Positive number***:
     - first array is bigger than second
     - if both arrays are the same but first has 1 more element
     - If the first element that differs is larger in the first array
@@ -1200,21 +1261,32 @@ objects[0] = new StringBuilder(); // COMPILES BUT: throws exception at runtime: 
     - numeric order for numbers
     - For strings:
       - one is smaller if it is a prefix of another
-      - Uppeercase is smaller than lowercase
+      - Uppercase is smaller than lowercase
       - Numbers are smaller than letters
 
 - `mismatch(myArr1, myArr2)`
   - returns -1 if no difference
   - returns first index of mismatch
+</details>
+<br>
 
 ## Varargs
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public static void main(String[] args)
 public static void main(String args[])
 public static void main(String... args) // varargs
 ```
+</details>
 
 ## Multidimensional Arrays
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 int[][] vars1; // 2D array
 int vars2 [][]; // 2D array
@@ -1227,14 +1299,20 @@ int [][] args = new int[4][];
 args[0] = new int[5];
 args[1] = new int[3];
 ```
+</details>
 
 ## `ArrayList`
-- Disadvantage of arrays is that they are fixed size. You can't change their size after creation
-- Implements `List`(an interface), thus you can store `ArrayList` in `List` reference.
-- Implements `toString()`
+> [!IMPORTANT]
+> Disadvantage of arrays is that they are fixed size. You can't change their size after creation <br><br>
+> Implements `List`(an interface), thus you can store `ArrayList` in `List` reference.<br><br>
+> Implements `toString()`
 - When empty `ArrayList`is created, capacity > 0 but the size is 0.
 
 ### Creating `ArrayList`
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 // pre-java 5, all of them are type of ArrayList<Object>
 ArrayList list1 = new ArrayList();        // contains space for default number of elements with empty slots
@@ -1247,8 +1325,14 @@ ArrayList<String> list4 = new ArrayList<String>();
 // after java 7
 ArrayList<String> list5 = new ArrayList<>();
 ```
+</details>
+<br>
 
 ### Using `var` with `ArrayList`
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 var myArr = new ArrayList<String>(); // myArr is type of ArrayList<String>
 
@@ -1256,8 +1340,14 @@ var list = new ArrayList<>();        // list is type of ArrayList<Object>
 list.add("a");
 for (String s: list) { } // DOES NOT COMPILE: java assumes most generic type => Object
 ```
+</details>
+<br>
 
 ### `ArrayList` Methods
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 // adds to list, doesn`t overwirtes elements
 boolean add(E element)          // always returns true: other classes in Collections family need to return a value when adding an element (Set)
@@ -1278,18 +1368,22 @@ boolean contains(Object object) // calls equals() for each element
 
 boolean equals(Object object)   // return true if same elements in same order
 ```
+</details>
+<br>
 
 ## Wrapper Classes
-- Contrary to primitives, then can store `null`: useful for data-based services
-- You can create them like `Float.valueOf((float) 1.0)`
-- Each wrapper class has a constructor but it is not recommended. `valueOf()` allows object caching. `String` can be shared when the value is the same(String pool). The wrapper classes are immutable and take advantage of some caching as well.
-- Each wrapper class also have a method that converts back to primitive: `intValue()`
+> [!IMPORTANT]
+> Contrary to primitives, then can store `null`: useful for data-based services <br><br>
+> You can create them like `Float.valueOf((float) 1.0)`<br><br>
+> Each wrapper class has a constructor but it is not recommended. `valueOf()` allows object caching. `String` can be shared when the value is the same(String pool). The wrapper classes are immutable and take advantage of some caching as well.<br><br>
+> Each wrapper class also have a method that converts back to primitive: `intValue()`<br>
 - Converting `String` to a primitive: `Byte.parseByte("1")` (`Character` cannot use these since you can just call `charAt()`)
 - Converting `String` to a primitive: `Byte.valueOf("2")` (`Character` cannot use these since you can just call `charAt()`)
 
 ## Autoboxing and Unboxing
-- ***Autoboxing***: type the primitive value, and Java will convert it to the relevant wrapper class for you
-- ***Unboxing***: reverse of autoboxing
+> [!IMPORTANT]
+> ***Autoboxing***: type the primitive value, and Java will convert it to the relevant wrapper class for you<br><br>
+> ***Unboxing***: reverse of autoboxing
 - Unboxing `null` will throw `NullPointerException`
 ```java
 List<Integer> weights = new ArrayList<>();
@@ -1306,9 +1400,10 @@ double first = weights.get(0);    // 60.0: retrieves Integer and unboxes to int 
 List<String> list = new ArrayList<>();
 list.add("hawk");
 list.add("robin");
-Object[] objectArray = list.toArray();              // using toArray() without parameters will default to array of Object
+Object[] objectArray = list.toArray();  
+// using toArray() without parameters will default to array of Object
 // if you specify a size of 0 for the parameter Java will create a new array of the proper size for the return value. 
-// If you like, you can suggest a larger array to be used instead. 
+// If you wish, you can suggest a larger array to be used instead. 
 // If the ArrayList fits in that array, it will be returned,
 // otherwise a new one will be created
 String[] stringArray = list.toArray(new String[0]); 
@@ -1318,6 +1413,10 @@ System.out.println(stringArray.length); // 2
 ```
 
 - `Array` to `List`
+> [!IMPORTANT]
+> `Arrays.asList(array)`: returns fixed size list; `List` points to the `array`<br><br>
+> `List.of(array)`: return immutable list; `List` and `array` are disconnected
+
 ```java
 String[] array = { "hawk", "robin" }; 
 
@@ -1325,14 +1424,14 @@ List<String> list = Arrays.asList(array);   // returns fixed size list!!!
 list.set(1, "test");                        // updates both array and list!!!
 array[0] = "new";                           // updates both array and list
 System.out.print(Arrays.toString(array));   // [new, test]
-list.remove(1);                             // throws exception
+list.remove(1);                             // throws exception: arrays are fixed size!
 
 
 List<String> list = List.of(array);         // returns immutable list
 array[0] = "new";                           // only updates array
 System.out.println(Arrays.toString(array)); // [new, robin]
 System.out.println(list);                   // [hawk, robin]
-list.set(1, "test");                        // throws exception
+list.set(1, "test");                        // throws exception: List.of() returns immutable list
 
 // Arrays.asList() nor List.of() allows you to 
 // change number of elements. For this you need to write logic:
@@ -1341,6 +1440,10 @@ List<String> expandableList = new ArrayList<>(fixedSizeList);
 ```
 
 ## Sorting `ArrayList`
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 List<Integer> numbers = new ArrayList<>();
 numbers.add(99);
@@ -1349,11 +1452,13 @@ numbers.add(81);
 Collections.sort(numbers);  
 System.out.println(numbers); // [5, 81, 99]       
 ```
+</details>
 
 ## Sets
-- Collection of objects that cannot contain duplicates
-- If you try to add a duplicate object to a `Set` API will not fullfil your request
-- there are 2 common classes that implements `Set`: `HashSet` and `TreeSet`(when ordering is important)
+> [!IMPORTANT]
+> Collection of objects that cannot contain duplicates <br><br>
+> If you try to add a duplicate object to a `Set` API will not fullfil your request <br><br>
+> there are 2 common classes that implements `Set`: `HashSet` and `TreeSet`(when ordering is important)
 ```java
 Set<Integer> set = new HashSet<>();
 System.out.println(set.add(66)); // true
@@ -1365,6 +1470,10 @@ System.out.println(set.isEmpty()); // true
 
 ## Maps
 - A `Map` uses key to identify values
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 V get(Object key)                   // returns the value mapped or null
 
@@ -1382,8 +1491,13 @@ Set<K> keySet()
 
 Collection<V> values()
 ```
+</details>
 
 ## Calculating with `Math` APIs
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 // same goes for Math.max()
 double min(double a, double b)
@@ -1398,6 +1512,16 @@ double pow(double number, double exponent)
 
 double random() // 1 > randomnum >= 0
 ```
+</details>
+
+## `Array` vs `ArrayList`
+
+`Array` | `ArrayList`
+-- | --
+Basic functionality in Java | Part of `Collection` framework. Implements `List<E>`, `Collection<E>`, `Iterable<E>`, `Cloneable`, `Serializable`, and `RandomAccess` interfaces
+Can access elements with `[]` | Can access elements with methods
+Fixed size | Can change size
+Can contain primitive and object types | Can only contain objects
 
 ___
 
