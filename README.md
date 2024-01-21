@@ -979,17 +979,13 @@ INNER_LOOP: for(int i=0; i<mySimpleArray.length; i++)
 
 ___
 
-> [!WARNING]
-> Useful information that users should know, even when skimming content.
-
 # Chapter 5
 
 ## Creating and Manipulating `String`
 
-
-
-- ***`String` does not need `new` to be instantiated***
-- ***`String` is a sequence of `char` and implements `CharSequence`***
+> [!IMPORTANT]
+> ***`String` does not need `new` to be instantiated***
+> ***`String` is a sequence of `char` and implements `CharSequence`***
 
 ## Concatenation
 - If either operand is `String` then it is concatenation
