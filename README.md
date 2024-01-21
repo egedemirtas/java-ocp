@@ -764,8 +764,8 @@ ___
 ## `switch`
 - a switch statement must have braces around the variable
 - a switch statement must have curly braces around the switch body
-- <u>***`case`, `defult`, `break` are optional***</u>
-- <u>***`default`: it is branched to only if there is no matching case value for the switch statement, regardless of its position within the switch statement***</u>
+- ***`case`, `defult`, `break` are optional***
+- ***`default`: it is branched to only if there is no matching case value for the switch statement, regardless of its position within the switch statement***
 - A switch can have 0 `case`
 - Allowed types: 
   - `int` and `Integer`
@@ -791,7 +791,7 @@ switch (month) {                  // a switch statement must have curly braces a
 
 switch(month){}
 ```
-- <u>***In the example below, the code will jump to the default block and then execute all of the proceeding case statements in order until it finds a break statement or finishes the switch statement***</u>
+- ***In the example below, the code will jump to the default block and then execute all of the proceeding case statements in order until it finds a break statement or finishes the switch statement***
 ```java
 var dayOfWeek = 5;
 switch(dayOfWeek) {
@@ -818,8 +818,8 @@ Saturday
 ```
 
 ### Acceptable Case Values
-- the values in each `case` statement must be <u>***compile time constant values***</u> of the same data type as the `switch` value
-- <u>***Compile time constants***</u>: `enum`, `final`, literals
+- the values in each `case` statement must be ***compile time constant values*** of the same data type as the `switch` value
+- ***Compile time constants***: `enum`, `final`, literals
 -  data type for `case` statements must all match the data type of the `switch` variable
 ```java
 final int getCookies() { return 4; }
@@ -922,7 +922,7 @@ for(int k=0; k<10; )
 </details>
 
 ## `foreach`
-- <u>***The right side of the for-each loop must be one of the following:***</u>
+- ***The right side of the for-each loop must be one of the following:***
   - A built-in Java array
   - An object whose type implements java.lang.Iterable
 - The left side of the for-each loop must include a declaration for an instance of a variable whose type is compatible with the type of the array or collection on the right side of the statement
@@ -931,6 +931,7 @@ for(int k=0; k<10; )
 <details>
 <summary>Details...</summary>
 <br>
+
 ```java
 for(int value : values) {
  System.out.print(value + ", ");
@@ -965,7 +966,7 @@ INNER_LOOP: for(int i=0; i<mySimpleArray.length; i++)
 </details>
 
 ## `break`
-- <u>***Without a label parameter, the `break` statement will terminate the nearest inner loop it is currently in the process of executing***</u>
+-  ***Without a label parameter, the `break` statement will terminate the nearest inner loop it is currently in the process of executing***
 - `break`break statement can take an optional label parameter.
 - `return` can be also used to exit loops quickly
 
@@ -978,11 +979,17 @@ INNER_LOOP: for(int i=0; i<mySimpleArray.length; i++)
 
 ___
 
+> [!WARNING]
+> Useful information that users should know, even when skimming content.
+
 # Chapter 5
 
 ## Creating and Manipulating `String`
-- <u>***`String` does not need `new` to be instantiated***</u>
-- <u>***`String` is a sequence of `char` and implements `CharSequence`***</u>
+
+
+
+- ***`String` does not need `new` to be instantiated***
+- ***`String` is a sequence of `char` and implements `CharSequence`***
 
 ## Concatenation
 - If either operand is `String` then it is concatenation
