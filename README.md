@@ -984,7 +984,7 @@ ___
 ## Creating and Manipulating `String`
 
 > [!IMPORTANT]
-> ***`String` does not need `new` to be instantiated***
+> ***`String` does not need `new` to be instantiated***<br>
 > ***`String` is a sequence of `char` and implements `CharSequence`***
 
 ## Concatenation
