@@ -63,7 +63,7 @@
 
 ### Fields and Methods
 
-- `methods/functions/procedures` **+** `fields/variables` **=** `members of class`
+- `methods` **+** `fields/variables` **=** `members of class`
 - ***Variables hold the state of the program, methods operate on that state***
 - **keyword**: a word with special meaning
 - `method name` **+** `parameter types` **=** `the method signature`
@@ -115,6 +115,9 @@ java Ege           # Notice that we must omit the .class extension to run Ege.ja
   ```
 
 ### Passing Parameters to Java Program
+<details>
+<summary>Details...</summary>
+<br>
 
 ```java
 public class Ege {
@@ -135,8 +138,12 @@ java Ege Pipet "cok seviyorum" # use double quotes if you want to use a sentence
 
 - All command-line arguments are treated as String objects. Thus if you type 123 as an argument, it will compile and `args[0]` returns 123 since `args` is String array
 - If you try `System.out.println(args[2]);` for this example, it will throw exception: `java.lang.ArrayIndexOutOfBoundsException`
+</details>
 
 ### Running Code In One Line
+<details>
+<summary>Details...</summary>
+<br>
 
 ```shell
 java Ege.java Pipet "cok seviyorum"
@@ -149,6 +156,7 @@ Full | single-file source-code
 Produces a `.class` file | Fully in memory 
 For any program | For programs with one file
 Can import code in any available Java library | Can only import code that came with the JDK
+</details>
 
 
 ## Package Declarations and Imports
@@ -281,6 +289,9 @@ Don't need to check for imports if:
 </details>
 
 ## Bonus:
+<details>
+<summary>Details...</summary>
+<br>
 
 ```java
 // INSERT PACKAGE NAME HERE
@@ -290,7 +301,7 @@ public class Bird { }
 - The package name represents any folders underneath the current path
 - Thus `package my.directory.named.A;` wont work
 - Correct one is `package named.A;`
-
+</details>
 
 ___
  
@@ -316,8 +327,8 @@ public class Chick {
 
 ### Order of Initialization
 
-- ***Fields and instance initializer blocks run in the order they appear***
-- ***Constructor runs after fields and IIB***
+- ***`Fields` and `instance initializer blocks` run in the order they appear***
+- ***`Constructor` runs after `fields` and `IIB`***
 - ***Order matters for the fields and blocks of code. You can’t refer to a variable before it has been defined***
 
 
@@ -337,7 +348,6 @@ Keyword | Type | Example
 `char` | 16bit unicode | 'a'
 
 - String is not primitive even though there is built-in support. It is an object.
-- `byte` can hold between -128 to 127
 - `short` and `char` are closely related: 
   - `short` is signed, `char` is unsigned; thus `char` has higher range for positive integer
   - you can use them interchangeably in some cases
@@ -417,13 +427,14 @@ void sandFence() {
 ## Initializing Variables
 
 ### Initiliazing Local Variables
-- A local variable is a variable defined within a constructor, method, or initializer block
-- Local variables do not have a default value and must be initialized before use. 
+- ***A `local variable` is a variable defined within a constructor, method, or initializer block***
+- ***`Local variables` do not have a default value and must be initialized before use.***
 - Complier will report error if you use an uninitialized variable.
 
 ### Passing Constructor and Method Paramters
-- Variables passed to a constructor or method are called ***constructor parameters or method parameters***
-- They are like local variables that have been initialized before the method is called, by the caller.
+- `constructor parameters` or `method parameters`: 
+  - Variables passed to a constructor or method 
+  - They are like local variables that have been initialized before the method is called, by the caller.
 ```java
 public void findAnswer(boolean check) {}
 
@@ -438,7 +449,7 @@ public void checkAnswer() {
 - A `class variable`:
   - it has the keyword `static` before it
   - defined on the class level / ***shared among all instances of the class***.
-- ***Instance and class variables*** do not require you to initialize them. As soon as you declare these variables, they are given a default value:
+- `Instance variables` and `class variables` do not require you to initialize them. As soon as you declare these variables, they are given a default value:
   Variable Type | Default Initialization Value
   --- | --- 
   `boolean` | `false`
@@ -526,14 +537,14 @@ public class var { // DNC
 ```
 
 ## Managing Variable Scope
-- **Local variables**: In scope from declaration to end of block
-- **Instance variables**: In scope from declaration until object eligible for garbage collection
-- **Class variables**: In scope from declaration until program ends 
+- `Local variables`: In scope from declaration to end of block
+- `Instance variables`: In scope from declaration until object eligible for garbage collection
+- `Class variables`: In scope from declaration until program ends 
 
 ## Destroying Objects
 - All Java objects are stored in your program memory’s heap.
-- ***Garbage collection***: Refers to the process of automatically freeing memory on the heap by deleting objects that are eligible for garbage collection
-- ***eligible for garbage collection***: Refers to an object’s state of no longer being accessible in a program.
+- `Garbage collection`: Refers to the process of automatically freeing memory on the heap by deleting objects that are eligible for garbage collection
+- **Eligible for garbage collection**: Refers to an object’s state of no longer being accessible in a program.
 - ***Eligible for garbage collection doesn't mean the object will be immediately garbage collected.***
 
 ### Calling `System.gc()`
@@ -586,23 +597,23 @@ Assignment operators | =, +=, -=, *=, /=, %=, &=, ^=, |=, <<=, >>=, >>>=
 int lion = 3;
 int tiger = ++lion * 5 / lion--;
 ```
-  1. int tiger = ++lion * 5 / 3     // 3 is returned, then lion decremented to 2
-  2. int tiger = 3 * 5 / 3          // lion is incremented to 3, then lion return 3
+  1. int tiger = ++lion * 5 / 3 &nbsp; &nbsp; &nbsp; // 3 is returned, then lion decremented to 2
+  2. int tiger = 3 * 5 / 3 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; // lion is incremented to 3, then lion return 3
   3. tiger is 5
   4. Lion is 3
 
 ## Binary Arithmetic Operators
 - `+,-,%,/,*`
-- For integer values, division results in the floor value of the nearest integer that fulfills the operation
+- ***For integer values, division results in the floor value of the nearest integer that fulfills the operation***
 - Floor value: discard anything after decimal: 4.645634 --> 4
 - Modulus can work with negative numbers
 
 ## Numeric Promotions
-1. If two values have different data types, Java will automatically promote one of the values to the larger of the two data types.
-2. If one of the values is integral and the other is floating-point, Java will automatically promote the integral value to the floating-point value’s data type.
-3. Smaller data types: `byte`, `short`, and `char` are first promoted to int any time they’re used with a Java binary arithmetic operator, even if neither of the operands is int.
+1. ***If two values have different data types, Java will automatically promote one of the values to the larger of the two data types.***
+2. ***If one of the values is integral and the other is floating-point, Java will automatically promote the integral value to the floating-point value’s data type.***
+3. ***Smaller data types: `byte`, `short`, and `char` are first promoted to int any time they’re used with a Java binary arithmetic operator, even if neither of the operands is int.***
     - Unary operators are excluded from this rule
-4. After all promotion has occurred and the operands have the same data type, the resulting value will have the same data type as its promoted operands.
+4. ***After all promotion has occurred and the operands have the same data type, the resulting value will have the same data type as its promoted operands.***
 
 ```java
 int x = 1;
@@ -644,7 +655,7 @@ if(healthy = true)          // healthy is assigned to true, then true is returne
 
 ## Casting Values
 - Optional if the casting is from bigger to smaller type
-- Mandatory if casting is from smaller to bigger type
+- ***Mandatory if casting is from smaller to bigger type***
 ```java
 int fur = (int)5;
 int hair = (short) 2;
@@ -667,7 +678,7 @@ short gerbil = 1 + (short)(mouse * hamster);  // DOES NOT COMPILE: result is aut
 
 ## Compound Assignment Values
 - `+=, -=, /=, *=`
-- Compound assignments automatically casts variables!!
+- ***Compound assignments automatically casts variables!!***
 ```java
 long goat = 10;
 int sheep = 5;
@@ -687,20 +698,20 @@ Equality | Primitive | Objects
 `==` | two values represent same value | two values reference the same object
 `!=` | two values represent different value | two values **do not** reference the same object
 
-- Only 3 scenarios are allowed:
-  1. Comparing two numeric types or primitives: If the numeric values are of different data types, the values are automatically promoted.
+- ***Only 3 scenarios are allowed:***
+  1. ***Comparing two numeric types or primitives: If the numeric values are of different data types, the values are automatically promoted.***
   ```java
   5 == 5.00 // true
   ```
-  2. two booleans
-  3. Two objects
+  2. ***two booleans***
+  3. ***Two objects***
 
   ```java
   boolean monkey = true == 3;       // DOES NOT COMPILE
   boolean ape = false != "Grape";   // DOES NOT COMPILE
   boolean gorilla = 10.2 == "Koko"; // DOES NOT COMPILE
   ```
-- Two references are equal if and only if they point to the same object or both point to null
+- ***Two references are equal if and only if they point to the same object or both point to null***
 ```java
 File monday = new File("schedule.txt");
 File tuesday = new File("schedule.txt");
@@ -711,8 +722,8 @@ System.out.println(tuesday == wednesday); // true
 
 ## Relational Operators
 - `<,>,<=,>=`: applies only to numeric values
-- `a instanceof b`: Returns true if the reference that `a` points to is an instance of a class, subclass or class that implements a particular interface, as named in `b`
-- If the two numeric operands are not of the same data type, the smaller one is promoted
+- ***`a instanceof b`: Returns `true` if the reference that `a` points to; is an instance of a class, subclass or class that implements a particular interface, as named in `b`***
+- ***If the two numeric operands are not of the same data type, the smaller one is promoted***
 ```java
 public static void openZoo(Number time) {
    if(time instanceof String) // DOES NOT COMPILE: String and Number are incompatible, only applies to classes, not interfaces
@@ -753,8 +764,8 @@ ___
 ## `switch`
 - a switch statement must have braces around the variable
 - a switch statement must have curly braces around the switch body
-- `case`, `defult`, `break` are optional
-- `default`: it is branched to only if there is no matching case value for the switch statement, regardless of its position within the switch statement
+- <u>***`case`, `defult`, `break` are optional***</u>
+- <u>***`default`: it is branched to only if there is no matching case value for the switch statement, regardless of its position within the switch statement***</u>
 - A switch can have 0 `case`
 - Allowed types: 
   - `int` and `Integer`
@@ -776,11 +787,11 @@ switch (month) {                  // a switch statement must have curly braces a
     break;
   default:                        // optional
     System.out.print("April");
+}
 
 switch(month){}
-}
 ```
-- In the example below, the code will jump to the default block and then execute all of the proceeding case statements in order until it finds a break statement or finishes the switch statement
+- <u>***In the example below, the code will jump to the default block and then execute all of the proceeding case statements in order until it finds a break statement or finishes the switch statement***</u>
 ```java
 var dayOfWeek = 5;
 switch(dayOfWeek) {
@@ -807,8 +818,8 @@ Saturday
 ```
 
 ### Acceptable Case Values
-- the values in each `case` statement must be ***compile time constant values*** of the same data type as the `switch` value
-- ***Compile time constants***: `enum`, `final`, literals
+- the values in each `case` statement must be <u>***compile time constant values***</u> of the same data type as the `switch` value
+- <u>***Compile time constants***</u>: `enum`, `final`, literals
 -  data type for `case` statements must all match the data type of the `switch` variable
 ```java
 final int getCookies() { return 4; }
@@ -861,11 +872,15 @@ Order:
 - initialization and update sections may contain multiple statements, separated by commas
 
 ### Working with `for` loops
+<details>
+<summary>Details...</summary>
+<br>
+
 1. Infinite loop
 ```java
 for( ; ; )
 ```
-2. Multiple terms in `for``
+2. Multiple terms in `for`
 ```java
 int x = 0;
 for(long y = 0, z = 4; x < 5 && y < 10; x++, y++) {
@@ -904,14 +919,18 @@ for(int j=1; j<10; j++)
 for(int k=0; k<10; )
  k++;
 ``` 
+</details>
 
 ## `foreach`
-- The right side of the for-each loop must be one of the following: 
+- <u>***The right side of the for-each loop must be one of the following:***</u>
   - A built-in Java array
   - An object whose type implements java.lang.Iterable
 - The left side of the for-each loop must include a declaration for an instance of a variable whose type is compatible with the type of the array or collection on the right side of the statement
 - `var` is allowed at the left side
--  Java actually converts the for-each loop into a standard for loop during compilation
+-  Java actually converts the for-each loop into a standard for loop during compilation:
+<details>
+<summary>Details...</summary>
+<br>
 ```java
 for(int value : values) {
  System.out.print(value + ", ");
@@ -927,8 +946,14 @@ for(int i=0; i < values.length; i++) {
  System.out.print(value + ", ");
 }
 ```
+</details>
+
 
 ## Optional Labels
+<details>
+<summary>Details...</summary>
+<br>
+
 - `if`, `switch` and loops may have ***optional labels***
 - A label is an optional pointer to the head of a statement that allows the application flow to jump to it or break from it.
 ```java
@@ -937,9 +962,10 @@ INNER_LOOP: for(int i=0; i<mySimpleArray.length; i++)
  System.out.print(mySimpleArray[i]+"\t");
  }
 ```
+</details>
 
 ## `break`
-- Without a label parameter, the `break` statement will terminate the nearest inner loop it is currently in the process of executing
+- <u>***Without a label parameter, the `break` statement will terminate the nearest inner loop it is currently in the process of executing***</u>
 - `break`break statement can take an optional label parameter.
 - `return` can be also used to exit loops quickly
 
@@ -955,8 +981,8 @@ ___
 # Chapter 5
 
 ## Creating and Manipulating `String`
-- `String` does not need `new` to be instantiated
-- `String` is a sequence of `char` and implements `CharSequence`
+- <u>***`String` does not need `new` to be instantiated***</u>
+- <u>***`String` is a sequence of `char` and implements `CharSequence`***</u>
 
 ## Concatenation
 - If either operand is `String` then it is concatenation
