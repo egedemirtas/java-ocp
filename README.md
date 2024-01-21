@@ -1528,16 +1528,17 @@ ___
 # Chapter 6
 
 ## What is Lambda?
-- Java is a OOP language. In java 8 ***Functional Programming*** aspect was added.
-- ***Functional Programming***: 
-  - You specify what you want to do rather than dealing with sate of objects. Focus more on expressions than loops.
-  - Uses ***lambda expressions***
-- ***lambda expressions***: 
-  - block of code that gets passed around like a variable
-  - unnamed method: has parameters and body but no method name
-  - short name: ***lambdas***
+> [!IMPORTANT]
+> `Functional Programming`: You specify what you want to do rather than dealing with state of objects. Focus more on expressions than loops.<br><br>
+> `lambda expressions`: used for functional prgramming. This block of code gets passed around like a variable. Short name: `lambdas`
+
+Java is a OOP language. In java 8 ***Functional Programming*** aspect was added. 
 
 ## Lambda Syntax
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 interface CheckTrait {
     boolean test(Animal a);
@@ -1554,7 +1555,9 @@ class Animal {
     private boolean canHop;
     private boolean canSwim;
 
-    public Animal(String speciesName, boolean hopper, boolean swimmer) { species = speciesName; canHop = hopper; canSwim = swimmer;}
+    public Animal(String speciesName, boolean hopper, boolean swimmer) { 
+      species = speciesName; canHop = hopper; canSwim = swimmer;
+    }
 
     public boolean canHop() {return canHop;}
     public boolean canSwim() {return canSwim;}
@@ -1580,8 +1583,7 @@ public class Main {
     }
 
     private static void print(List<Animal> animals, CheckTrait checkTrait) {
-        for (Animal animal :
-                animals) {
+        for (Animal animal : animals) {
             if (checkTrait.test(animal)) {
                 System.out.println(animal);
             }
@@ -1589,9 +1591,10 @@ public class Main {
     }
 }
 ```
-- Above code uses ***Deferred Execution*** in `print(animals, a -> a.canSwim());` and `print(animals, a -> a.canHop());`. It means code specified now will run later. Normally when an expression contains a nested method call, that method call is evaluated immediately. However in this case, `canHop()` and `canSwim()` are called when `print()` calls `test()`.
-- ***Lambdas work with interfaces that have only one abstract method (functional interface)***. In the code above java looks at `CheckTrait` interface
-- We are passing lambda as the second parameter of `print()` which expects `CheckTrait`. Java tries to map lambda to that interface: `boolean test(Animal a);`. Since the parameter in that interface method has to be an `Animal` and returns `boolean`, we know the lambda parameter has to be animal and returns `boolean`
+> [!IMPORTANT]
+> Above code uses `Deferred Execution` in `print(animals, a -> a.canSwim());` and `print(animals, a -> a.canHop());`. It means code specified now will run later. Normally when an expression contains a nested method call, that method call is evaluated immediately. However in this case, `canHop()` and `canSwim()` are called when `print()` calls `test()`. <br><br>
+> ***Lambdas work with interfaces that have only one abstract method (`functional interface`)***. In the code above java looks at `CheckTrait` interface <br><br>
+> We are passing lambda as the second parameter of `print()` which expects `CheckTrait`. Java tries to map lambda to that interface: `boolean test(Animal a);`. Since the parameter in that interface method has to be an `Animal` and returns `boolean`, we know the lambda parameter has to be animal and returns `boolean` <br>
 - These are the same:
 ```java
 a -> a.canHop()
@@ -1600,12 +1603,20 @@ a -> a.canHop()
 // curly braces can be omitted if there is only a single statement. If you don't have braces you can also omit return
 (Animal a) -> { return a.canHop(); } 
 ```
+</details>
 
 ## Functional Interfaces
-- ***Functional Interface*** = Interfaces that have only one abstract method(simplified explanation)
-- Java provides `@FunctionalInterface` on **some** functional interfaces. This annotation indicates that usage of lambda in the future will be safe. However, there are functional interfaces without this annotation.
-- 4 functional interfaces:
-  1. `Predicate`
+<details>
+<summary>Details...</summary>
+<br>
+
+>[!IMPORTANT]
+> ***`Functional Interface`*** = Interfaces that have only one abstract method(simplified explanation) <br>
+
+Java provides `@FunctionalInterface` on **some** functional interfaces. This annotation indicates that usage of lambda in the future will be safe. However, there are functional interfaces without this annotation.
+
+***4 functional interfaces:***
+1. `Predicate`
     - Return `boolean`
     - Imagine you need to test Animals, Strings and Plants.. then we would have to create lots of interfaces to use lambdas
     ```java
@@ -1614,7 +1625,7 @@ a -> a.canHop()
     }
     ```
     - This way you don't need your interface anymore!! In the animal example you just need to change the parameter in `print()` as a predicate class. Nothing else will be changed
-  2. `Consumer`
+2. `Consumer`
     - only need to know `void accept(T t)`
     - When you want receive a value but not return it (you might need it if you just want to print the value)
     ```java
@@ -1627,16 +1638,13 @@ a -> a.canHop()
       consumer.accept(value);
     }
     ```
-  3. `Supplier`
+3. `Supplier`
     - only need to know `T get()`
     - you might need it when you generating values
     ```java
-    Supplier<Integer> number = () ->  42;                     //always return 42 when called
-    Supplier<Integer> random = () ->  new Random().nextInt(); //always random number (likey to be different one)
-
     public static void main(String[] args) {
-      Supplier<Integer> number = () ->  42;
-      Supplier<Integer> random = () ->  new Random().nextInt();
+      Supplier<Integer> number = () ->  42; //always return 42 when called
+      Supplier<Integer> random = () ->  new Random().nextInt(); //always random number
       System.out.println(returnNumber(number));
       System.out.println(returnNumber(random));
     }
@@ -1645,14 +1653,14 @@ a -> a.canHop()
       return supplier.get();
     }
     ```
-  4. `Comparator`
+4. `Comparator`
     - `int compare(T o1, T o2)`
     - For custom ordering
     ```java
     Comparator<Integer> ints = (i1, i2) -> i1 - i2; //ascending
     Comparator<String> strings = (s1, s2) -> s2.compareTo(s1); //descending
     ```
-  5. BONUS: `BiConsumer`
+5. BONUS: `BiConsumer`
     - just like `Consumer`but it can take two parameters
     ```java
     Map<String, Integer> bunnies = new HashMap<>();
@@ -1661,9 +1669,14 @@ a -> a.canHop()
     bunnies.put("hoppy", 1);
     bunnies.forEach((k, v) -> System.out.println(k + " " + v));
     ```
+</details>
 
 ## Working With Variables in Lambdas
-- Variables can appear in 4 places in a lambdas:
+<details>
+<summary>Details...</summary>
+<br>
+
+***Variables can appear in 3 places in a lambdas:***
 1. Parameter List
 ```java
 Predicate<String> p = x -> true;
@@ -1691,7 +1704,7 @@ public void variables(int a) {
 
 3. Variables Referenced from Lambda Body
 - Lambda can always access instance variables and class variables
-- Lambda can access local variables and method parameter only if they are ***effectively final***(value of variable doesn't change after it is set, regardless of whether it is explicitly marked as `final`). If you aren't sure if your variable is ***effectively final*** then just add `final` to it. If you code compiles, your varaible is effectively final.
+- Lambda can access local variables and method parameter only if they are `effectively final` (value of variable doesn't change after it is set, regardless of whether it is explicitly marked as `final`). If you aren't sure if your variable is `effectively final` then just add `final` to it. If you code compiles, your varaible is effectively final.
 ```java
 public class Crow {
    private String color;
@@ -1701,8 +1714,20 @@ public class Crow {
       + volume + " that she is " + color);
 } }
 ```
+Variable Type | Rule
+-- | --
+Instance variable | Allowed
+Static variable | Allowed
+Local variable | Allowed if effectively final
+Method parameter | Allowed if effectively final
+Lambda parameter | Allowed
+</details>
 
 ## Calling APIs with Lambdas
+<details>
+<summary>Details...</summary>
+<br>
+
 - `List` and `Set`declare `removeIf()` that takes `Predicate`
 ```java
 List<String> bunnies = new ArrayList<>();
@@ -1734,16 +1759,14 @@ bunnies.add("floppy");
 bunnies.add("hoppy");
 bunnies.forEach(b -> System.out.println(b));
 ```
+</details>
 
 ___
 
 # Chapter 7
 
 ## Designing Methods
-- ***Method Signature:*** method name and parameter list
-```java
-public final void nap(int minutes) throws Exception {}
-```
+
 ### 1. Access Modifiers
   1. `private`: method can be called only from within class
   2. default (there is no key word for this, you simply have to omit the access modifier to achieve default behaviour): can be called from classes in the same package. `default` key word is in `switch` and `interface`, don't mix it up.
