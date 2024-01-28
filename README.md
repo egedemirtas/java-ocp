@@ -1769,13 +1769,15 @@ ___
 
 ### 1. Access Modifiers
   1. `private`: method can be called only from within class
-  2. default (there is no key word for this, you simply have to omit the access modifier to achieve default behaviour): can be called from classes in the same package. `default` key word is in `switch` and `interface`, don't mix it up.
+  2. default (there is no key word for this, you simply have to omit the access modifier to achieve default behaviour): can be called from classes in the same package. 
+  > [!CAUTION]
+  > `default` key word is in `switch` and `interface`, don't mix it up.
   ```java
   default void walk2() {} // DOES NOT COMPILE
   void walk4() {}
   ```
   3. `protected`: can be called from classes in the same package or subclasses
-    - Assume you have the parant class **Bird** which has protected method and variable: `floatInWater()` and `name`. **Swan** is a subclass of **Bird** but ***they are in different packages***. In class **Swan**, you can freely access `name` and call `floatInWater()`. However you can not do something like this:
+    - Assume you have the parent class **Bird** which has `protected` method and variable: `floatInWater()` and `name`. **Swan** is a subclass of **Bird** but ***they are in different packages***. In class **Swan**, you can freely access `name` and call `floatInWater()`. However you can not do something like this:
   ```java
   public class Swan extends Bird {
     public void swim() {
@@ -1791,6 +1793,10 @@ ___
     }
   }
   ```
+
+  >[!IMPORTANT]
+  > ***Why use `protected`?*** Use it to make a class provide special functionality to its derived classes that must not be visible to other classes
+
   4. `public`: can be called from any class
 
 ### 2. Optional specifier (not required)
@@ -1814,13 +1820,17 @@ ___
 
 
 ## Working with Varargs
+<details>
+<summary>Details...</summary>
+<br>
+
 - A bit different than an array:
   - A varargs parameter must be the last element in a method's parameter List. Thus, you are allowed to have only 1 varargs parameter per method.
 - When calling a method with varargs as parameter you have few choices:
   - pass an array
   - list the elements of the array (let java create the array)
   - omit varargs values method call (java will create an empty array).
-  - pass `null`: java treats this paramter as array reference that happens to be `null`. Thus, java won't create an array and vararg varaible in the method will be `null`
+  - pass `null`: java treats this parameter as array reference that happens to be `null`. Thus, java won't create an array and vararg variable in the method will be `null`
   ```java
   public static void walk(int start, int... nums) { 
     System.out.println(nums.length);
@@ -1833,15 +1843,23 @@ ___
       walk(1, new int[] {4, 5});  // 2
   }
   ```
+</details>
 
 ## Designing `static` Methods and Fields
-- `static` methods don't require an instance of the class. They are shared among all users of the class. `static` keyword applies to the class rather than an instance of a class
-- `static` methods in the class, including a `main()` method, may access private members, including private constructors.
-- Purposes of `static` methods:
-  1. Used for utility or helper methods that don't require any object state. User doesn't need to instantiate objects to call these utility methods. Ex: `public static void main(String[]args)`
-  2. Used for a shared state by all instances of a class. **Methods that use any static variables must be `static` as well**
+>[!IMPORTANT]
+> `static` methods don't require an instance of the class. They are shared among all users of the class. <br><br>
+> `static` keyword applies to the class rather than an instance of a class. <br><br>
+> `static` methods in the class, including a `main()` method, may access private members, including private constructors.<br><br>
+> **Methods that use any static variables must be `static` as well**
+
+> [!NOTE]
+> ***Used for:*** utility or helper methods that don't require any object state. User doesn't need to instantiate objects to call these utility methods. Ex: `public static void main(String[]args)`
 
 ## Accessing a `static` Variable/Method
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Koala {
    public static int count = 0;
@@ -1849,10 +1867,11 @@ public class Koala {
       System.out.println(count);
    }
 }
-----------------------------------
+
+// _________________________________________________
 
 System.out.println(Koala.count);
-Koala.main(new String[0]);
+Koala.main(new String[0]);        // 0
 
 Koala k = new Koala();
 System.out.println(k.count);      // 0
@@ -1866,9 +1885,17 @@ koala1.count = 6;
 koala2.count = 5;
 System.out.println(Koala.count);  // 5
 ```
+</details>
 
 ## `static` VS Instance
-- A `static` member cannot call an instance member without referencing an instance of the class.
+> [!IMPORTANT]
+> A `static` member cannot call an instance member without referencing an instance of the class.<br><br>
+> ***A `static` method or instance method can call a `static` method because `static` methods don't require an object to use. `static` methods can not call an instance method or instance variable without a reference variable because these need object to be created in the first place!*** 
+
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Static {
    private String name = "Static class";
@@ -1884,9 +1911,12 @@ public class Static {
 ```
 - You can fix the code above by:
   1. make `third()`, `static`. However now `third()` is a `static` method referring to nonstatic `name`
-  2. add `static` to `name`
+  2. add `static` to `name`<br><br>
+</details>
 
-- A `static` method or instance method can call a `static` method because `static` methods don't require an object to use. `static` methods can not call an instance method or instance variable without a reference variable because these need object to be created in the first place!
+<details>
+<summary>Details...</summary>
+<br>
 
 ```java
 public class Giraffe {
@@ -1908,9 +1938,14 @@ Type | Calling | Legal?
 `eat()` | `allGiraffeComeOut()` | Yes
 `eat()` | `drink()` | Yes
 `eat()` | `g.eat()` | Yes
+</details>
 
 ## `static` Variables
-- ***constant variable***: use the modifier `static final`(`static` for memory management, don't create a variable for each instance of class) and use all uppercase letters with underscore between words
+- ***Constant variable***: use the modifier `static final`(`static` for memory management, don't create a variable for each instance of class) and use all uppercase letters with underscore between words
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Initializers {
    private static final int NUM_BUCKETS = 45;
@@ -1925,8 +1960,12 @@ public class Initializers {
       values.add("changed");  
    }
 ```
+</details>
 
 ## `static` Initialization
+> [!IMPORTANT]
+> All `static` initializers run when the class is first used in the order they are defined. The statements in them run and assign any `static` variables as needed.<br><br>
+> `static` initializer blocks always execute before the `instance initialization blocks` because `static` blocks run at the time of `class loading`. However, the instance block runs at the time of instance creation. 
 ```java
 private static int one;               // since `one` is not final it can be reassigned many times
 private static final int two;         // it is final, can be initialized once in `static`
@@ -1939,8 +1978,6 @@ static {
    two = 4;       // DNC: second attempt to assign `two`
 }
 ```
-- All `static` initializers run when the class is first used in the order they are defined. The statements in them run and assign any `static` variables as needed.
-- `static` initializer blocks always execute before the instance initialization blocks because static blocks run at the time of class loading. However, the instance block runs at the time of instance creation. 
 - ***Tip for better code practice***:
   - try to avoid instance initializers: use constructor
   - try to avoid `static` initializers: but if you need to do so (you may need to initialize a collection like `ArrayList`), put all the static initialization in the same block
@@ -1950,7 +1987,8 @@ static {
 - If you try to explicitly `import static` two same method or variables, the code won't compile.
 
 ## Passing Data among Methods
-- Java is a ***pass-by-value*** language: copy of the variable is made and the method receives that copy. Assignments made in the method do not affect the caller
+> [!IMPORTANT]
+> Java is a ***pass-by-value*** language: copy of the variable is made and the method receives that copy. Assignments made in the method do not affect the caller
 ```java
 public static void main(String[] args) {
    String name = "Webby";     // name -> "Webby"
@@ -1973,8 +2011,13 @@ public static void speak1(StringBuilder s) {    // name1-> `StringBuilder` <-s
 - In the above code: The variable ***s*** is a copy of the variable ***name***. Both point to the same `StringBuilder`, which means that changes made to the `StringBuilder` are available to both references
 
 ## Overloading Methods
-- ***Method overloading*** occurs when methods have the same name but different method signatures, so only method parameters can change. 
-- On an overloaded method you can also have different access modifiers, specifiers, return types and exception list
+> [!IMPORTANT]
+> ***`Method overloading` occurs when methods have the same name but different method signatures, so only method parameters can change.***<br><br>
+> On an overloaded method you can also have different access modifiers, specifiers, return types and exception list
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 // they are overloaded because method parameters are different
 // not beacuse they have different access modifiers, specifiers, return types and exception list
@@ -1988,18 +2031,16 @@ public int fly(int numMiles) {}     // DNC: since name and parameters are the sa
 public void fly(int[] lengths) {}
 public void fly(int... lengths) {}     // DNC: java treats varargs as arrays!!
 ```
-- Although java treats varargs as arrays, calling them are different
-```java
-public void fly(int[] lengths) {}
-fly(new int[] { 1, 2, 3 });
-fly(1, 2, 3); // DNC
-//---------------------------------------
-public void fly(int... lengths) {}
-fly(new int[] { 1, 2, 3 });
-fly(1, 2, 3);
-```
+</details>
 
 ## Autoboxing
+> [!IMPORTANT]
+> `Autoboxing` is the automatic conversion that the Java compiler makes between the primitive types and their corresponding object wrapper classes
+
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public void fly(Integer numMiles) {}
 fly(3);  // int will be autoboxed to Integer
@@ -2027,9 +2068,14 @@ Exact match by type | `String glide(int i, int j)`
 Larger primitive type | `String glide(long i, long j)`
 Autoboxed type | `String glide(Integer i, Integer j)`
 Varargs | `String glide(int... nums)`
+</details>
 
 ## Generics
-- Java has ***type erasure***: generics are used at compile time
+- Java has `type erasure` generics are used at compile time
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public void walk(List<String> strings) {}
 public void walk(List<Integer> integers) {}    // DNC
@@ -2053,32 +2099,39 @@ public class Anteater extends LongTailAnimal {
    protected void chew(List<Double> input) {}  // DOES NOT COMPILE 
 }
 ```
+</details>
 
 ## Encapsulating Data
-- ***Encapsulation*** means only methods in the class with the variables can refer to the instance variables. Callers are required to use these methods. 
-- As long as instance variables are `private`, the class is encapsulated. Only methods can read/update these variables.
-- Uses ***getter/accessor methods*** and ***setter/mutator methods***
+>[!IMPORTANT]
+> `Encapsulation` means only methods in the class with the variables can refer to the instance variables. Callers are required to use these methods.<br><br>
+> As long as instance variables are `private`, the class is encapsulated. Only methods can read/update these variables.<br><br>
+> Uses ***getter/accessor methods*** and ***setter/mutator methods***
 
 ___
 
 # Chapter 8
 
 ## Inheritance
-- ***Inheritance*** is the process by which a subclass automatically includes any `public` or `protected` members of the class, defined in the parent class. 
-- Package-private(default) members are available if the child class is in the same package as the parent class
-- ***Inheritance*** is transitive: child class X inherits from class Y, which inherits from class Z. X is subclass of Z and X is direct subclass  of Y. Y is direct subclass of Z.
+> [!IMPORTANT]
+> `Inheritance` is the process by which a subclass automatically includes any `public` or `protected` members of the class, defined in the parent class. <br><br>
+> `Inheritance` is transitive: child class X inherits from class Y, which inherits from class Z. X is subclass of Z and X is direct subclass of Y. Y is direct subclass of Z.
 
 ## Single vs Multiple Inheritance
-- Java supports single inheritance: a class may inherit from only 1 direct parent class.
-- However, a class may implement multiple interfaces
-- Java supports multiple level inheritance: X->Y->Z (example before)
-- Multiple inheritance is complex: which parent to inherit values from in case of a conflict. For example, if you have an object or method defined in all of the parents, which one does the child inherit?
-- You can prevent a class from being extended by marking the class with the `final` modifier
+> [!IMPORTANT]
+> Java supports single inheritance: a class may inherit from only 1 direct parent class. ***However, a class may implement multiple interfaces***<br><br>
+> Java supports multiple level inheritance: X->Y->Z (example before)<br><br>
+> Multiple inheritance is complex: which parent to inherit values from in case of a conflict. For example, if you have an object or method defined in all of the parents, which one does the child inherit?<br><br>
+> You can prevent a class from being extended by marking the class with the `final` modifier
 
 ## Inheriting `Object`
-- All classes inherit from a single class: `Object`
-- `Object` is the only class that doesn’t have a parent class.
-- If you have a class which doesn't extends from any class, complier will automatically adds a code which extends from `Object`:
+> [!IMPORTANT]
+> All classes inherit from a single class: `Object`<br><br>
+> `Object` is the only class that doesn’t have a parent class.<br><br>
+> If you have a class which doesn't extends from any class, complier will automatically adds a code which extends from `Object`:
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Zoo { }
 
@@ -2089,15 +2142,23 @@ public class Zoo extends java.lang.Object { }
 public class Animal extends Zoo {}   
 ```
 - `toString()` and `equals()` methods are available in `Object`; therefore, they are accessible in all classes.
+</details>
 
 ## Applying Class Access Modifiers
-- ***Top-level class***: a class that is not defined inside another class. They can only have `public`or package-private(default) class.
-- ***Inner class***: a class defined in another class. Can have `public`, default, protected, private access.
-- Java file can have many top level classes but can have **at most** only 1 top-level `public` class.
+> [!IMPORTANT]
+> `Top-level class`: a class that is not defined inside another class. They can only have `public`or package-private(default) class.<br><br>
+> `Inner class`: a class defined in another class. Can have `public`, default, protected, private access.<br><br>
+> Java file can have many top level classes but can have **at most** only 1 top-level `public` class.
 
 ## Accessing `this` Reference
-- `this`reference refers to the current instance of the class. Can be used to access any member of the class, including inherited members.
-- `this` can be used in any instance method, constructor, instance initializer block. But can not be used when there is no implicit instance of the class such as `static` method or `static` initializer block
+> [!IMPORTANT]
+> `this`reference refers to the current instance of the class. Can be used to access any member of the class, including inherited members.<br><br>
+> `this` can be used in any instance method, constructor, instance initializer block. But can not be used when there is no implicit instance of the class such as `static` method or `static` initializer block
+
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Flamingo {
   private String color;
@@ -2111,12 +2172,24 @@ public class Flamingo {
   } 
 }
 ```
+</details>
 
 ## Calling `super` Reference
-- **Problem**: A variable/method can be defined both in child and parent class, how can we reference the version in the parent class? 
-- `super` reference excludes any memebers found the current class, and can refer only to the members available via inheritance.
+> [!IMPORTANT]
+> **Problem**: A variable/method can be defined both in child and parent class, how can we reference the version in the parent class? <br><br>
+> `super` reference excludes any memebers found the current class, and can refer only to the members available via inheritance.
 
-## Crating a Constructor
+## Creating a Constructor
+> [!IMPORTANT]
+> Can have many constructors as long as they all have unique signatures. Since constructor name should be same, only constructor parameters can change in the signature. <br><br>
+> Declaring constructors with different signatures called `constructor overloading`<br><br>
+> Constructors are used when creating a new object. This process called `instantiation`<br><br>
+> When java sees `new`, it allocates memory for the new object and looks for a constructor, matching signature<br><br>
+> Constructor parameters can not contain `var`
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Bunny {
    public Bunny() { // contructor name matches the class name + no return type(not even void)
@@ -2126,21 +2199,24 @@ public class Bunny {
    public void Bunny(String name) {}    // not a consturctor but a method
 }
 ```
-- Constructor parameters can not contain `var`
+
 ```java
 class Bonobo {
    public Bonobo(var food) { // DOES NOT COMPILE
 } }
 ```
-- Can have many constructors as long as they all have unique signatures. Since constructor name should be same, only constructor parameters can change in the signature
-- Declaring constructors with different signatures called ***constructor overloading***
-- Constructors are used when creating a new object. This process called ***instantiation***
-- When java sees `new`, it allocates memory for the new object and looks for a constructor, matching signature
+</details>
 
 ## Default Constructor
-- If you don’t include any constructors in the class, Java will create one for you without any parameters. This Java-created constructor is called the ***default constructor***
-- The default constructor has an empty parameter list and an empty body
-- Default constructor is generated during compile time
+> [!IMPORTANT]
+> If you don’t include any constructors in the class, Java will create one for you without any parameters. This Java-created constructor is called the `default constructor`<br><br>
+> The `default constructor` has an empty parameter list and an empty body<br><br>
+> `Default constructor` is generated during compile time
+
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 // Only Rabbit1 will have a default constructor generated since it doesn't have any constructor!!
 
@@ -2155,9 +2231,21 @@ public class Rabbit4 {
    private Rabbit4() {}
 }
 ```
-- ***Why would you want to have a private constructor?:*** this will tell complier not provide default constructor. This also prevents other classes to instantiate the class. This is useful if the class has only `static` methods or the dev wants to have full control of all calls to create new instances of the class (`static` methods can access `private` memebrs)
+</details>
+
+> [!CAUTION]
+> ***Why would you want to have a `private` constructor?***<br>
+> This will tell complier not provide `default constructor`. This also prevents other classes to instantiate the class. This is useful if the class has only `static` methods or the dev wants to have full control of all calls to create new instances of the class (`static` methods can access `private` members)
 
 ## Calling Overloaded Constructors with `this()`
+> [!IMPORTANT]
+> `this`, refers to an instance of the class, while `this()`, refers to a constructor call within the class<br><br>
+> `this()` call must be the first statement in the constructor. The side effect of this is that there can be only one call to `this()` in any constructor.
+
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Hamster {
    private String color;
@@ -2186,7 +2274,7 @@ public class Hamster {
     this(weight, "brown");
   }
   ```
-- `this()` call must be the first statement in the constructor. The side effect of this is that there can be only one call to `this()` in any constructor.
+
 ```java
 public class Gopher {
    public Gopher(int dugHoles) {
@@ -2194,14 +2282,21 @@ public class Gopher {
    }
 }
 ```
-- `this`, refers to an instance of the class, while `this()`, refers to a constructor call within the class
+</details>
 
 ## Calling Parent Constructors With `super()`
-- In Java, the first statement of every constructor is either `this()` or `super()`
-- `super()` always refers to the most direct parent
+> [!IMPORTANT]
+> In Java, the first statement of every constructor is either `this()` or `super()`.<br><br>
+> `super()` always refers to the most direct parent
 
 ## Complier Enhancements
-- Java compiler automatically inserts a call to the no-argument constructor `super()` if you do not explicitly call `this()` or `super()` as the first line of a constructor
+> [!IMPORTANT]
+> Java compiler automatically inserts a call to the no-argument constructor `super()` if you do not explicitly call `this()` or `super()` as the first line of a constructor
+
+<details>
+<summary>Details...</summary>
+<br>
+
 - following three class and constructor definitions are equivalent:
 ```java
 public class Donkey {}
@@ -2216,11 +2311,17 @@ public class Donkey {
   }
 }
 ```
+</details>
 
-## ARE CLASSES WITH ONLY PRIVATE CONSTRUCTORS CONSIDERED FINAL?
-- What happens if you have a class that is not marked final but only contains private constructors—can you extend the class? The answer is “yes,” but only an inner class defined in the class itself can extend it. An inner class is the only one that would have access to a private constructor and be able to call super(). Other top-level classes cannot extend such a class.
+## Are Classes With Only Private Constructors Considered `final`?
+> [!NOTE]
+> What happens if you have a class that is not marked `final` but only contains private constructors—can you extend the class? The answer is “yes,” but only an `inner class` defined in the class itself can extend it. An `inner class` is the only one that would have access to a private constructor and be able to call `super()`. Other top-level classes cannot extend such a class.
 
 ## Missing a Default No-Argument Constructor
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Mammal {
    public Mammal(int age) {}
@@ -2250,10 +2351,19 @@ public class Elephant extends Mammal {
   }
 }
 ```
+</details>
 
 ## Constructors and `final` fields
-- `final static` variables must be assigned a value exactly once. Instance variables marked `final` follow similar rules. They can be assigned values in the line in which they are declared or in an instance initializer. There is one more place they can be assigned a value—the constructor. ***By the time the constructor completes, all `final` instance variables must be assigned a value.***
-- Unlike local `final` variables, which are not required to have a value unless they are actually used, `final` instance variables must be assigned a value. Default values are not used for these variables.
+> [!IMPORTANT]
+> `final static` variables and `final` instance variables must be assigned a value exactly once. <br><br>
+> They can be assigned values in the line in which they are declared ***or*** in an instance initializer ***or*** in constructor.<br><br>
+> ***By the time the constructor completes, all `final` instance variables must be assigned a value.***<br><br>
+> ***Unlike local `final` variables, which are not required to have a value unless they are actually used, `final` instance variables must be assigned a value. Default values are not used for these variables.***
+
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class MouseHouse {
    private final int volume;
@@ -2275,16 +2385,21 @@ public MouseHouse() {
    this(null);
 }
 ```
+</details>
 
 ## Order of Initialization
-1. Class Initialization
-  - Starting from highest super class, invoke all `static` members in the class hierarchy. Often referred as ***loading the class***
-  - The JVM controls when the class is initialized, although you can assume the class is loaded before it is used. The class may be initialized when the program first starts, when a static member of the class is referenced, or shortly before an instance of the class is created. A class may never be loaded if it is not used.
-  - Happens at most once for each class
+1. **Class Initialization**
+  > [!IMPORTANT]
+  > `Loading the class`: Starting from highest super class, invoke all `static` members in the class hierarchy.<br><br>
+  > The `JVM` controls when the class is initialized, although you can assume the class is loaded before it is used. The class may be initialized when the program first starts, when a `static` member of the class is referenced, or shortly before an instance of the class is created. A class may never be loaded if it is not used.<br><br>
+  > Class loading happens at most once for each class
   - ***Initialize Class X***
     1. If there is a superclass Y of X, then initialize class Y first.
     2. Process all static variable declarations in the order they appear in the class.
     3. Process all static initializers in the order they appear in the class.
+    <details>
+    <summary>Details...</summary>
+    <br>
     ```java
     public class Animal {
       static { System.out.print("A"); }
@@ -2309,16 +2424,24 @@ public MouseHouse() {
       }
     }
     ```
-    - this program will likely print CAB, with the Hippo class not being loaded until it is needed inside the main() method. We say likely, because the rules for when classes are loaded are determined by the JVM at runtime.
-2. Instance Initialization
-  - An instance is initialized anytime the new keyword is used
-  - First, start at the lowest-level constructor where the new keyword is used. Remember, the first line of every constructor is a call to this() or super(), and if omitted, the compiler will automatically insert a call to the parent no-argument constructor super(). Then, progress upward. 
-  - Finally, initialize each class starting with the superclass, processing each instance initializer and constructor in the reverse order in which it was called
+    - this program will ***likely*** print CAB, with the Hippo class not being loaded until it is needed inside the main() method. We say ***likely***, because the rules for when classes are loaded are determined by the JVM at runtime.
+    </details>
+
+2. **Instance Initialization**
+  > [!IMPORTANT]
+  > An instance is initialized anytime the `new` keyword is used.<br><br>
+  > First, start at the lowest-level constructor where the `new` keyword is used. Remember, the first line of every constructor is a call to `this()` or `super()`, and if omitted, the compiler will automatically insert a call to the parent no-argument constructor `super()`. Then, progress upward. <br><br>
+  > Finally, initialize each class starting with the superclass, processing each instance initializer and constructor in the reverse order in which it was called
   - ***Initialize Class X***
   1. If there is a superclass Y of X, then initialize the instance of Y first.
   2. Process all instance variable declarations in the order they appear in the class.
   3. Process all instance initializers in the order they appear in the class.
   4. Initialize the constructor including any overloaded constructors referenced with this().
+
+<details>
+<summary>Details...</summary>
+<br>
+
   - Example without inheritance, prints: 0-10-BestZoo-z-
   ```java
   public class ZooTickets {
@@ -2392,7 +2515,7 @@ public MouseHouse() {
   BECHG
   ```java
   class GiraffeFamily {
-    static { System.out.print("A"); }
+    static { System.out.print("A"); }     // 1: 
     { System.out.print("B"); }
     public GiraffeFamily(String name) {
       this(1);
@@ -2420,30 +2543,41 @@ public MouseHouse() {
     }
   }
   ```
+</details>
 
-1. The first statement of every constructor is a call to an overloaded constructor via this(), or a direct parent constructor via super().
-2. If the first statement of a constructor is not a call to this() or super(), then the compiler will insert a no-argument super() as the first statement of the constructor.
-3. Calling this() and super() after the first statement of a constructor results in a compiler error.
-4. If the parent class doesn’t have a no-argument constructor, then every constructor in the child class must start with an explicit this() or super() constructor call.
-5. If the parent class doesn’t have a no-argument constructor and the child doesn’t define any constructors, then the child class will not compile.
-6. If a class only defines private constructors, then it cannot be extended by a top-level class.
-7. All final instance variables must be assigned a value exactly once by the end of the constructor. Any final instance variables not assigned a value will be reported as a compiler error on the line the constructor is declared.
-
-## Calling Inherited Members
-- you can use `this` to access visible members of the current or a parent class, and you can use super to access visible members of a parent class
+> [!NOTE]
+> The first statement of every constructor is a call to an overloaded constructor via this(), or a direct parent constructor via super().<br><br>
+> If the first statement of a constructor is not a call to this() or super(), then the compiler will insert a no-argument super() as the first statement of the constructor.<br><br>
+> Calling this() and super() after the first statement of a constructor results in a compiler error.<br><br>
+> If the parent class doesn’t have a no-argument constructor, then every constructor in the child class must start with an explicit this() or super() constructor call.<br><br>
+> If the parent class doesn’t have a no-argument constructor and the child doesn’t define any constructors, then the child class will not compile.<br><br>
+> If a class only defines private constructors, then it cannot be extended by a top-level class.<br><br>
+> All final instance variables must be assigned a value exactly once by the end of the constructor. Any final instance variables not assigned a value will be reported as a compiler error on the line the constructor is declared.<br><br>
 
 ## Defining Subtype and Supertype
-- In java subtype is used rather than subclass since java includes `interface`
+<details>
+<summary>Details...</summary>
+<br>
+
+- In java, subtype is used rather than subclass since java includes `interface`
 - A subtype is the relationship between two types where one type inherits the other. If X is subtype of Y, then one of these must be true:
   - X and Y are classes, and X is a subclass of Y
   - X and Y are interfaces, and X is a subinterface of Y
   - X is a class and Y is an interface, and X implements Y (either directly or through an inherited class).
+</details>
 
 ## Overriding a Method
-- overriding a method occurs when a subclass declares a new implementation for an inherited method with the same signature and compatible return type. 
-- there are 4 rules to overriding:
-  1. The method in the child class must have the same signature as the method in the parent class.
-  2. The method in the child class must be at least as accessible as the method in the parent class.
+> [!IMPORTANT]
+> Overriding a method occurs when a subclass declares a new implementation for an inherited method with the ***same signature and compatible return type.***<br><br>
+> Overloaded methods are considered independent and do not share the same polymorphic properties as overridden methods.
+
+- **There are 4 rules to overriding:**
+  1. **The method in the child class must have the same signature as the method in the parent class.**
+  2. **The method in the child class must be at least as accessible as the method in the parent class.**
+    <details>
+    <summary>Details...</summary>
+    <br>
+
     ```java
     public class Camel {
       public int getNumberOfHumps() {
@@ -2465,8 +2599,12 @@ public MouseHouse() {
     }
     ```
     - Why such a rule exists? Assume the code will compile, The reference type for the object is Camel, where the method is declared public, but the object is actually an instance of type BactrianCamel, which is declared private. This creates ambiguity
+    </details>
 
-  3. The method in the child class may not declare a checked(***does not apply to unchecked exception!!!***) exception that is new or broader than the class of any exception declared in the parent class method.
+  3. **The method in the child class may not declare a `checked exception` that is new or broader than the class of any exception declared in the parent class method.** (***This rule does not apply to `unchecked exception`!!!***) 
+    <details>
+    <summary>Details...</summary>
+    <br>
     ```java
     // FileNotFoundException is subclass of IOException
     // NumberFormatException is subclass of IllegalArgumentException
@@ -2482,8 +2620,14 @@ public MouseHouse() {
     }
     ```
     - Why such a rule exists? Same as **2.**, because of polymorphism, you could end up with an object that is more restrictive than the reference type it is assigned to, resulting in a checked exception that is not handled or declared.
+    </details>
 
-  4. If the method returns a value, it must be the same or a subtype of the method in the parent class, known as ***covariant return types***.
+  4. **If the method returns a value, it must be the same or a subtype of the method in the parent class, known as `covariant return types`.**
+
+    <details>
+    <summary>Details...</summary>
+    <br>
+
     ```java
     public class Rhino {
       protected CharSequence getName() {
@@ -2503,13 +2647,18 @@ public MouseHouse() {
       }
     }
     ```
+    </details>
 
-
-- Overloaded methods are considered independent and do not share the same polymorphic properties as overridden methods.
+  5. **The method defined in the child class must be marked as `static` if it is marked as `static` in a parent class.(This creates `hidden method`)**
 
 ## Overloading VS Overriding
-- Similarity: involve redefining a method using the same name.
-- Difference: overloaded method will use a different list of method parameters
+> [!IMPORTANT]
+> Similarity: involve redefining a method using the same signature.<br><br>
+> Difference: overloaded method will use a different list of method parameters
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Bird {
    public void fly() {
@@ -2531,10 +2680,16 @@ public class Eagle extends Bird {
    }
 }
 ```
+</details>
 
 ## Generic Method Parameters
-- You can not overload a parent method with generic parameters. But you can override a method with generic parameters.
-- When overriding a method with generic type, you must match the signature(including generic type) exactly.
+> [!IMPORTANT]
+> You can not overload a parent method with generic parameters. But you can override a method with generic parameters.<br><br>
+> When overriding a method with generic type, you must match the signature(including generic type) exactly.
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class LongTailAnimal {
    protected void chew(List<String> input) {}
@@ -2543,9 +2698,15 @@ public class Anteater extends LongTailAnimal {
    protected void chew(List<String> input) {}
 }
 ```
+</details>
 
 ## Generic Return Types
-- When you’re working with overridden methods that return generics, the return values must be covariant. The generic parameter type must match its parent’s type exactly.
+> [!IMPORTANT]
+> When you’re working with overridden methods that return generics, the return values must be `covariant`. The generic parameter type must match its parent’s type exactly.
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Mammal {
    public List<CharSequence> play() { ... }
@@ -2559,9 +2720,15 @@ public class Goat extends Mammal {
    public String sleep() { ... }
 }
 ```
+</details>
 
 ## Redeclaring `private` Methods
-- In Java, you can’t override `private` methods since they are not inherited. But the child can still define the same method, but the method wouldn't be an inherited method, it will be jsut a regualr instance method.
+> [!IMPORTANT]
+> In Java, you can’t override `private` methods since they are not inherited. But the child can still define the same method, but the method wouldn't be an inherited method, it will be just a regular instance method.
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Camel {
    private String getNumberOfHumps() {
@@ -2574,13 +2741,16 @@ public class DromedaryCamel extends Camel {
    }
 }
 ```
+</details>
 
 ## Hiding `static` Methods
-- A ***hidden method*** occurs when a child class defines a `static` method with the same name and signature as an inherited static method defined in a parent class.
-- The same 4 rules for overriding are applied with 1 more rule to follow:
-  5. The method defined in the child class must be marked as static if it is marked as static in a parent class.
-  ***Tip***: this means if you have an overriden method, making it `static` both in parent and child would make it ***hidden method***
-- ***Hidden methods*** are not considered as overriden methods, but there is still inheritance going on:
+> [!IMPORTANT]
+> A `hidden method` occurs with 5th rule in overriding: when a child class defines a `static` method with the same signature as an inherited `static` method defined in a parent class.<br><br>
+> `Hidden methods` **are not considered as overriden methods**, but there is still inheritance going on:
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Bear {
    public static void eat() {
@@ -2597,14 +2767,21 @@ public class Panda extends Bear {
 }
 ```
 - Above code prints ***Panda is chewing*** at runtime. What if `eat()` from Panda was removed? Then it prints ***Bear is eating***
+</details>
 
 ## Creating `final` Methods
-- `final` methods cannot be overriden nor hidden(hidden method)
-- ***Why mark a method as `final`?:*** you’d mark a method as final when you’re defining a parent class and want to guarantee certain behavior of a method in the parent class, regardless of which child is invoking the method. For example if you have a `hasFeathers()` which always returns `true` in Bird, then it means you trust that all birds have feathers and you don't want any childern of Bird to change this behaviour. In practice not many methods are marked with `final` beacuse as a dev it is hard to predict and see every possibilty of children. For this example: a Chick class can extend from Bird, but chicks are featherless!!!
+> [!IMPORTANT]
+> `final` methods cannot be overriden nor can be `hidden methods`. <br><br>
+> ***Why mark a method as `final`?:*** you’d mark a method as final when you’re defining a parent class and want to guarantee certain behavior of a method in the parent class, regardless of which child is invoking the method. For example if you have a `hasFeathers()` which always returns `true` in Bird, then it means you trust that all birds have feathers and you don't want any children of Bird to change this behaviour. In practice not many methods are marked with `final` beacuse as a dev it is hard to predict and see every possibilty of children. For this example: a Chick class can extend from Bird, but chicks are featherless!!!
 
 ## Hiding Variables
-- Variables can not be overriden, but they can be hidden.
-- A ***hidden variable*** occurs when a child class defines a variable with the same name as an inherited variable defined in the parent class. 
+> [!IMPORTANT]
+> Variables can not be overriden, but they can be hidden.<br><br>
+> A `hidden variable` occurs when a child class defines a variable with the same name as an inherited variable defined in the parent class. 
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 class Carnivore {
    protected boolean hasFur = false;
@@ -2614,19 +2791,25 @@ public class Meerkat extends Carnivore {
    public static void main(String[] args) {
       Meerkat m = new Meerkat();
       Carnivore c = m;
-      System.out.println(m.hasFur);
-      System.out.println(c.hasFur);
+      System.out.println(m.hasFur); //true
+      System.out.println(c.hasFur); //false: polymorphism
 } 
 ```
+</details>
 
-## Understanding Polymorphism
-- ***polymorphism***, the property of an object to take on many different forms. 
+## Understanding `Polymorphism`
+> [!IMPORTANT]
+> `Polymorphism` the property of an object to take on many different forms. 
 - A Java object may be accessed 
   - using a reference with the same type as the object, 
   - a reference that is a superclass of the object, 
   - or a reference that defines an interface the object implements, either directly or through a superclass. 
 - Furthermore, a cast is not required if the object is being reassigned to a super type or interface of the object.
 - Example for polymorphism: 
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Primate {
    public boolean hasHair() {
@@ -2655,20 +2838,36 @@ public class Lemur extends Primate implements HasTail {
 ```
 - Above, only 1 object Lemur created. Polymorphism enables an instance of Lemur to be reassigned or passed to a method using one of its supertypes, such as Primate or HasTail
 - Once the object has been assigned to a new reference type, only the methods and variables available to that reference type are callable on the object without an explicit cast
+</details>
 
 ## Object VS Reference
-- all objects are accessed by reference, thus no direct access to objects itself
-- Regardless of the type of the reference you have for the object in memory, the object itself doesn’t change. 
+> [!IMPORTANT]
+> All objects are accessed by reference, thus no direct access to objects itself<br><br>
+> Regardless of the type of the reference you have for the object in memory, the object itself doesn’t change. 
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 Lemur lemur = new Lemur();
 Object lemurAsObject = lemur;
 ```
 - Even though the Lemur object has been assigned to a reference with a different type, the object itself has not changed and still exists as a Lemur object in memory. What has changed, then, is our ability to access methods within the Lemur class with the `lemurAsObject` reference. 
+</details>
 
 1. The type of the object determines which properties exist within the object in memory.
 2. The type of the reference to the object determines which methods and variables are accessible to the Java program.
 
 ## Casting Objects
+Casting objects is similar to casting primitives: 
+  1. Casting a reference from a subtype to a supertype doesn’t require an explicit cast.
+  2. Casting a reference from a supertype to a subtype requires an explicit cast.
+  3. The compiler disallows casts to an unrelated class. (applies to class types only, not interfaces)
+  4. At runtime, an invalid cast of a reference to an unrelated type results in a `ClassCastException` being thrown.
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 Primate primate = new Lemur();  // Implicit Cast: Lemur is a subclass of Primate, this can be done without a cast operator
 
@@ -2678,11 +2877,6 @@ System.out.println(lemur2.age);
 Lemur lemur3 = (Lemur)primate;  // Explicit Cast
 System.out.println(lemur3.age);
 ```
-- Casting objects is similar to casting primitives: 
-  1. Casting a reference from a subtype to a supertype doesn’t require an explicit cast.
-  2. Casting a reference from a supertype to a subtype requires an explicit cast.
-  3. The compiler disallows casts to an unrelated class. (applies to class types opnly, not interfaces)
-  4. At runtime, an invalid cast of a reference to an unrelated type results in a ClassCastException being thrown.
 
 ```java
 public class Rodent {}
@@ -2694,10 +2888,12 @@ public class Capybara extends Rodent {
   } 
 }
 ```
+</details>
 
 ## `instanceof` With Polymorphism
-- we presented the instanceof operator, which can be used to check whether an object belongs to a particular class or interface and to prevent ClassCastExceptions at runtime.
-- Just as the compiler does not allow casting an object to unrelated types, it also does not allow instanceof to be used with unrelated types.
+> [!IMPORTANT]
+> `instanceof`: can be used to check whether an object belongs to a particular class or interface and to prevent ClassCastExceptions at runtime.<br><br>
+> Just as the compiler does not allow casting an object to unrelated types, it also does not allow instanceof to be used with unrelated types.
 ```java
 public static void main(String[] args) {
    Fish fish = new Fish();
@@ -2708,10 +2904,14 @@ public static void main(String[] args) {
 ```
 
 ## Polymorphism And Method Overriding
-- In Java, polymorphism states that when you override a method, you replace all calls to it, even those defined in the parent class.
-- The facet of polymorphism that replaces methods via overriding is one of the most important properties in all of Java. It allows you to create complex inheritance models, with subclasses that have their own custom implementation of overridden methods. It also means the parent class does not need to be updated to use the custom or overridden method. If
-the method is properly overridden, then the overridden version will be used in all places that it is called.
-- Remember, you can choose to limit polymorphic behavior by marking methods `final`, which prevents them from being overridden by a subclass.
+> [!IMPORTANT]
+> In Java, `polymorphism` states that when you override a method, you replace all calls to it, even those defined in the parent class.<br><br>
+> The facet of `polymorphism` that replaces methods via overriding is one of the most important properties in all of Java. It allows you to create complex inheritance models, with subclasses that have their own custom implementation of overridden methods. It also means the parent class does not need to be updated to use the custom or overridden method. If the method is properly overridden, then the overridden version will be used in all places that it is called.<br><br>
+> You can choose to limit polymorphic behavior by marking methods `final`, which prevents them from being overridden by a subclass.
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 class Penguin {
   public int getHeight() { return 3; }
@@ -2727,8 +2927,13 @@ public class EmperorPenguin extends Penguin {
   }
 }
 ```
+</details>
 
 ## Calling the Parent Version of Overriden Method
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 class Penguin {
    public int getHeight() { return 3; }
@@ -2749,15 +2954,46 @@ public class EmperorPenguin extends Penguin {
    }
 }
 ```
+</details>
 
 ## Overrriding vs. Hiding Members
-- While method overriding replaces the method everywhere it is called, static method and variable hiding does not.
-- hiding members is not a form of polymorphism since
-the methods and variables maintain their individual properties. Unlike method overriding, hiding members is very sensitive to the reference type and location where the member is being used.
+> [!IMPORTANT]
+> While method overriding replaces the method everywhere it is called; static method and variable hiding does not.<br><br>
+> Hiding members is not a form of polymorphism since the methods and variables maintain their individual properties. Unlike method overriding, hiding members is very sensitive to the reference type and location where the member is being used.
+<details>
+<summary>Details...</summary>
+<br>
+
+```java
+class Penguin {
+ public static int getHeight() { return 3; }
+ public int getWeight() { return 3; }
+
+ public void printHeight() {
+  System.out.println(this.getHeight());
+ }
+ public void printWeight() {
+  System.out.println(this.getWeight());
+ }
+}
+public class CrestedPenguin extends Penguin {
+ public static int getHeight() { return 8; }
+ public int getWeight() { return 8; }
+
+ public static void main(String... fish) {
+  new CrestedPenguin().printHeight();
+  new CrestedPenguin().printWeight();
+ }
+}
+```
+- `getHeight()` is hidden but not overridden, thus it prints 3.
+- `getWeight()` is overridden, thus it prints 8.
+</details>
 
 ## Don't Hide Members in Practice
-- Java allows you to hide variables and `static` methods but it is a poor coding practice
-- Value of variable/method can change depending on what reference is used, making your code very confusing
+> [!NOTE]
+> Java allows you to hide variables and `static` methods but it is a poor coding practice<br><br>
+> Value of variable/method can change depending on what reference is used, making your code very confusing
 
 ___
 
