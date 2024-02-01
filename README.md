@@ -3000,26 +3000,34 @@ ___
 # Chapter 9
 
 ## Abstract Classes
-- An **abstract class** is a class that ***cannot be instantiated*** and ***may*** contain **abstract methods** and **may** contain constructors
-- An **abstract method** is a method that does not define an implementation when it is declared
-- Both abstract classes and abstract methods are denoted with the `abstract` modifier
-- Any `abstract` method in the parent class ***must be overridden*** in child class
-- Why need `abstract` class/method? Imagine you have an abstract `Bird` class, in there you have `abstract String getName();`. This way you are forcing other developers who extends `Bird`, to override this method. If you have a `Sparrow` class extending from `Bird`, you must override the `getName()`, which should print **Sparrow**. Similarly a `Chicken` class must print **Chicken** by overriding `getName()`
-- When overriding an `abstract` method, you can also use **implementing** a method. But for `abstract` methods, using overriding as a term is more accurate.
+> [!IMPORTANT]
+> An `abstract class` is a class that ***cannot be instantiated*** and ***may*** contain `abstract methods` and **may** contain `constructors`.<br><br>
+> An `abstract method` is a method that does not define an implementation when it is declared.<br><br>
+> Both abstract classes and abstract methods are denoted with the `abstract` modifier.<br><br>
+> Any `abstract` method in the parent class ***must be overridden*** in child class.<br><br>
+
+> [!CAUTION]
+> Why do we need `abstract` class/method?<br><br>
+> Imagine you have an abstract `Bird` class, in there you have `abstract String getName();`. This way you are forcing other developers who extends `Bird`, to override this method. If you have a `Sparrow` class extending from `Bird`, you must override the `getName()`, which should print **Sparrow**. Similarly a `Chicken` class must print **Chicken** by overriding `getName()`.
 
 ## `abstract` Methods
-- can only be defined in `abstract` class or interface
-- the `abstract` modifier can be placed before or after the access modifier in class and method declarations
-- The `abstract` modifier cannot be placed after the `class` keyword in a class declaration, nor after the return type in a method declaration
+> [!IMPORTANT]
+> Can only be defined in `abstract` class or interface.<br><br>
+> `abstract` modifier can be placed before or after the access modifier in class and method declarations.<br><br>
+> `abstract` modifier cannot be placed after the `class` keyword in a class declaration, nor after the return type in a method declaration
 
 ## Constructors in `abstract` Classes
-- There is only 1 difference between the constructor in abstract and nonabstract class:
-  - `abstract` classes cannot be instantiated, but they can be initialized through constructors by their subclasses.
+> [!IMPORTANT]
+> There is only 1 difference between the constructor in abstract and nonabstract class: `abstract` classes cannot be instantiated, but they can be initialized through constructors by their subclasses.
+
+<details>
+<summary>Details...</summary>
+<br>
 
 ```java
 abstract class Bear {
   abstract CharSequence chew();
-  public Bear() {
+  public Bear() {f
     System.out.println(chew()); 
   }
 }
@@ -3031,9 +3039,11 @@ public class Panda extends Bear {
 }
 ```
 - In the above code, the compiler inserts a default no-argument constructor into the `Panda` class, which first calls `super()` in the `Bear` class. The `Bear` constructor is only called when the abstract class is being initialized through a subclass
+</details>
 
 ## `abstract` and `final` Modifiers
-- You can not declare a method or class as both `final` and `abstract`:
+> [!IMPORTANT]
+> You can not declare a method or class as both `final` and `abstract`:
   - `final` prevents inheritance of class or overriding a method
   - `abstract` forces you to override a method
   - Thus, `abstract` and `final` conflict each other
@@ -3044,18 +3054,24 @@ public class Panda extends Bear {
   ```
 
 ## `abstract` and `private` Modifiers
-- A method cannot be marked as both `abstract` and `private`: 
+> [!IMPORTANT]
+> A method cannot be marked as both `abstract` and `private`: 
   - `abstract` forces you to override a method
   - `private` methods can not be overridden
 
 ## `abstract` and `static` Modifiers
-- A method cannot be marked as both `abstract` and `static`
+> [!IMPORTANT]
+> A method cannot be marked as both `abstract` and `static`
   - `static` methods can not be overridden
 
 ## Creating Concrete Classes
-- An abstract class becomes usable when it is extended by a concrete subclass. 
-- A concrete class is a nonabstract class.
-- An abstract class can extend a nonabstract class
+> [!IMPORTANT]
+> An abstract class becomes usable when it is extended by a concrete subclass.<br><br>
+> A concrete class is a nonabstract class.<br><br>
+> An abstract class can extend a nonabstract class
+<details>
+<summary>Details...</summary>
+<br>
 
 ```java
 abstract class Mammal {
@@ -3070,6 +3086,7 @@ public class BlackRhino extends Rhino {
 }
 ```
 - In the above code, the BlackRhino class is the first concrete subclass, while the Mammal and Rhino classes are abstract
+</details>
 
 ## Abstract Class Definition Rules
 1. Abstract classes cannot be instantiated.
@@ -3082,19 +3099,28 @@ public class BlackRhino extends Rhino {
 
 ## Abstract Method Definition Rules
 1. Abstract methods can be defined only in abstract classes or interfaces.
-2. Abstract methods cannot be declared private or final or static.
+2. Abstract methods cannot be declared `private` or `final` or `static`.
 3. Abstract methods must not provide a method body/implementation in the abstract class in which they are declared.
 4. Implementing an abstract method in a subclass follows the same rules for overriding a method, including covariant return types, exception declarations, etc.
 
+
 ## Implementing Interfaces
-- An `interface` is an abstract data type that declares a list of `abstract` methods that any class implementing the `interface` must provide.
-- Interfaces simply define a set of rules/ a contract that a class implementing them must follow
-- A class can implement any number of interfaces, separeted by comma
-- An interface can include constant variables
-- Interfaces have ***implicit modifiers***; these are assumed to be this way, you cannot change them:
-  - Interfaces are implicitly `abstract`, thus interfaces cannot be `static` or `final` or `private`
-  - Interface variables are implicitly `public` and `static`, and `final`.
-  - Interface methods without a body are implicitly `public` and `abstract`
+> [!IMPORTANT]
+> An `interface` is an `abstract` data type that declares a list of `abstract` methods that any class implementing the `interface` must provide.<br><br>
+> Interfaces simply define a set of rules/ a contract that a class implementing them must follow.<br><br>
+> A class can implement any number of interfaces, separeted by comma.<br><br>
+> An interface can include constant variables.
+> Interfaces cannot have constructors
+
+> [!CAUTION]
+> Interfaces have `implicit modifiers`; these are assumed to be this way, you cannot change them:<br><br>
+> Interfaces are implicitly `abstract`, thus interfaces cannot be `static` or `final` or `private` but can be default or `public`<br>
+> Interface variables are implicitly `public` and `static`, and `final`.<br>
+> Interface methods without a body are implicitly `public` and `abstract`<br>
+  <details>
+  <summary>Details...</summary>
+  <br>
+
   ```java
   public abstract interface WalksOnTwoLegs {
     public static final int MIN_DEPTH = 2;
@@ -3111,48 +3137,49 @@ public class BlackRhino extends Rhino {
     private Float getSpeed(int age);  //DNC: must be public
   }  
   ```
-- Interfaces can be default or `public`
+  ```java
+  abstract class Husky {
+    abstract void play(); // default access
+  }
+  interface Poodle {
+    void play();    // public access
+  }
 
-- Interfaces can't have constructors
+  class Webby extends Husky {
+    void play() {}  
+  }
+  class Georgette implements Poodle {
+    void play() {}    //DNC: Poodle's access is public but Georgette's access is default.
+  }
+  ```
+  </details>
 
-- When implementing an interface method:
-  - **method signature** must exactly match
-  - return type is **covariant**
-  - In the implemention, the access modifier has to be explicitly declared
+> [!NOTE]
+> When implementing an interface method:<br><br>
+> **Method signature** must exactly match<br>
+> Return type is **covariant**<br>
+> In the implemention, the access modifier has to be explicitly declared<br>
 
+> [!NOTE]
+> Rules for class declarations also apply to interfaces<br><br>
+> A file may have only 1 `public` top-level interface and name must match file name<br>
+> top-level interface can be only `public` or default<br>
 
-
-- Rules for class declarations also apply to interfaces
-  - a file may have only 1 `public` top-level interface and name must match file name
-  - top-level interface can be only `public` or default
-
-## Difference Between Interfaces and Abstract Classes
-- They are both considered as abstract
-- Only interfaces use ***implicit modifiers***
-```java
-abstract class Husky {
-  abstract void play(); // default access
-}
-interface Poodle {
-  void play();    // public access
-}
-
-class Webby extends Husky {
-  void play() {}  
-}
-class Georgette implements Poodle {
-  void play() {}    //DNC: Poodle's access is public but Georgette's access is default.
-}
-```
-
-## Inheriting an Interface
-- An interface can be inherited in 3 ways:
-  - An interface can extend multiple interfaces using `extends` since interfaces can not be initialized and don't have constructors. If an abstract class or interface is implementing an interface, it is not required to implement all the interface methods
-  - A class can implement an interface
-  - A class can extend another class whose ancestor implements an interface.
+## Inheriting an Interface in 3 Ways
+> [!IMPORTANT]
+> An `interface` can extend multiple `interfaces` using `extends` since `interfaces` can not be initialized and don't have constructors. If an `abstract` class or `interface` is implementing an `interface`, it is not required to implement all the interface methods<br><br>
+> A class can implement an `interface`<br><br>
+> A class can extend another class whose ancestor implements an interface.
 
 ## Duplicate Interface Method Declarations
-- Since java allows multiple inheritance via interfaces, what would happen if a class inherits the same method from 2 different interfaces?
+> [!IMPORTANT]
+> Since java allows multiple inheritance via interfaces, what would happen if a class inherits the `identical` methods from 2 different interfaces?<br>
+> ***Answer:*** complier can resolve differences without conflicts since these are identical methods
+
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public interface Herbivore {
   public void eatPlants();
@@ -3171,12 +3198,19 @@ public class Bear implements Herbivore, Omnivore {
   }
 }
 ```
-- In the above code, `eatPlants()` methods are duplicate. As they have identical method declarations, they are also considered **compatible**: complier can resolve differences without conflicts
+- In the above code, `eatPlants()` methods are duplicate. As they have identical method declarations, they are also considered `compatible`: complier can resolve differences without conflicts
+</details>
 
-- What happens if a class implements multiple interfaces with methods with different signatures? This actually method overloading, thus the class must implement both methods
+> [!IMPORTANT]
+> What happens if a class implements multiple interfaces with methods with `different signatures`? This actually method overloading, thus the class must implement both methods
 
-- What happens if a class/interface/abstarct class implements multiple interfaces with a method that has different return types?
-  - If return types are covariant, you have to implement using the subclass:
+> [!IMPORTANT]
+> What happens if a class/interface/abstarct class implements multiple interfaces with a method that has `different return types`?<br>
+> ***Answer:*** If return types are `covariant`, you have to implement using the subclass, otherwise you cannot implement
+<details>
+<summary>Details...</summary>
+<br>
+
   ```java
   interface Dances {
     String swingArms();
@@ -3190,11 +3224,19 @@ public class Bear implements Herbivore, Omnivore {
     }
   }
   ```
-  - you can not implement if return types are not covariant!!!
+</details>
 
 ## Casting Interfaces
+> [!IMPORTANT]
+> The compiler does not allow a cast from an interface reference to an object reference if the object type does not implement the interface. <br><br>
+> Compiler does not allow casts to unrelated types.
+
+<details>
+<summary>Details...</summary>
+<br>
+
 - Let’s say you have an abstract reference type variable, which has been instantiated by a concrete subclass. If you need access to a method that is only declared in the concrete subclass, then you will need to cast the interface reference to that type assuming the cast is supported at runtime.
-- Compiler does not allow casts to unrelated types.
+
 ```java
 interface Canine {}
 class Dog implements Canine {}
@@ -3202,17 +3244,18 @@ class Wolf implements Canine {}
 public class BadCasts {
   public static void main(String[] args) {
     Canine canine = new Wolf();
-    Canine badDog = (Dog)canine;   // throws exception at runtime: because of polymorphism, java can't decide the class of canine instance. Thus it complies and throw exception at runtime
+    Canine badDog = (Dog)canine;   // throws exception at runtime: because of polymorphism, java can't decide the class of canine instance.
+    Object badDog1 = (String)canine; //DNC: String doesnt implement Canine
   } 
 }
 ```
-
-- The compiler does not allow a cast from an interface reference to an object reference if the object type does not implement the interface. 
-```java
-Object badDog = (String)canine; //DNC: String doesnt implement Canine
-```
+</details>
 
 ## `instanceof` with Interfaces
+<details>
+<summary>Details...</summary>
+<br>
+
 - Using `instanceof` with unrelated types does not compile. But this rule has limited capacity with interfaces: even though a reference type may not implement an interface, one of its subclasses could. Thus this compiles:
 ```java
 Number tickets = 5;
@@ -3224,6 +3267,7 @@ if(tickets instanceof List) {}
 Integer tickets = 6;  //wrapper classes are immutable
 if(tickets instanceof List) {} // DOES NOT COMPILE
 ```
+</details>
 
 ## Interface Definition Rules
 1. Interfaces cannot be instantiated
@@ -3248,29 +3292,41 @@ if(tickets instanceof List) {} // DOES NOT COMPILE
 2. Because interface variables are marked `final`, they must be initialized with a value when they are declared.
 
 ## Primary differences
-The primary differences between the two are that interfaces include implicit modifiers, do not contain constructors, do not participate in the instance initialization process, and support multiple inheritance.
+> [!IMPORTANT]
+> The primary differences between the two are that interfaces include implicit modifiers, do not contain constructors, do not participate in the instance initialization process, and support multiple inheritance.<br><br>
+> abstract class represents a type of object, while an interface represents a set of behaviors/rules.
 
 ## Interface Advantage in Development
-- An interface provides a way for one individual to develop code that uses another individual’s code, without having access to the other individual’s underlying implementation. 
-- Interfaces can facilitate rapid application development by enabling development teams to create applications in parallel, rather than being directly dependent on each other.
+<details>
+<summary>Details...</summary>
+<br>
+
+- An interface provides a way for one individual to develop code that uses another individual’s code, without having access to the other individual’s underlying implementation. <br><br>
+- Interfaces can facilitate rapid application development by enabling development teams to create applications in parallel, rather than being directly dependent on each other.<br><br>
 - Two teams can work together to develop a one-page standard interface at the start of a project. One team then develops code that uses the interface, while the other team develops code that implements the interface
+</details>
 
 ## Inner Classes
-- All of these apply to both `class` and `interface` types
-- Nested classes: member inner classes, local classes, anonymous classes, and static nested classes
+> [!IMPORTANT]
+> All of these apply to both `class` and `interface` types.<br><br>
+> Nested classes: `member inner classes`, `local classes`, `anonymous classes`, and `static nested classes`
+
 ## Member Inner Classes
-- A ***member inner class*** is a class defined at the member level of
-a class (the same level as the methods, instance variables, and
-constructors)
-- Developers often define a member inner class inside another class if the relationship between the two classes is very close. For example, a Zoo sells tickets for its patrons; therefore, it may want to manage the lifecycle of the Ticket object.
+> [!IMPORTANT]
+> A ***member inner class*** is a class defined at the member level of a class (the same level as the methods, instance variables, and constructors)<br><br>
+> A top-level class can be only `public` or default, but member inner classes can have any access modifiers they want<br><br>
+> A member inner class can contain many of the same methods and variables as a top-level class. But `static` members are disallowed in member inner classes<br><br>
+> Developers often define a member inner class inside another class if the relationship between the two classes is very close. For example, a Zoo sells tickets for its patrons; therefore, it may want to manage the lifecycle of the Ticket object.
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public class Zoo {
  private interface Paper {} //member inner interface
  public class Ticket implements Paper {} // member inner class implementing inner interface
 }
 ```
-- A top-level class can be only `public` or default, but member inner classes can have any access modifiers they want
-- A member inner class can contain many of the same methods and variables as a top-level class. But `static` members are disallowed in member inner classes
 ```java
 public class Zoo {
  private interface Paper {
@@ -3282,10 +3338,16 @@ public class Zoo {
  }
 }
 ```
+</details>
 
 ## Using Member Inner Class
-- you can use a member inner class by calling it from outer class.
-- one advantage is that you completely control the inner member class lifecycle
+> [!IMPORTANT]
+> you can use a member inner class by calling it from outer class.<br><br>
+> one advantage is that you completely control the inner member class lifecycle
+<details>
+<summary>Details...</summary>
+<br>
+
   ```java
   public class Zoo {
     private interface Paper {
@@ -3302,33 +3364,35 @@ public class Zoo {
   }
   }
   ```
-
-- In the next sections, you will learn more interface members:
-  - With Java 8, interfaces were updated to include static and default methods. A default method is one in which the interface method has a body and is not marked abstract.
-  - In Java 9, interfaces were updated to support private and private static methods.
-
+</details>
 
 # Chapter 10: Exceptions
 
-- A method can handle the exception case itself or make it the caller’s responsibility.
-- In general, try to avoid return codes (ex: -1 for invalid). Return codes are commonly used in searches(ex: find position of 'Ege' in an array), so programmers are expecting them. In other methods, you will take your callers by surprise by returning a special value.
+> [!IMPORTANT]
+> A method can handle the exception case itself or make it the caller’s responsibility.
 
 ## Understanding Exception Types
 
 ```java
 java.lang.Object <- java.lang.Throwable <- java.lang.Exception <- java.lang.RuntimeException                                     
-                                      ^- java.lang.Error
+                                        ^- java.lang.Error
 ```
 
-- `Error` means something went so horribly wrong that your program should not attempt to recover from it
-- While you can handle `Throwable` and `Error` exceptions, it is not recommended you do so in your application code
+> [!NOTE]
+> `Error` means something went so horribly wrong that your program should not attempt to recover from it<br><br>
+> While you can handle `Throwable` and `Error` exceptions, it is not recommended you do so in your application code
 
 ### Checked Exceptions
-- An exception that must be declared or handled by the application code where it is thrown. 
-- **Checked exceptions** all inherit `Exception` but not `RuntimeException`. 
-- Checked exceptions are used where it is anticipated that an exception might be thrown if anything goes wrong.
-- ***The distinction between checked and unchecked*** is that checked exceptions must be handled or declared, while unchecked exceptions can be optionally handled or declared.
-- ***The handle or declare rule***: means that all checked exceptions that could be thrown within a method are either wrapped in compatible try and catch blocks or declared in the method signature.
+> [!IMPORTANT]
+> An exception that must be declared or handled by the application code where it is thrown. <br><br>
+> `Checked exceptions` all inherit `Exception` but not `RuntimeException`. <br><br>
+> `Checked exceptions` are used where it is anticipated that an exception might be thrown if anything goes wrong.<br><br>
+> ***The distinction between checked and unchecked*** is that `checked exceptions` must be handled or declared, while `unchecked exceptions` can be optionally handled or declared.<br><br>
+> ***The handle or declare rule***: means that all `checked exceptions` that could be thrown within a method are either wrapped in compatible `try and catch blocks` or declared in the method signature.
+
+<details>
+<summary>Details...</summary>
+<br>
 
 ```java
 void fall(int distance) throws IOException { // the method might throw Exception
@@ -3348,41 +3412,62 @@ void fall1(int distance) {
  }
 }
 ```
+</details>
 
 ### Unchecked Exceptions
-- An unchecked exception is any exception that does not need to be declared or handled by the application code where it is thrown. 
-- Unchecked exceptions are often referred to as **runtime exceptions**, ***HOWEVER***, unchecked exceptions include any class that inherits `RuntimeException` or `Error`. 
-- A ***runtime exception*** is defined as the `RuntimeException` class and its subclasses. Runtime exceptions tend to be unexpected but not necessarily fatal.
+> [!IMPORTANT]
+> An `unchecked exception` is any exception that does not need to be declared or handled by the application code where it is thrown. <br><br>
+> `Unchecked exceptions` are often referred to as `runtime exceptions`, ***HOWEVER***, unchecked exceptions include any class that inherits `RuntimeException` or `Error`. <br><br>
+> `Runtime exceptions` tend to be unexpected but not necessarily fatal.
 
 ## Throwing an Exception
+> [!IMPORTANT]
+> The `throw` keyword is used as a statement inside a code block to throw a new exception or rethrow an existing exception<br><br>
+> `throws` keyword is used only at the end of a method declaration to indicate what exceptions it supports.<br><br>
+> Remember that a `Throwable` is either an `Exception` or an `Error`. You should not catch `Throwable` or `Error` directly in your code.
 ```java
 throw new Exception();
 throw new Exception("Ow! I fell.");
 throw new RuntimeException();
 throw new RuntimeException("Ow! I fell.");
 ```
-- The `throw` keyword is used as a statement inside a code block to throw a new exception or rethrow an existing exception, while the `throws` keyword is used only at the end of a method declaration to indicate what exceptions it supports.
-- Remember that a `Throwable` is either an `Exception` or an `Error`. You should not catch `Throwable` or `Error` directly in your code.
 
-## Recognizing Excepiton Classes
+## Recognizing Exception Classes
 
 ### `RuntimeException` Classes
-- `RuntimeException` and its subclasses are unchecked exceptions that don’t have to be handled or declared. They can be thrown by the programmer or by the JVM.
+<details>
+<summary>Details...</summary>
+<br>
+
+> [!IMPORTANT]
+> `RuntimeException` and its subclasses are unchecked exceptions that don’t have to be handled or declared. They can be thrown by the programmer or by the JVM.
 1. `ArithmeticException` Thrown when code attempts to divide by zero
 2. `ArrayIndexOutOfBoundsException` Thrown when code uses an illegal index to access an array
 3. `ClassCastException` Thrown when an attempt is made to cast an object to a class of which it is not an instance
 4. `NullPointerException` Thrown when there is a null reference where an object is required
 5. `IllegalArgumentException` Thrown by the programmer to indicate that a method has been passed an illegal or inappropriate argument
 6. `NumberFormatException` Subclass of `IllegalArgumentException` thrown when an attempt is made to convert a string to a numeric type but the string doesn’t have an appropriate format
+</details>
 
 ### Checked Exception Classes
-- Checked exceptions have `Exception` in their hierarchy but not `RuntimeException`. They must be handled or declared.
+<details>
+<summary>Details...</summary>
+<br>
+
+> [!IMPORTANT]
+> Checked exceptions have `Exception` in their hierarchy but not `RuntimeException`. They must be handled or declared.
 1. `ExceptionInInitializerError` Thrown when a static initializer throws an exception and doesn’t handle it
 2. `StackOverflowError` Thrown when a method calls itself too many times (This is called infinite recursion because the method typically calls itself without end.)
 3. `NoClassDefFoundError` Thrown when a class that the code uses is available at compile time but not runtime. Generally, this means a library available when the code was compiled is not available when the code is executed
+</details>
 
 ## Chaining `Catch` Blocks
-- A rule exists for the order of the catch blocks. Java looks at them in the order they appear. If it is impossible for one of the catch blocks to be executed, a compiler error about unreachable code occurs.
+> [!IMPORTANT]
+> A rule exists for the order of the catch blocks. Java looks at them in the order they appear. If it is impossible for one of the catch blocks to be executed, a compiler error about unreachable code occurs.
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public void visitMonkeys() {
  try {
@@ -3394,8 +3479,13 @@ public void visitMonkeys() {
  }
 }
 ```
+</details>
 
 ## Multi-catch Block
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 public static void main(String[] args) {
  try {
@@ -3406,20 +3496,23 @@ public static void main(String[] args) {
  }
 }
 
-catch(Exception1 e | Exception2 e | Exception3 e) // DOES NOT COMPILE
-catch(Exception1 e1 | Exception2 e2 | Exception3 e3) // DOES NOT COMPILE
-
 try {
  throw new IOException();
-} catch (FileNotFoundException | IOException p) {} // DNC: java doesn't allow redundant tyoes in multi catch. IOException is superclass of FileNotFoundException
+} catch (FileNotFoundException | IOException p) {} // DNC: java doesn't allow redundant types in multi catch. IOException is superclass of FileNotFoundException
 ```
+</details>
 
 ## `finally` Block
-- lets you run code at the end with a `finally` regardless of whether an exception is thrown
-- `catch` is optional when `finally` is used
-- must be after `catch`, at the end
-- A `finally` block is typically used to close resources such as files or databases
-- You cannot have multiple `finally`
+> [!IMPORTANT]
+> lets you run code at the end with a `finally` regardless of whether an exception is thrown <br><br>
+> `catch` is optional when `finally` is used <br><br>
+> must be after `catch`, at the end <br><br>
+> A `finally` block is typically used to close resources such as files or databases <br><br>
+> You cannot have multiple `finally`
+
+<details>
+<summary>Details...</summary>
+<br>
 
 ```java
 int goHome(){
@@ -3427,7 +3520,7 @@ int goHome(){
     mightThrowException();
     System.out.print("1");
     return 1;
-  } catch(Exception e) {
+  } catch (Exception e) {
     System.out.print("2");
     return 2;
   } finally {
@@ -3436,11 +3529,16 @@ int goHome(){
   }
 }
 ```
-- Above code alwways returns `3`: Because the `finally` block is executed shortly before the method completes, it interrupts the `return` statement from inside both the `try` and `catch` blocks.
+- Above code always returns `3`: Because the `finally` block is executed shortly before the method completes, it interrupts the `return` statement from inside both the `try` and `catch` blocks.
 - Above code might print `1 3` or `2 3`
 - `System.exit(int code)`: if you call this inside `catch`, `finally` won't be executed!! This is the only exception to our rule
+</details>
 
 ## Closing Resources (files, DB etc)
+<details>
+<summary>Details...</summary>
+<br>
+
 - To open a file you need `catch` for `IOException` when reading/opening file. Then in `finally` you need to close the file which may throw `IOException` too! You need to catch this as well. Manually you need to write 2 `catch`, 1 `finally`
 - Solution: ***try-with-resources statement***: to automatically close all resources opened in a `try` clause (automatic resource management)
 ```java
@@ -3467,9 +3565,16 @@ try {
 }
 ```
 - Above code will actually throw `Exception`, the reason is `finally` will be run at last and `RuntimeException` from previous catch will be omitted
+</details>
 
 ## Calling Methods That Throw Exceptions
-- the rules for calling a method that throw exception is the same as within a method
+<details>
+<summary>Details...</summary>
+<br>
+
+> [!NOTE]
+> The rules for calling a method that throw exception is the same as within a method
+
 ```java
 class NoMoreCarrotsException extends Exception {}
 
@@ -3482,10 +3587,17 @@ public class Bunny {
 }
 ```
 
-- ***Note***: When you see a checked exception declared inside a catch block, make sure the code in the associated try block is capable of throwing the exception or a subclass of the exception. If not, the code is unreachable and does not compile. Remember that this rule does not extend to unchecked exceptions or exceptions declared in a method signature.
+> [!NOTE]
+> When you see a `checked exception` declared inside a `catch` block, make sure the code in the associated try block is capable of throwing the exception or a subclass of the exception. If not, the code is unreachable and does not compile. Remember that this rule does not extend to `unchecked exceptions` or exceptions declared in a method signature.
+</details>
 
 ## Declaring and Overriding Methods With Exceptions
-- When a class overrides a method from a superclass or implements a method from an interface, it’s not allowed to add new checked exceptions to the method signature:
+> [!IMPORTANT]
+> When a class overrides a method from a superclass or implements a method from an interface, it’s not allowed to add new checked exceptions to the method signature:
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 class CanNotHopException extends Exception { }
 class Hopper {
@@ -3495,8 +3607,14 @@ class Bunny extends Hopper {
  public void hop() throws CanNotHopException { } // DNC
 }
 ```
+</details>
 
-- An overridden method in a subclass is allowed to declare fewer exceptions(or subclasse type of the exception) than the superclass or interface. This is legal because callers are already handling them:
+> [!IMPORTANT]
+> An overridden method in a subclass is allowed to declare fewer exceptions(or subclasse type of the exception) than the superclass or interface. This is legal because callers are already handling them:
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 class Hopper {
  public void hop() throws Exception { }
@@ -3508,8 +3626,14 @@ class Kangroo extends Hopper {
  public void hop() throws CanNotHopException{ }
 }
 ```
+</details>
 
-- These rules applies only to checked exceptions. You can add unchecked exceptions freely:
+> [!IMPORTANT]
+> These rules applies only to checked exceptions. You can add unchecked exceptions freely:
+<details>
+<summary>Details...</summary>
+<br>
+
 ```java
 class Hopper {
  public void hop() { }
@@ -3518,7 +3642,10 @@ class Bunny extends Hopper {
  public void hop() throws IllegalStateException { }
 }
 ```
-- The reason that it’s okay to declare new unchecked exceptions in a subclass method is that the declaration is redundant. Methods are free to throw any unchecked exceptions they want without mentioning them in the method declaration.
+</details>
+
+> [!IMPORTANT]
+> The reason that it’s okay to declare new unchecked exceptions in a subclass method is that the declaration is redundant. Methods are free to throw any unchecked exceptions they want without mentioning them in the method declaration.
 
 
 # Chapter 11: Modules
